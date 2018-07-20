@@ -17,7 +17,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    final Fragment createPost = new CreatePostFragment();
+    final Fragment createPostFragment = new CreatePostFragment();
+    final Fragment archiveFragment = new ArchiveFragment();
+    final Fragment feedFragemt = new FeedFragemt();
+    final Fragment rakFragment = new RakFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
         new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("home");
+        final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
+        final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
+        final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
+        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK")
+
 
     // create the drawer and remember the `Drawer` result object
     Drawer result =
@@ -42,20 +49,34 @@ public class MainActivity extends AppCompatActivity {
             .addDrawerItems(
                 home,
                 new DividerDrawerItem(),
+                feed,
+                rak,
                 reflection,
+                archive,
                 new SecondaryDrawerItem().withName("othername"))
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {
                   @Override
                   public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                     if (drawerItem == reflection) {
-                      FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                      ft.replace(R.id.placeholder, createPost);
-                      ft.commit();
+                      nextFragment(createPostFragment);
+                    }else if (drawerItem == archive){
+                        nextFragment(archiveFragment);
+                    }else if (drawerItem == rak){
+                        nextFragment(rakFragment);
+                    }else if (drawerItem == feed){
+                        nextFragment(feedFragemt);
                     }
                     return true;
                   }
                 })
             .build();
+    }
+
+    private void nextFragment(Fragment fragment){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.placeholder, fragment);
+        ft.commit();
+
     }
 }

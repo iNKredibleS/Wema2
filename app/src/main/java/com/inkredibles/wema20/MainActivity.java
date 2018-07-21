@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
-        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK")
+        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
 
 
     // create the drawer and remember the `Drawer` result object

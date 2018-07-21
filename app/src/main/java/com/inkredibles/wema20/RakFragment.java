@@ -109,7 +109,7 @@ public class RakFragment extends Fragment {
 
             }
         });
-        
+
         //add ability to create new RAK and post to database\
         //newRakBtn = findViewById(R.id.newRakBtn);
 

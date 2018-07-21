@@ -18,9 +18,13 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     final Fragment createPostFragment = new CreatePostFragment();
-    //final Fragment archiveFragment = new ArchiveFragment();
-    //final Fragment feedFragemt = new FeedFragemt();
+    final Fragment archiveFragment = new ArchiveFragment();
+    final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
+
+
+    public static boolean archiveBool = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +65,15 @@ public class MainActivity extends AppCompatActivity {
                     if (drawerItem == reflection) {
                       nextFragment(createPostFragment);
                     }else if (drawerItem == archive){
-                       // nextFragment(archiveFragment);
+                        archiveBool = true;
+                        nextFragment(archiveFragment);
+
                     }else if (drawerItem == rak){
                         nextFragment(rakFragment);
                     }else if (drawerItem == feed){
-                       // nextFragment(feedFragemt);
+
+                        archiveBool = false;
+                        nextFragment(feedFragment);
                     }
                     return true;
                   }
@@ -79,4 +87,6 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
 
     }
+
+    public boolean getArchiveBool(){return archiveBool;}
 }

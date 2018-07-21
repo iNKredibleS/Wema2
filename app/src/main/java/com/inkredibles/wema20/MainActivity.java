@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     final Fragment createPostFragment = new CreatePostFragment();
-    final Fragment archiveFragment = new ArchiveFragment();
-    final Fragment feedFragemt = new FeedFragemt();
+    //final Fragment archiveFragment = new ArchiveFragment();
+    //final Fragment feedFragemt = new FeedFragemt();
     final Fragment rakFragment = new RakFragment();
 
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
-        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK")
+        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
 
 
     // create the drawer and remember the `Drawer` result object
@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
                     if (drawerItem == reflection) {
                       nextFragment(createPostFragment);
                     }else if (drawerItem == archive){
-                        nextFragment(archiveFragment);
+                       // nextFragment(archiveFragment);
                     }else if (drawerItem == rak){
                         nextFragment(rakFragment);
                     }else if (drawerItem == feed){
-                        nextFragment(feedFragemt);
+                       // nextFragment(feedFragemt);
                     }
                     return true;
                   }

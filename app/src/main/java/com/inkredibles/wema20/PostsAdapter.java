@@ -43,7 +43,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvItemTitle = (TextView) itemView.findViewById(R.id.tvItemTitle);
             tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
             ivPostImageView = (ParseImageView) itemView.findViewById(R.id.ivPostImage);
-            //tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
+            tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
 
             itemView.setOnClickListener(this);
         }
@@ -71,11 +71,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         if(main.getArchiveBool()){
             // Inflate the custom layout
-            //View contactView = inflater.inflate(R.layout.item_archive, parent, false);
+            View contactView = inflater.inflate(R.layout.item_archive, parent, false);
             // Return a new holder instance
-           // ViewHolder viewHolder = new ViewHolder(contactView);
-           //return viewHolder;
-            return null;
+            ViewHolder viewHolder = new ViewHolder(contactView);
+           return viewHolder;
         } else {
             // Inflate the custom layout
             View postView = inflater.inflate(R.layout.item_post, parent, false);

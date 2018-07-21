@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     final Fragment createPostFragment = new CreatePostFragment();
-    //final Fragment archiveFragment = new ArchiveFragment();
+    final Fragment archiveFragment = new ArchiveFragment();
     final Fragment feedFragemt = new FeedFragment();
     //final Fragment rakFragment = new RakFragment();
     public static boolean archiveBool = false;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                       nextFragment(createPostFragment);
                     }else if (drawerItem == archive){
                         archiveBool = true;
-                        //nextFragment(archiveFragment);
+                        nextFragment(archiveFragment);
                     }else if (drawerItem == rak){
                        // nextFragment(rakFragment);
                     }else if (drawerItem == feed){

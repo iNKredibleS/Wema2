@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
 
 
+
     // create the drawer and remember the `Drawer` result object
     Drawer result =
         new DrawerBuilder()

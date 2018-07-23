@@ -11,6 +11,12 @@ import com.parse.ParseUser;
 
 import java.util.Date;
 
+/*
+    The data schema for posts created by users. Each post has a main text of the message, a privacy field, a type field
+    (whether the kindness was given or received), a parse user that created the post, the time it was created, a RAK of the day pointer,
+    and possibly an image if the user chooses to add one.
+ */
+
 
 @ParseClassName("Post")
 public class Post extends ParseObject {

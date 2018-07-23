@@ -16,6 +16,12 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    The archive fragment allows viewers to look back on all of their posts about kindness. Using a recycler view
+    and reusing the posts adapter, the posts query to populate the recycler view filters show's all of the posts
+    the user has made including the one's they have marked as private that won't appear in their main feed.
+ */
+
 public class ArchiveFragment extends Fragment{
 
     private ArrayList<Post> archivedPosts;
@@ -32,14 +38,13 @@ public class ArchiveFragment extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
-        //initialize posts
         archivedPosts = new ArrayList<>();
         loadArchives();
 
     }
 
     private void loadArchives(){
-        //get the top posts
+        //get the user's private posts
         final Post.Query postsQuery = new Post.Query();
         postsQuery.getPrivate().withUser();
 

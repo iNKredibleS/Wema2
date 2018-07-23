@@ -1,6 +1,6 @@
 package com.inkredibles.wema20;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,20 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inkredibles.wema20.models.Rak;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,8 +40,11 @@ public class RakFragment extends Fragment {
     Random rand;
     Button newRakBtn;
     ArrayList<Rak> rakList;
+    Rak currentRak;
 
     ParseQuery<Rak> query;
+
+    private onItemSelectedListener listener;
 
 
     @Override
@@ -91,7 +89,7 @@ public class RakFragment extends Fragment {
                     Log.d("FindSuccessful", "Finding RAK Successful");
                     int randomNum = rand.nextInt(total) + 1;
 
-                    Rak currentRak = objects.get(randomNum - 1);
+                    currentRak = objects.get(randomNum - 1);
 
                     //store current randomNum so dont refresh to the same thing
                     current = randomNum;
@@ -139,8 +137,8 @@ public class RakFragment extends Fragment {
                     }
 
 
-                    Rak currentRak = objects.get(randomNum - 1);
-                    String title = currentRak.getTitle();
+                    Rak refRak = objects.get(randomNum - 1);
+                    String title = refRak.getTitle();
 
                     rakTxt.setText(title);
 
@@ -155,6 +153,21 @@ public class RakFragment extends Fragment {
 
     }
 
+    @OnClick(R.id.feedBtn)
+    protected void goToFeed() {
+
+//        Bundle args = new Bundle();
+//        args.putString("RAK Title",currentRak.getTitle());
+//        CreatePostFragment createPostFragment = new CreatePostFragment();
+//        createPostFragment.setArguments(args);
+//
+//
+
+        listener.toFeed();
+    }
+
+
+
     private String RAKGenerator(ParseQuery<Rak> query, final int total) {
         final String title = "";
 
@@ -165,7 +178,7 @@ public class RakFragment extends Fragment {
                     Log.d("FindSuccessful", "Finding RAK Successful");
                     int randomNum = rand.nextInt(total) + 1;
 
-                    Rak currentRak = objects.get(randomNum - 1);
+                    //Rak currentRak = objects.get(randomNum - 1);
                     //ask angie
                     //title = currentRak.getTitle();
 
@@ -179,6 +192,27 @@ public class RakFragment extends Fragment {
         });
 
         return title;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onItemSelectedListener) {
+            listener = (onItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnItemSelectedListener");
+        }
+    }
+
+    @OnClick(R.id.doneBtn)
+    protected void goToPost() {
+        if (currentRak != null){
+            listener.fromRAKtoCreatePost(currentRak);
+        }else{
+            Toast.makeText(getContext(), "current rak null", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

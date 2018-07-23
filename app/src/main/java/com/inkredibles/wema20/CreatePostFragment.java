@@ -108,6 +108,8 @@ public class CreatePostFragment extends Fragment {
 
 
     //TODO change to teriary format
+    //when button changes the type, change the textview that displays type and the type field in
+    //posts model
     @OnCheckedChanged(R.id.switch_give_rec)
     void giveRec(CompoundButton compoundButton, boolean checked){
         if(checked) {
@@ -145,12 +147,10 @@ public class CreatePostFragment extends Fragment {
 
         if(file != null) parseFile = new ParseFile(file);
 
-        //set up getting image
-        //get final Strings for switches too
-
-        createPost(title, message, user, parseFile, finalPrivacy, finalType); //eventually createPost (title, message, user, image, privacy, type)
+        createPost(title, message, user, parseFile, finalPrivacy, finalType);
     }
 
+    //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)
     protected void gallery(){
         Intent intent = new Intent(Intent.ACTION_PICK,
@@ -158,6 +158,7 @@ public class CreatePostFragment extends Fragment {
         startActivityForResult(intent , REQUEST_GALLERY_IMAGE);
     }
 
+    //launch activity to take a picture for the post
     @OnClick(R.id.btn_camera)
     protected void camera() {
         if(isStoragePermissionGranted()) {
@@ -165,12 +166,8 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
-    //switches
-    //create a protected/public? boolean for the states and then in create post
-    //set the fields of the post to the give/receive, public/private based on these
-    //booleans
 
-    //create post
+    //create post and store to parse server
     //set the title, message, user, image, privacy, give, receive
     private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type) {
         final Post newPost = new Post();

@@ -4,6 +4,11 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+/*
+    Data schema for the RAK (random act of kindness of the day). The title of the RAK is the suggested daily random act of kindess
+    for the user for the day. In terms of UI, the image we hope to underlay the RAK post.
+ */
+
 @ParseClassName("Rak")
 public class Rak extends ParseObject{
 

@@ -14,6 +14,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+    When the user clicks the signup button, this activity is launched to allow the user to create a new username, password, and
+    attach their account to their email. Eventually we may to to be able to sync this with facebook and google sign in.
+    If there are no issues, the user's information is saved in the parse user class on the parse server and the app opens to the RAK
+    of the day.
+ */
+
 public class SignupActivity extends AppCompatActivity {
 
     @BindView(R.id.et_email) EditText et_email;

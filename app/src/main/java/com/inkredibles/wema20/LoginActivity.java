@@ -15,6 +15,10 @@ import com.parse.ParseUser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+/*
+    Allows the user to login to their Wema account. After successful logging in the user will be directed to the main activity and the
+    RAK of the day fragment.
+ */
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,7 +41,8 @@ public class LoginActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-       //persisted user code
+        //persisted user code so the user doesn't have to log in
+        // each time they open the app
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null){
             final Intent intent = new Intent(LoginActivity.this, MainActivity.class);

@@ -99,7 +99,6 @@ public class FeedFragment extends Fragment {
                     rvPosts.setAdapter(adapter);
                     //set the layout manager to position the items
                     StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
-                    //mLayoutManager.setReverseLayout(true);
                     rvPosts.setLayoutManager(mLayoutManager);
                 }else{
                     e.printStackTrace();
@@ -107,10 +106,6 @@ public class FeedFragment extends Fragment {
             }
         });
     }
-//    public void setonItemSelectedListener(onItemSelectedListener listener){
-//        itemSelectedListener = listener;
-//    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

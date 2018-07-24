@@ -9,8 +9,10 @@ import com.parse.ParseObject;
     for the user for the day. In terms of UI, the image we hope to underlay the RAK post.
  */
 
+
 @ParseClassName("Rak")
-public class Rak extends ParseObject{
+
+public class Rak extends ParseObject {
 
     public Rak() {}
 

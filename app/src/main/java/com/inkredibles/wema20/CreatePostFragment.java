@@ -1,6 +1,7 @@
 package com.inkredibles.wema20;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inkredibles.wema20.models.Post;
+import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -57,6 +59,8 @@ public class CreatePostFragment extends Fragment {
     private static File filesDir;
     private String type;
     private String privacy;
+    private onItemSelectedListener listener;
+    Rak rak;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -83,9 +87,14 @@ public class CreatePostFragment extends Fragment {
         //butterknife bind
         ButterKnife.bind(this, view);
 
-        //TODO: get title from rak passed to this post
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            rak = bundle.getParcelable("RAK");
+        } else {
+            System.out.println("-------------");
+        }
 
-        et_title.setText("RAK #1");
+        et_title.setText(rak.getTitle());
         //set the cursor position to end of input title
         //found on stack overflow
         int position = et_title.length();
@@ -185,6 +194,7 @@ public class CreatePostFragment extends Fragment {
                         if (e == null) {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
+                            listener.toFeed();
 
                         } else {
                             e.printStackTrace();
@@ -256,6 +266,17 @@ public class CreatePostFragment extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onItemSelectedListener) {
+            listener = (onItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnItemSelectedListener");
         }
     }
 

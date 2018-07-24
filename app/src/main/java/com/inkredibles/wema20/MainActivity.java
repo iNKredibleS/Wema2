@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.inkredibles.wema20.models.Post;
+import com.inkredibles.wema20.models.Rak;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
@@ -116,7 +117,35 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 .addToBackStack("Added to stack")
                 .commit();
 
-        //nextFragment(detailFragment);
+        nextFragment(detailFragment);
     }
+
+
+    @Override
+    //after new post created go back to feed fragment
+    public void toFeed() {
+        //Need to begin a new fragment transaction for any fragment operation
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, feedFragment).commit();
+    }
+
+    @Override
+    //after new post created go back to feed fragment
+    public void fromRAKtoCreatePost(Rak rak) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("RAK", rak );
+        //bundle.putString("rak_title", rak.getTitle());
+        createPostFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+
+    }
+
+  @Override
+  public void toCreatePost() {
+
+      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+  }
 
 }

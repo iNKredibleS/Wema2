@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
     final Fragment createGroupFragment = new CreateGroupFragment();
+    private Drawer result;
+    private SecondaryDrawerItem feed;
 
 
 
@@ -49,13 +51,13 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
-        final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
+        feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
         final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
 
 
     // create the drawer and remember the `Drawer` result object
-    Drawer result =
+    result =
         new DrawerBuilder()
             .withActivity(this)
             .withToolbar(toolbar)
@@ -133,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         //Need to begin a new fragment transaction for any fragment operation
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, feedFragment).commit();
+        result.setSelection(feed);
+
     }
 
     @Override

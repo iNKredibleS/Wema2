@@ -90,16 +90,17 @@ public class CreatePostFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             rak = bundle.getParcelable("RAK");
+            Log.d("RAk text", rak.getTitle());
             et_title.setText(rak.getTitle());
             //set the cursor position to end of input title
             //found on stack overflow
             int position = et_title.length();
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
-            bundle = null;
         } else {
             System.out.println("-------------");
         }
+
 
 
         //setting up switches
@@ -115,6 +116,40 @@ public class CreatePostFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        filesDir = getContext().getFilesDir();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            rak = bundle.getParcelable("RAK");
+            Log.d("RAk text", rak.getTitle());
+            et_title.setText(rak.getTitle());
+            //set the cursor position to end of input title
+            //found on stack overflow
+            int position = et_title.length();
+            Editable etext = et_title.getText();
+            Selection.setSelection(etext, position);
+        } else {
+            System.out.println("-------------");
+        }
+
+
+
+        //setting up switches
+        switch_pub_pri.setChecked(true);
+        switch_give_rec.setChecked(true);
+        tvGiveRec.setText("Given");
+        tvPubPri.setText("Public");
+
+        //default type and privacy values
+        type = "give";
+        privacy = "public";
+
+
+    }
 
 
     //TODO change to teriary format
@@ -157,7 +192,10 @@ public class CreatePostFragment extends Fragment {
 
         if(file != null) parseFile = new ParseFile(file);
 
+
         createPost(title, message, user, parseFile, finalPrivacy, finalType);
+
+
     }
 
     //launch activity to choose a photo from gallery
@@ -195,8 +233,8 @@ public class CreatePostFragment extends Fragment {
                         if (e == null) {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
-                            et_message.clearComposingText();
-                            et_title.clearComposingText();
+                            et_message.setText("");
+                            et_title.setText("");
                             listener.toFeed();
 
                         } else {

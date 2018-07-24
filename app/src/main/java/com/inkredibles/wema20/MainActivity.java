@@ -3,10 +3,13 @@ package com.inkredibles.wema20;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -14,6 +17,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.parse.ParseImageView;
 
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
 
@@ -25,8 +29,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment createGroupFragment = new CreateGroupFragment();
 
 
+
     public static boolean archiveBool = false;
 
+   // private onItemSelectedListener itemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
                         nextFragment(createGroupFragment);
+
                     }
 
                     return true;
@@ -92,13 +99,33 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void nextFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, fragment);
+        ft.addToBackStack("added to stack");
         ft.commit();
 
     }
 
+
     public boolean getArchiveBool(){return archiveBool;}
 
-    //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    @Override
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
+        Fragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("post", post);
+        detailFragment.setArguments(bundle);
+        Log.d("Main Activity", "feed");
+        ViewCompat.setTransitionName(parseImageView, "postPicTransition");
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(parseImageView, "postPicTransition")
+                .replace(R.id.placeholder, detailFragment)
+                .addToBackStack("Added to stack")
+                .commit();
+
+        nextFragment(detailFragment);
+    }
+
 
     @Override
     //after new post created go back to feed fragment

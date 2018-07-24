@@ -56,5 +56,11 @@ dependencies {
     implementation "com.android.support:support-annotations:${versions.supportLib}"
     implementation "com.android.support:design:${versions.supportLib}"
 
+    //cardview
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    //paging library
+    implementation "android.arch.paging:runtime:1.0.0"
+
+
 
 }

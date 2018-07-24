@@ -3,18 +3,22 @@ package com.inkredibles.wema20;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.inkredibles.wema20.models.Post;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.parse.ParseImageView;
 
-public class MainActivity extends AppCompatActivity implements  onItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
 
     private Toolbar toolbar;
     final Fragment createPostFragment = new CreatePostFragment();
@@ -23,8 +27,10 @@ public class MainActivity extends AppCompatActivity implements  onItemSelectedLi
     final Fragment rakFragment = new RakFragment();
 
 
+
     public static boolean archiveBool = false;
 
+   // private onItemSelectedListener itemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,19 +80,43 @@ public class MainActivity extends AppCompatActivity implements  onItemSelectedLi
 
                         archiveBool = false;
                         nextFragment(feedFragment);
+                        //feedFragment.setonItemSelectedListener(new )
                     }
                     return true;
                   }
                 })
             .build();
+    nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, fragment);
+        ft.addToBackStack("added to stack");
         ft.commit();
 
     }
 
+
     public boolean getArchiveBool(){return archiveBool;}
+
+    @Override
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
+        Fragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("post", post);
+        detailFragment.setArguments(bundle);
+        Log.d("Main Activity", "feed");
+        ViewCompat.setTransitionName(parseImageView, "postPicTransition");
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(parseImageView, "postPicTransition")
+                .replace(R.id.placeholder, detailFragment)
+                .addToBackStack("Added to stack")
+                .commit();
+
+        //nextFragment(detailFragment);
+    }
+
 }

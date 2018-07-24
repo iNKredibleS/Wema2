@@ -1,11 +1,11 @@
 package com.inkredibles.wema20;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.inkredibles.wema20.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class FeedFragment extends Fragment {
     private RecyclerView rvPosts;
     private PostsAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private onItemSelectedListener itemSelectedListener;
+    private EndlessRecyclerViewScrollListener scrollListener;// for infinite scrolling
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class FeedFragment extends Fragment {
         rvPosts = (RecyclerView) mainView.findViewById(R.id.rvPosts);
         //initialize posts
         posts = new ArrayList<>();
+        //create a posts adapter
+        adapter = new PostsAdapter(posts);
         //get the swipe container
         swipeContainer = (SwipeRefreshLayout) mainView.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -68,6 +73,14 @@ public class FeedFragment extends Fragment {
             }
         });
         loadPosts();
+        //this is called by the viewholder
+        adapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
+            @Override
+            public void onViewHolderClicked(Post post, ParseImageView parseImageView) {
+               //now move this post from the feed fragment to the main activity
+                if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView);
+            }
+        });
     }
 
     private void loadPosts(){
@@ -81,15 +94,12 @@ public class FeedFragment extends Fragment {
                 if (e == null){
                     for (int i = 0; i < objects.size(); i++){
                         posts.add(objects.get(i));
-                        Log.d("Post", posts.get(i).getMessage());
                     }
-                    //create a posts adapter
-                    adapter = new PostsAdapter(posts);
                     //attach the adapter to the recyclerview to populate items
                     rvPosts.setAdapter(adapter);
                     //set the layout manager to position the items
                     StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
-                    mLayoutManager.setReverseLayout(true);
+                    //mLayoutManager.setReverseLayout(true);
                     rvPosts.setLayoutManager(mLayoutManager);
                 }else{
                     e.printStackTrace();
@@ -97,4 +107,19 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+//    public void setonItemSelectedListener(onItemSelectedListener listener){
+//        itemSelectedListener = listener;
+//    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onItemSelectedListener) {
+            itemSelectedListener = (onItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnItemSelectedListener");
+        }
+    }
+
 }

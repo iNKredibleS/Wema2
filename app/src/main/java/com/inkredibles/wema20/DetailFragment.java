@@ -15,6 +15,7 @@
     import butterknife.BindView;
     import butterknife.ButterKnife;
 
+    /*The detail fragment shows more information about the post that has been selected from the recyclerview*/
     public class DetailFragment extends Fragment {
         //bind views
         @BindView(R.id.tvTitle) TextView tvtTitle;

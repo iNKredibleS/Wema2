@@ -18,6 +18,8 @@ import com.parse.ParseImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/*The feedfragment is responsible for the feed page which shows the posts.
+* Setting the adapter occurs in the findInbackground method since by then, we have gotten a list of posts*/
 public class FeedFragment extends Fragment {
 
     private static final  int SPAN_COUNT = 3;
@@ -83,6 +85,7 @@ public class FeedFragment extends Fragment {
         });
     }
 
+    //This method loads posts from the server, attaches the adapter to the recyclerview and sets the layout manager.
     private void loadPosts(){
         //get the top posts
         final Post.Query postsQuery = new Post.Query();
@@ -106,6 +109,8 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+
+    //initializes the onItemSelectedListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

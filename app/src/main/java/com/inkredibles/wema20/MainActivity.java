@@ -19,6 +19,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
 
+/*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
 
     private Toolbar toolbar;

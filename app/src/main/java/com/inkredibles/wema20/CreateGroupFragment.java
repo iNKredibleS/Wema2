@@ -1,5 +1,6 @@
 package com.inkredibles.wema20;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CreateGroupFragment extends Fragment {
+
+    private onItemSelectedListener listener;
 
 
     @BindView(R.id.etGroupName) EditText etGroupName;
@@ -44,5 +47,24 @@ public class CreateGroupFragment extends Fragment {
         newRole.saveInBackground();
     }
 
+    @OnClick(R.id.addUsersBtn)
+    protected void addUsersLaunch(){
+        listener.toAddUsers();
+    }
+
+
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onItemSelectedListener) {
+            listener = (onItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnItemSelectedListener");
+        }
+    }
 
 }

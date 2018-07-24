@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
     final Fragment createGroupFragment = new CreateGroupFragment();
+    final Fragment addUsersFragment = new AddUsersFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
 
@@ -152,10 +153,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     }
 
   @Override
-  public void toCreatePost() {
+  public void toAddUsers() {
 
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+      fragmentTransaction.replace(R.id.placeholder, addUsersFragment).commit();
   }
 
 }

@@ -34,7 +34,7 @@
         android:layout_marginLeft="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Title" />
+        android:hint="Title" />
 
     <EditText
         android:id="@+id/et_message"

@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment archiveFragment = new ArchiveFragment();
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
+    final Fragment createGroupFragment = new CreateGroupFragment();
 
 
     public static boolean archiveBool = false;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
+        final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
 
 
     // create the drawer and remember the `Drawer` result object
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 rak,
                 reflection,
                 archive,
+                group,
                 new SecondaryDrawerItem().withName("othername"))
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {
@@ -75,11 +78,15 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
                         archiveBool = false;
                         nextFragment(feedFragment);
+                    }else if (drawerItem == group){
+                        nextFragment(createGroupFragment);
                     }
+
                     return true;
                   }
                 })
             .build();
+    nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){

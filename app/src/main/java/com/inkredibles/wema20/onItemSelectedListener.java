@@ -16,6 +16,4 @@ public interface onItemSelectedListener {
     void fromRAKtoCreatePost(Rak rak);
 
     void toCreatePost();
-
-
 }

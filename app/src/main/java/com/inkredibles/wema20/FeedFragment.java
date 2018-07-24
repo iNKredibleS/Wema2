@@ -103,8 +103,37 @@ public class FeedFragment extends Fragment {
                     //set the layout manager to position the items
                     StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
                     rvPosts.setLayoutManager(mLayoutManager);
+                    scrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
+                        @Override
+                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+                            loadNextDataFromApi(totalItemsCount);
+                        }
+                    };
+                    // Adds the scroll listener to RecyclerView
+                    rvPosts.addOnScrollListener(scrollListener);
+
                 }else{
                     e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    //method that loads more data from the parse server and nofitfies the adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        final Post.Query postsQuery = new Post.Query();
+        postsQuery.getMore(offset);
+        postsQuery.withUser();
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null){
+                    for (int i = 0; i < objects.size(); i++){
+                        posts.add(objects.get(i));
+                        adapter.notifyItemInserted(objects.size()-1);
+                    }
                 }
             }
         });

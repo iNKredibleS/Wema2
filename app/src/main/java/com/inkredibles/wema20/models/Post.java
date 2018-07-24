@@ -99,7 +99,7 @@ public class Post extends ParseObject {
 
         public Query getTop(){
             orderByDescending("createdAt");
-            setLimit(50);
+            setLimit(20);
             return this;
         }
 
@@ -111,6 +111,12 @@ public class Post extends ParseObject {
             orderByDescending("createdAt");
             setLimit(50);
             whereContains("creator_user", ParseUser.getCurrentUser().getObjectId());
+            return this;
+        }
+        public Query getMore(int skip){
+            orderByDescending("createdAt");
+            setSkip(skip);
+            setLimit(20);
             return this;
         }
     }

@@ -2,8 +2,11 @@ package com.inkredibles.wema20;
 
 
 import com.inkredibles.wema20.models.Post;
-import com.parse.ParseImageView;
 import com.inkredibles.wema20.models.Rak;
+import com.parse.ParseImageView;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 public interface onItemSelectedListener {
 
@@ -16,6 +19,8 @@ public interface onItemSelectedListener {
     void fromRAKtoCreatePost(Rak rak);
 
     void toAddUsers();
+
+    void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
 
 
 }

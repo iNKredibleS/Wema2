@@ -3,12 +3,13 @@ package com.inkredibles.wema20;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -16,17 +17,21 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
-    private List<ParseUser> mUsers; //why is this neccessary?
+    private List<ParseUser> mUsers;
     private Context context;
+    private List<ParseUser> mAddedUsers;
 
     MainActivity main = new MainActivity();
 
-    public UsersAdapter(List<ParseUser> allUsers) {
+    public UsersAdapter(List<ParseUser> allUsers, List<ParseUser> addedUsers) {
         mUsers = allUsers;
+        mAddedUsers = addedUsers;
     }
 
 
     public class ViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
         public ImageView ivUserProfile;
         public TextView tvUser;
@@ -42,7 +47,24 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+            ParseUser user = mUsers.get(getAdapterPosition());
+
+            if (selectedItems.get(getAdapterPosition(), false)) {
+                selectedItems.delete(getAdapterPosition());
+                view.setSelected(false);
+                mAddedUsers.remove(user);
+                for(int i = 0; i < mAddedUsers.size(); i++){
+                    Log.i("users adapter", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
+                }
+            }
+            else {
+                selectedItems.put(getAdapterPosition(), true);
+                view.setSelected(true);
+                mAddedUsers.add(user);
+                for(int i = 0; i < mAddedUsers.size(); i++){
+                    Log.i("users adapter", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
+                }
+            }
 
         }
 
@@ -66,4 +88,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() { return mUsers.size(); }
+
+    public List<ParseUser> getAddedUsers() { return mAddedUsers; }
 }

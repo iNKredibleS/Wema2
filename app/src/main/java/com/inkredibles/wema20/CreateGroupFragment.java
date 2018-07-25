@@ -3,6 +3,7 @@ package com.inkredibles.wema20;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.parse.ParseACL;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -19,6 +22,7 @@ import butterknife.OnClick;
 public class CreateGroupFragment extends Fragment {
 
     private onItemSelectedListener listener;
+    ArrayList<ParseUser> addedUsers;
 
 
     @BindView(R.id.etGroupName) EditText etGroupName;
@@ -35,15 +39,32 @@ public class CreateGroupFragment extends Fragment {
         ButterKnife.bind(this, view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            addedUsers = bundle.getParcelableArrayList("added_users");
+            for(int i = 0; i < addedUsers.size(); i++){
+                Log.i("create group fragment", "users[" + i + "]" + "=" + addedUsers.get(i).getUsername());
+            }
+        }
+    }
+
+
     @OnClick(R.id.createGroupBtn)
     protected void createGroup(){
+
         String roleName = etGroupName.getText().toString();
         ParseACL roleAcl = new ParseACL();
         roleAcl.setPublicWriteAccess(false);
         roleAcl.setPublicReadAccess(false);
 
         ParseRole newRole = new ParseRole(roleName, roleAcl);
-        newRole.getUsers().add(ParseUser.getCurrentUser());
+        for(int i = 0; i < addedUsers.size(); i++){
+            newRole.getUsers().add(addedUsers.get(i));
+        }
         newRole.saveInBackground();
     }
 

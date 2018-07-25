@@ -18,6 +18,10 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
 
@@ -157,6 +161,17 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, addUsersFragment).commit();
+  }
+
+  @Override
+  public void fromAddUserstoCreateGroup(List<ParseUser> addedUsers){
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("added_users", new ArrayList<ParseUser>(addedUsers));
+        createGroupFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, createGroupFragment).commit();
+
+
   }
 
 }

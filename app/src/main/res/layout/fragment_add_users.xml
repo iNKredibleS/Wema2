@@ -10,4 +10,12 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <Button
+        android:id="@+id/doneAddedUsersBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rvUsers"
+        android:layout_centerHorizontal="true"
+        android:text="Add to group"/>
+
 </RelativeLayout>

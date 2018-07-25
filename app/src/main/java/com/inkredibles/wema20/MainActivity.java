@@ -18,6 +18,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment rakFragment = new RakFragment();
     final Fragment createGroupFragment = new CreateGroupFragment();
     final Fragment addUsersFragment = new AddUsersFragment();
+    final Fragment currentGroupFragment = new CurrentGroupFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
+    private SecondaryDrawerItem rak;
+    private SecondaryDrawerItem group;
 
 
 
@@ -57,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
-        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
-        final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
+        rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
+        group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
 
 
     // create the drawer and remember the `Drawer` result object
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        //result.setSelection(rak);
 
     }
 
@@ -172,6 +177,15 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         fragmentTransaction.replace(R.id.placeholder, createGroupFragment).commit();
 
 
+  }
+
+  @Override
+  public void fromCreateGrouptoCurrentGroup(ParseRole newRole){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("newRole", newRole);
+        currentGroupFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
   }
 
 }

@@ -4,6 +4,7 @@ package com.inkredibles.wema20;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseImageView;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public interface onItemSelectedListener {
     void toAddUsers();
 
     void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
+
+    void fromCreateGrouptoCurrentGroup (ParseRole newRole);
 
 
 }

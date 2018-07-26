@@ -1,5 +1,6 @@
 package com.inkredibles.wema20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
 /*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         setSupportActionBar(toolbar);
 
 
+
         new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
         final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
         final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
+        final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
 
 
     // create the drawer and remember the `Drawer` result object
@@ -72,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 reflection,
                 archive,
                 group,
-                places)
+                places,
+                logout)
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {
                   @Override
@@ -95,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                     else if (drawerItem == places){
                         //nextFragment();
                         nextFragment(placesFragment);
+                    }else if (drawerItem == logout){
+                        ParseUser.logOut();
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
                     }
 
                     return true;
@@ -109,7 +118,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         ft.replace(R.id.placeholder, fragment);
         ft.addToBackStack("added to stack");
         ft.commit();
-
+        closeDrawer();
+    }
+    //This method closes the drawer
+    private void closeDrawer(){
+        if (result.isDrawerOpen()) result.closeDrawer();
     }
 
 
@@ -159,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
   public void toCreatePost() {
-
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
   }

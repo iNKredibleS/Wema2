@@ -50,6 +50,9 @@ import butterknife.OnClick;
 import static android.app.Activity.RESULT_OK;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
+/*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
+ *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
+  *  is private, only they can see it in their archive.*/
 public class CreatePostFragment extends Fragment {
 
     @BindView(R.id.Title) EditText et_title;
@@ -142,9 +145,6 @@ public class CreatePostFragment extends Fragment {
 
         }
 
-
-
-
     }
 
     @Override
@@ -166,8 +166,6 @@ public class CreatePostFragment extends Fragment {
         } else {
             System.out.println("-------------");
         }
-
-
 
         //setting up switches
         switch_pub_pri.setChecked(true);
@@ -343,6 +341,7 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
+    // Initializes the listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

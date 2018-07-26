@@ -24,9 +24,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private List<Post>mPosts;
     private Context context;
     private ViewHolderListener  viewHolderListener;
-    // private onItemSelectedListener listener;
-
-    //static public boolean archive;
     MainActivity main = new MainActivity();
 
     // Pass in the contact array into the constructor

@@ -21,9 +21,6 @@ import java.util.Date;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
-
-
-    //just a comment to test
     private static  final String KEY_NAME = "name";
     private static  final String KEY_MESSAGE = "message";
     private static  final String KEY_IMAGE = "image";
@@ -103,33 +100,36 @@ public class Post extends ParseObject {
 
     }
 
-
-
     public static class Query extends ParseQuery<Post> {
         public Query() {
             super(Post.class);
         }
 
         public Query getTop(){
-            orderByDescending("createdAt");
+            orderByDescending(KEY_CREATED_AT);
             setLimit(20);
             return this;
         }
 
         public Query withUser (){
-            include("creator_user");
+            include(KEY_CREATOR);
             return this;
         }
         public Query getPrivate(){
-            orderByDescending("createdAt");
+            orderByDescending(KEY_CREATED_AT);
             setLimit(50);
-            whereContains("creator_user", ParseUser.getCurrentUser().getObjectId());
+            whereContains(KEY_CREATOR, ParseUser.getCurrentUser().getObjectId());
             return this;
         }
         public Query getMore(int skip){
-            orderByDescending("createdAt");
+            orderByDescending(KEY_CREATED_AT);
             setSkip(skip);
             setLimit(20);
+            return this;
+        }
+        public Query getMany(){
+            orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
             return this;
         }
     }

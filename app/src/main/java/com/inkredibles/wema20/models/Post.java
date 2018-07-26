@@ -107,6 +107,7 @@ public class Post extends ParseObject {
 
         public Query getTop(){
             orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
             setLimit(20);
             return this;
         }
@@ -123,6 +124,7 @@ public class Post extends ParseObject {
         }
         public Query getMore(int skip){
             orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
             setSkip(skip);
             setLimit(20);
             return this;

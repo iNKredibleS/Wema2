@@ -39,7 +39,7 @@ import java.util.List;
             // Get the SupportMapFragment and request notification
             // when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment)  getChildFragmentManager()
-                    .findFragmentById(R.id.map); //getChildFragmentManager()  is used for fragments instead of
+                    .findFragmentById(R.id.map); //getChildFragmentManager()  is used for fragments instead of getFragmentManager
             mapFragment.getMapAsync(this);
         }
 

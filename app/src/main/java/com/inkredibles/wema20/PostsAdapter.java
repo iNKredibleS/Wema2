@@ -39,6 +39,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         public  ViewHolder(View itemView){
             super(itemView);
+            context = itemView.getContext();
             tvItemTitle = (TextView) itemView.findViewById(R.id.tvItemTitle);
             ivPostImageView = (ParseImageView) itemView.findViewById(R.id.ivPostImage);
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
@@ -55,7 +56,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 //for parcels to be defined, remember to add the parcel dependencies in the build.gradle file
                 //intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(selectedPost));
                // context.startActivity(intent);
-                if (viewHolderListener != null) viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView);
+                //ivPostImageView.
+                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView);
+
             }
 
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -135,11 +134,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putParcelable("post", post);
         detailFragment.setArguments(bundle);
         Log.d("Main Activity", "feed");
-        ViewCompat.setTransitionName(parseImageView, "postPicTransition");
-
+        //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
         getSupportFragmentManager()
                 .beginTransaction()
-                .addSharedElement(parseImageView, "postPicTransition")
+                .addSharedElement(parseImageView, "postTransition")
                 .replace(R.id.placeholder, detailFragment)
                 .addToBackStack("Added to stack")
                 .commit();

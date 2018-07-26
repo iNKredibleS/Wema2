@@ -12,5 +12,9 @@ public interface onItemSelectedListener {
 
     void toCreatePost();
 
+    void toCreateRak();
+
+    void addRakToServer(String rakTitle);
+
 
 }

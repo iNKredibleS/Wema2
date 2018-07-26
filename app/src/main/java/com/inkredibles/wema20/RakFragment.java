@@ -15,9 +15,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inkredibles.wema20.models.Rak;
+import com.inkredibles.wema20.models.User;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +38,9 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.impl.client.BasicResponseHandler;
 
 public class RakFragment extends Fragment {
 
@@ -36,15 +51,24 @@ public class RakFragment extends Fragment {
     @BindView(R.id.doLaterBtn) ImageButton doLaterBtn;
     @BindView(R.id.doneBtn) ImageButton doneBtn;
 
-    int total, current;
-    Random rand;
+    int total;
+    private  Random rand;
     Button newRakBtn;
     ArrayList<Rak> rakList;
+    ArrayList<User> userList;
     Rak currentRak;
+    private static Rak rak;
+    //private static Rak rak;
+    String text;
+    boolean created = false;
 
     ParseQuery<Rak> query;
 
     private onItemSelectedListener listener;
+
+    public final static String API_BASE_URL = "https://api.unsplash.com/";
+    public final static String OATH_URL = "https://unsplash.com/oauth/authorize";
+    //public final static String API_KEY_PARAM = "api_key";
 
 
     @Override
@@ -59,141 +83,149 @@ public class RakFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //put basically all the code here
 
         ButterKnife.bind(this, view);
 
 
 
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         query = ParseQuery.getQuery(Rak.class);
-        //query.setLimit(10);
+        rakList = new ArrayList();
+        userList = new ArrayList();
 
-        rakList = new ArrayList<Rak>();
-
-        //get total number of Rak objects from server
-        try {
-            total = query.count();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         rand = new Random();
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String title = bundle.getString("new_rak_title");
+            rakTxt.setText(title);
 
-        //set text box initially
-        query.findInBackground(new FindCallback<Rak>() {
-            @Override
-            public void done(List<Rak> objects, ParseException e) {
-                if(e == null) {
-                    Log.d("FindSuccessful", "Finding RAK Successful");
-                    int randomNum = rand.nextInt(total) + 1;
+            Rak newRak = new Rak();
+            newRak.setTitle(title);
+            newRak.setUser(ParseUser.getCurrentUser());
+            newRak.saveInBackground();
 
-                    currentRak = objects.get(randomNum - 1);
+        } else {
+            query.findInBackground(new FindCallback<Rak>() {
+                @Override
+                public void done(List<Rak> objects, ParseException e) {
+                    if (e == null) {
+                        Log.d("FindSuccessful", "Finding RAK Successful");
+                        //initialize array list
+                        rakList.addAll(objects);
 
-                    //store current randomNum so dont refresh to the same thing
-                    current = randomNum;
+                        if(rak == null) {
+                            rak = RAKGenerator(rakList, rakList.size(), false);
+                        }
+                        rakTxt.setText(rak.getTitle());
+                        //add RAK field to current user
+                        ParseUser user = ParseUser.getCurrentUser();
 
-                    //set text box
-                    String title = currentRak.getTitle();
+                        if (user.get("current_rak") == null) {
+                            user.put("current_rak", rak);
+                            user.saveInBackground();
+                        }
 
-                    //rakTxt = view.findViewById(rakTxt);
-                    rakTxt.setText(title);
-
-                } else {
-                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
+                    } else {
+                        Log.d("FindFailed", "Retrieving RAK unsuccessful");
+                    }
                 }
+            });
+            getPopularPhoto();
+        }
 
+    }
 
-            }
-        });
+    @Override
+    public void onResume() {
+            super.onResume();
 
-        //add ability to create new RAK and post to database\
-        //newRakBtn = findViewById(R.id.newRakBtn);
+    }
 
-        /*newRakBtn.setOnClickListener(new View.OnClickListener() {
+    private void getAuthorization() {
+        String url = OATH_URL;
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("client_id", R.string.api_key);
+        params.put("redirect_uri", R.string.redirect_uri);
+        //params.put("response_type", )
+    }
+    private void getPopularPhoto() {
+        String url = API_BASE_URL + "/photos/random";
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("client_id", R.string.api_key);
+        client.get(url, params, new JsonHttpResponseHandler() {
             @Override
-            public void onClick(View view) {
-               // Intent i = new Intent(RAKActivity.this, NewRakPost.class);
-               // startActivityForResult(i, REQUEST_CODE);
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.d("RequestSuccess", "Unsplash request successful");
             }
-        });*/
 
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d("RequestFailure", "Unsplash request failed");
+            }
+
+
+        });
     }
 
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
+        Rak rak = RAKGenerator(rakList, rakList.size(), false);
+        System.out.println(rakList.size());
 
-        query.findInBackground(new FindCallback<Rak>() {
-            @Override
-            public void done(List<Rak> objects, ParseException e) {
-                if (e == null) {
-                    Log.d("FindSuccessful", "Finding RAK Successful");
-
-                    int randomNum = rand.nextInt(total) + 1;
-
-                    while (randomNum == current) {
-                        randomNum = rand.nextInt(total) + 1;
-                    }
-
-
-                    Rak refRak = objects.get(randomNum - 1);
-                    String title = refRak.getTitle();
-
-                    rakTxt.setText(title);
-
-                } else {
-                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
-                }
-
-
-            }
-
-        });
-
+        rakTxt.setText(rak.getTitle());
     }
 
     @OnClick(R.id.feedBtn)
     protected void goToFeed() {
-
-//        Bundle args = new Bundle();
-//        args.putString("RAK Title",currentRak.getTitle());
-//        CreatePostFragment createPostFragment = new CreatePostFragment();
-//        createPostFragment.setArguments(args);
-//
-//
-
         listener.toFeed();
     }
 
 
-
-    private String RAKGenerator(ParseQuery<Rak> query, final int total) {
-        final String title = "";
-
-        query.findInBackground(new FindCallback<Rak>() {
-            @Override
-            public void done(List<Rak> objects, ParseException e) {
-                if(e == null) {
-                    Log.d("FindSuccessful", "Finding RAK Successful");
-                    int randomNum = rand.nextInt(total) + 1;
-
-                    //Rak currentRak = objects.get(randomNum - 1);
-                    //ask angie
-                    //title = currentRak.getTitle();
-
-
-                } else {
-                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
-                }
-
-
-            }
-        });
-
-        return title;
+    @OnClick(R.id.doneBtn)
+    protected void goToPost() {
+        listener.fromRAKtoCreatePost(currentRak);
     }
 
+    @OnClick(R.id.newRakBtn)
+    protected void createRak() {
+        listener.toCreateRak();
+    }
+
+
+    //This method returns a random RAK
+    private  Rak RAKGenerator(ArrayList<Rak> list,  int size, boolean refresh) {
+        String title = "";
+
+        //get random rak from list
+        int randomNum = rand.nextInt(rakList.size()) + 1;
+        int current = randomNum;
+
+        //change random number so RAK won't refresh to the same/current RAK
+        if(refresh) {
+            while (randomNum == current) {
+                randomNum = rand.nextInt(size) + 1;
+            }
+        }
+
+        //get title
+        Rak rak = rakList.get(randomNum - 1);
+        //title = currentRak.getTitle();
+
+        return rak;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -206,14 +238,7 @@ public class RakFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.doneBtn)
-    protected void goToPost() {
-        if (currentRak != null){
-            listener.fromRAKtoCreatePost(currentRak);
-        }else{
-            Toast.makeText(getContext(), "current rak null", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
 
 

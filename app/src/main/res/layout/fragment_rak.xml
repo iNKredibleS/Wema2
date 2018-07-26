@@ -64,4 +64,14 @@
         app:srcCompat="@drawable/ic_refresh_black_24dp"
         tools:ignore="VectorDrawableCompat"
         android:layout_alignParentRight="true" />
+
+    <ImageButton
+        android:id="@+id/imgBtn"
+        android:layout_width="42dp"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="49dp"
+        app:srcCompat="@drawable/ic_camera_alt_black_24dp"
+        tools:ignore="VectorDrawableCompat" />
 </RelativeLayout>

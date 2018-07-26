@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment archiveFragment = new ArchiveFragment();
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
+    final Fragment createRakFragment = new CreateRakFragment();
 
 
     public static boolean archiveBool = false;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                   }
                 })
             .build();
+
+            nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){
@@ -107,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     public void fromRAKtoCreatePost(Rak rak) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("RAK", rak );
-        //bundle.putString("rak_title", rak.getTitle());
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
@@ -119,6 +121,23 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+  }
+
+  @Override
+    public void toCreateRak() {
+      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.placeholder, createRakFragment).commit();
+  }
+
+  @Override
+    public void addRakToServer(String rakTitle) {
+      Bundle bundle = new Bundle();
+      bundle.putString("new_rak_title", rakTitle);
+      rakFragment.setArguments(bundle);
+
+      FragmentTransaction
+              fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.placeholder, rakFragment).commit();
   }
 
 }

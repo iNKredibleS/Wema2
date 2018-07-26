@@ -15,7 +15,12 @@ public interface onItemSelectedListener {
     //Transitions from any fragment to the CreatePost Fragment
     void fromRAKtoCreatePost(Rak rak);
 
+    void toCreateRak();
+
     void toAddUsers();
+
+    void addRakToServer(String rakTitle);
+
 
 
 }

@@ -15,6 +15,7 @@
 
     <com.parse.ParseImageView
         android:id="@+id/ivPostImg"
+        android:transitionName="postTransition"
         android:layout_width="match_parent"
         android:layout_height="252dp"
         android:layout_alignParentStart="true"

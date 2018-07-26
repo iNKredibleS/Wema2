@@ -18,6 +18,8 @@ import com.parse.ParseImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/*The feedfragment is responsible for the feed page which shows the posts.
+* Setting the adapter occurs in the findInbackground method since by then, we have gotten a list of posts*/
 public class FeedFragment extends Fragment {
 
     private static final  int SPAN_COUNT = 3;
@@ -83,6 +85,7 @@ public class FeedFragment extends Fragment {
         });
     }
 
+    //This method loads posts from the server, attaches the adapter to the recyclerview and sets the layout manager.
     private void loadPosts(){
         //get the top posts
         final Post.Query postsQuery = new Post.Query();
@@ -100,12 +103,43 @@ public class FeedFragment extends Fragment {
                     //set the layout manager to position the items
                     StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
                     rvPosts.setLayoutManager(mLayoutManager);
+                    scrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
+                        @Override
+                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+                            loadNextDataFromApi(totalItemsCount);
+                        }
+                    };
+                    // Adds the scroll listener to RecyclerView
+                    rvPosts.addOnScrollListener(scrollListener);
+
                 }else{
                     e.printStackTrace();
                 }
             }
         });
     }
+
+    //method that loads more data from the parse server and nofitfies the adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        final Post.Query postsQuery = new Post.Query();
+        postsQuery.getMore(offset);
+        postsQuery.withUser();
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null){
+                    for (int i = 0; i < objects.size(); i++){
+                        posts.add(objects.get(i));
+                        adapter.notifyItemInserted(objects.size()-1);
+                    }
+                }
+            }
+        });
+    }
+
+    //initializes the onItemSelectedListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

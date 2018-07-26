@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -20,9 +21,6 @@ import java.util.Date;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
-
-
-    //just a comment to test
     private static  final String KEY_NAME = "name";
     private static  final String KEY_MESSAGE = "message";
     private static  final String KEY_IMAGE = "image";
@@ -32,6 +30,8 @@ public class Post extends ParseObject {
     private static  final String KEY_CREATOR = "creator_user";
     private static  final String KEY_CREATED_AT = "createdAt";
     private static  final String KEY_TITLE = "title";
+    private static  final String KEY_LOCATION = "location";
+    private static  final  String KEY_PLACE_NAME =  "placename";
 
     public String getName() {return getString(KEY_NAME);}
     public void setName(String name) {
@@ -76,9 +76,19 @@ public class Post extends ParseObject {
         long dateMillis = getCreatedAt().getTime();
         return DateUtils.getRelativeTimeSpanString(dateMillis, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
     }
+    public void setLocation(ParseGeoPoint parseGeoPoint){
+        put(KEY_LOCATION, parseGeoPoint);
+    }
+    public ParseGeoPoint getLocation(){
+        return getParseGeoPoint(KEY_LOCATION);
+    }
 
-
-
+    public void setPlaceName(String name){
+        put(KEY_PLACE_NAME, name);
+    }
+    public String getPlaceName(){
+        return getString(KEY_PLACE_NAME);
+    }
 
 
     public ParseUser getUser(){
@@ -90,27 +100,38 @@ public class Post extends ParseObject {
 
     }
 
-
-
     public static class Query extends ParseQuery<Post> {
         public Query() {
             super(Post.class);
         }
 
         public Query getTop(){
-            orderByDescending("createdAt");
-            setLimit(50);
+            orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
+            setLimit(20);
             return this;
         }
 
         public Query withUser (){
-            include("creator_user");
+            include(KEY_CREATOR);
             return this;
         }
         public Query getPrivate(){
-            orderByDescending("createdAt");
+            orderByDescending(KEY_CREATED_AT);
             setLimit(50);
-            whereContains("creator_user", ParseUser.getCurrentUser().getObjectId());
+            whereContains(KEY_CREATOR, ParseUser.getCurrentUser().getObjectId());
+            return this;
+        }
+        public Query getMore(int skip){
+            orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
+            setSkip(skip);
+            setLimit(20);
+            return this;
+        }
+        public Query getMany(){
+            orderByDescending(KEY_CREATED_AT);
+            whereContains(KEY_PRIVACY, "public");
             return this;
         }
     }

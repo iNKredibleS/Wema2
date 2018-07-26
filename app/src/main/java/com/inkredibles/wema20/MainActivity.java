@@ -161,11 +161,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     @Override
     //after new post created go back to feed fragment
     public void fromRAKtoCreatePost(Rak rak) {
+
         Bundle bundle = new Bundle();
         isRak = true;
         bundle.putBoolean("isRak", isRak);
         bundle.putParcelable("RAK", rak );
-        //bundle.putString("rak_title", rak.getTitle());
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
@@ -202,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
   public void fromCurrentGrouptoCreatePost(ParseRole currentRole){
-//        isGroup = true;
+
+        isGroup = true;
         Bundle bundle = new Bundle();
         bundle.putBoolean("isGroup", isGroup);
         bundle.putParcelable("currentRole", currentRole);

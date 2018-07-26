@@ -86,59 +86,10 @@ public class CreatePostFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        filesDir = getContext().getFilesDir();
-
         //butterknife bind
         ButterKnife.bind(this, view);
 
-        bundle = this.getArguments();
-        Boolean isGroup = bundle.getBoolean("isGroup");
-        Boolean isReflection = bundle.getBoolean("isReflection");
-        Boolean isRak = bundle.getBoolean("isRak");
-        if(isGroup){
-            currentRole = bundle.getParcelable("currentRole");
-
-        }else if (isRak){ //comes from rak
-            rak = bundle.getParcelable("RAK");
-            et_title.setText(rak.getTitle());
-            //set the cursor position to end of input title
-            int position = et_title.length();
-            Editable etext = et_title.getText();
-            Selection.setSelection(etext, position);
-        } else if (isReflection){
-            et_message.setText("");
-            et_title.setText("");
-        } else{
-            System.out.println("-------------");
-        }
-//        if (bundle != null) {
-//            Boolean isGroup = bundle.getBoolean("isGroup");
-//            if(isGroup){
-//                currentRole = bundle.getParcelable("currentRole");
-//
-//            }else { //comes from rak
-//                rak = bundle.getParcelable("RAK");
-//                et_title.setText(rak.getTitle());
-//                //set the cursor position to end of input title
-//                int position = et_title.length();
-//                Editable etext = et_title.getText();
-//                Selection.setSelection(etext, position);
-//            }
-//
-//        } else {
-//            System.out.println("-------------");
-//        }
-
-        //setting up switches
-        switch_pub_pri.setChecked(true);
-        switch_give_rec.setChecked(true);
-        tvGiveRec.setText("Given");
-        tvPubPri.setText("Public");
-
-        //default type and privacy values
-        type = "give";
-        privacy = "public";
-
+        setUpView();
 
     }
 
@@ -146,6 +97,13 @@ public class CreatePostFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        setUpView();
+
+    }
+
+
+    public void setUpView() {
+
         filesDir = getContext().getFilesDir();
 
         bundle = this.getArguments();
@@ -163,33 +121,11 @@ public class CreatePostFragment extends Fragment {
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
         } else if (isReflection){
-            et_message.setText("");
-            et_title.setText("");
+//            et_message.setText("");
+//            et_title.setText("");
         } else{
             System.out.println("-------------");
         }
-
-
-
-//        bundle = this.getArguments();
-//        if (bundle != null) {
-//            Boolean isGroup = bundle.getBoolean("isGroup");
-//            if(isGroup){
-//                currentRole = bundle.getParcelable("currentRole");
-//
-//            }else { //comes from rak
-//                rak = bundle.getParcelable("RAK");
-//                et_title.setText(rak.getTitle());
-//                //set the cursor position to end of input title
-//                int position = et_title.length();
-//                Editable etext = et_title.getText();
-//                Selection.setSelection(etext, position);
-//            }
-//
-//        } else {
-//            System.out.println("-------------");
-//        }
-
 
 
         //setting up switches
@@ -202,11 +138,9 @@ public class CreatePostFragment extends Fragment {
         type = "give";
         privacy = "public";
 
-
     }
 
 
-    //TODO change to teriary format
     //when button changes the type, change the textview that displays type and the type field in
     //posts model
     @OnCheckedChanged(R.id.switch_give_rec)
@@ -288,13 +222,7 @@ public class CreatePostFragment extends Fragment {
                         if (e == null) {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
-                            et_message.setText("");
-                            et_title.setText("");
-                            listener.setIsGroup(false);
-                            listener.setIsRak(false);
-                            listener.setIsReflection(false);
-                            bundle = null;
-                            currentRole = null;
+                            resetCreatePost();
                             listener.toFeed();
 
                         } else {
@@ -302,6 +230,19 @@ public class CreatePostFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    protected void resetCreatePost() {
+        et_message.setText("");
+        et_title.setText("");
+        listener.setIsGroup(false);
+        listener.setIsRak(false);
+        listener.setIsReflection(false);
+        bundle = null;
+        currentRole = null;
+        file = null;
+        parseFile = null;
+
     }
 
 

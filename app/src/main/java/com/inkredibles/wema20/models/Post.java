@@ -108,6 +108,7 @@ public class Post extends ParseObject {
 
         public Query getTop(){
             orderByDescending("createdAt");
+            whereEqualTo("privacy", "public");
             setLimit(50);
             return this;
         }

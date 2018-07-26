@@ -43,12 +43,12 @@ public class LoginActivity extends AppCompatActivity {
 
         //persisted user code so the user doesn't have to log in
         // each time they open the app
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        if (currentUser != null){
-//            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null){
+            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
 
     }

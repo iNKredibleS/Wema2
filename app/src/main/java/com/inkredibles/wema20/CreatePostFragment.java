@@ -28,6 +28,7 @@ import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -61,6 +62,9 @@ public class CreatePostFragment extends Fragment {
     private String privacy;
     private onItemSelectedListener listener;
     Rak rak;
+    private ParseRole currentRole;
+    private Bundle bundle;
+
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -87,21 +91,43 @@ public class CreatePostFragment extends Fragment {
         //butterknife bind
         ButterKnife.bind(this, view);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        bundle = this.getArguments();
+        Boolean isGroup = bundle.getBoolean("isGroup");
+        Boolean isReflection = bundle.getBoolean("isReflection");
+        Boolean isRak = bundle.getBoolean("isRak");
+        if(isGroup){
+            currentRole = bundle.getParcelable("currentRole");
+
+        }else if (isRak){ //comes from rak
             rak = bundle.getParcelable("RAK");
-            Log.d("RAk text", rak.getTitle());
             et_title.setText(rak.getTitle());
             //set the cursor position to end of input title
-            //found on stack overflow
             int position = et_title.length();
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
-        } else {
+        } else if (isReflection){
+            et_message.setText("");
+            et_title.setText("");
+        } else{
             System.out.println("-------------");
         }
-
-
+//        if (bundle != null) {
+//            Boolean isGroup = bundle.getBoolean("isGroup");
+//            if(isGroup){
+//                currentRole = bundle.getParcelable("currentRole");
+//
+//            }else { //comes from rak
+//                rak = bundle.getParcelable("RAK");
+//                et_title.setText(rak.getTitle());
+//                //set the cursor position to end of input title
+//                int position = et_title.length();
+//                Editable etext = et_title.getText();
+//                Selection.setSelection(etext, position);
+//            }
+//
+//        } else {
+//            System.out.println("-------------");
+//        }
 
         //setting up switches
         switch_pub_pri.setChecked(true);
@@ -122,19 +148,47 @@ public class CreatePostFragment extends Fragment {
 
         filesDir = getContext().getFilesDir();
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        bundle = this.getArguments();
+        Boolean isGroup = bundle.getBoolean("isGroup");
+        Boolean isReflection = bundle.getBoolean("isReflection");
+        Boolean isRak = bundle.getBoolean("isRak");
+        if(isGroup){
+            currentRole = bundle.getParcelable("currentRole");
+
+        }else if (isRak){ //comes from rak
             rak = bundle.getParcelable("RAK");
-            Log.d("RAk text", rak.getTitle());
             et_title.setText(rak.getTitle());
             //set the cursor position to end of input title
-            //found on stack overflow
             int position = et_title.length();
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
-        } else {
+        } else if (isReflection){
+            et_message.setText("");
+            et_title.setText("");
+        } else{
             System.out.println("-------------");
         }
+
+
+
+//        bundle = this.getArguments();
+//        if (bundle != null) {
+//            Boolean isGroup = bundle.getBoolean("isGroup");
+//            if(isGroup){
+//                currentRole = bundle.getParcelable("currentRole");
+//
+//            }else { //comes from rak
+//                rak = bundle.getParcelable("RAK");
+//                et_title.setText(rak.getTitle());
+//                //set the cursor position to end of input title
+//                int position = et_title.length();
+//                Editable etext = et_title.getText();
+//                Selection.setSelection(etext, position);
+//            }
+//
+//        } else {
+//            System.out.println("-------------");
+//        }
 
 
 
@@ -189,11 +243,11 @@ public class CreatePostFragment extends Fragment {
         final ParseUser user = ParseUser.getCurrentUser();
         final String finalPrivacy = privacy;
         final String finalType = type;
-
         if(file != null) parseFile = new ParseFile(file);
+        final ParseRole role = currentRole;
 
 
-        createPost(title, message, user, parseFile, finalPrivacy, finalType);
+        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
 
 
     }
@@ -217,7 +271,7 @@ public class CreatePostFragment extends Fragment {
 
     //create post and store to parse server
     //set the title, message, user, image, privacy, give, receive
-    private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type) {
+    private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
         final Post newPost = new Post();
         newPost.setTitle(title);
         newPost.setMessage(message);
@@ -225,6 +279,7 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
+        if(role != null) newPost.setRole(role);
 
         newPost.saveInBackground(
                 new SaveCallback() {
@@ -235,6 +290,11 @@ public class CreatePostFragment extends Fragment {
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
                             et_message.setText("");
                             et_title.setText("");
+                            listener.setIsGroup(false);
+                            listener.setIsRak(false);
+                            listener.setIsReflection(false);
+                            bundle = null;
+                            currentRole = null;
                             listener.toFeed();
 
                         } else {

@@ -42,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     public static boolean archiveBool = false;
+    public boolean isGroup = false;
+    public boolean isReflection = false;
+    public boolean isRak = false;
 
-   // private onItemSelectedListener itemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,12 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                   @Override
                   public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                     if (drawerItem == reflection) {
-                      nextFragment(createPostFragment);
+                        isReflection = true;
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isReflection", isReflection);
+                        createPostFragment.setArguments(bundle);
+                        nextFragment(createPostFragment);
+
                     }else if (drawerItem == archive){
                         archiveBool = true;
                         nextFragment(archiveFragment);
@@ -117,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     public boolean getArchiveBool(){return archiveBool;}
+
+
+
 
     @Override
     public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
@@ -152,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     //after new post created go back to feed fragment
     public void fromRAKtoCreatePost(Rak rak) {
         Bundle bundle = new Bundle();
+        isRak = true;
+        bundle.putBoolean("isRak", isRak);
         bundle.putParcelable("RAK", rak );
         //bundle.putString("rak_title", rak.getTitle());
         createPostFragment.setArguments(bundle);
@@ -187,5 +199,34 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
   }
+
+  @Override
+  public void fromCurrentGrouptoCreatePost(ParseRole currentRole){
+//        isGroup = true;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isGroup", isGroup);
+        bundle.putParcelable("currentRole", currentRole);
+        createPostFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+  }
+
+  @Override
+  public void setIsGroup(Boolean bool){
+        isGroup = bool;
+  }
+
+  @Override
+  public void setIsReflection (Boolean bool){
+        isReflection = bool;
+  }
+
+    @Override
+    public void setIsRak (Boolean bool){
+        isRak = bool;
+    }
+
+
+
 
 }

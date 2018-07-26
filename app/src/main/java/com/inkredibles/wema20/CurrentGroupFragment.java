@@ -13,6 +13,7 @@ import com.parse.ParseRole;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CurrentGroupFragment extends Fragment {
 
@@ -20,6 +21,7 @@ public class CurrentGroupFragment extends Fragment {
 
     private onItemSelectedListener listener;
     private ParseRole currentRole;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -38,6 +40,66 @@ public class CurrentGroupFragment extends Fragment {
         }else {
             Toast.makeText(getContext(), "bundle not gotten", Toast.LENGTH_SHORT);
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //get the newly created group from args
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            currentRole = bundle.getParcelable("newRole");
+            tvGroupName.setText(currentRole.getName());
+        }else {
+            Toast.makeText(getContext(), "bundle not gotten", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @OnClick(R.id.btnCreateGroupPost)
+    protected void createGroupPost() {
+        listener.setIsGroup(true);
+        //TODO figure out how to unset isGroup
+        listener.fromCurrentGrouptoCreatePost(currentRole);
+
+
+
+
+
+
+
+
+
+
+        //TODO probably delete all this stuff
+//        final Post groupPost = new Post();
+//        groupPost.setTitle("Group Post please");
+//        groupPost.setMessage("First Group Post hoping that it attaches");
+//        groupPost.setPrivacy("private");
+//        groupPost.setUser(ParseUser.getCurrentUser());
+//        groupPost.setType("received");
+
+
+
+
+       // currentRole.getRelation("groupPosts").add(groupPost);
+
+
+//        currentRole.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    Log.d("CurrentGroupFragment", "create group post success");
+//
+//                    } else {
+//                        e.printStackTrace();
+//                    }
+//            }
+//        });
+
+
+
+
 
     }
 

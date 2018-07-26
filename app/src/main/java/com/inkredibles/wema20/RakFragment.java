@@ -64,7 +64,6 @@ public class RakFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
-
         query = ParseQuery.getQuery(Rak.class);
         //query.setLimit(10);
 

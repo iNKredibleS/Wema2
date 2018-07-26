@@ -7,6 +7,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.Date;
@@ -32,6 +33,7 @@ public class Post extends ParseObject {
     private static  final String KEY_CREATOR = "creator_user";
     private static  final String KEY_CREATED_AT = "createdAt";
     private static  final String KEY_TITLE = "title";
+    private static final String KEY_ROLE = "role";
 
     public String getName() {return getString(KEY_NAME);}
     public void setName(String name) {
@@ -88,6 +90,13 @@ public class Post extends ParseObject {
     public void setUser(ParseUser parseUser){
         put(KEY_CREATOR, parseUser);
 
+    }
+
+    //TODO Figure out how to get ROLE
+    //public ParseRole getRole() {return get(KEY_ROLE); }
+
+    public void setRole (ParseRole parseRole) {
+        put(KEY_ROLE, parseRole);
     }
 
 

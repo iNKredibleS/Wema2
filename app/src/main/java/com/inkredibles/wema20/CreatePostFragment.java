@@ -24,10 +24,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -60,6 +66,8 @@ public class CreatePostFragment extends Fragment {
     private String type;
     private String privacy;
     private onItemSelectedListener listener;
+    private ParseGeoPoint geoPoint;
+    private String placeName;
     Rak rak;
 
     // Storage Permissions
@@ -112,6 +120,29 @@ public class CreatePostFragment extends Fragment {
         //default type and privacy values
         type = "give";
         privacy = "public";
+        //Location autocomplete
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        if (autocompleteFragment != null){
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    // TODO: Get info about the selected place.
+                    LatLng latLong= place.getLatLng(); //get a lat long
+                    geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
+                    placeName = place.getName().toString();
+                }
+
+                @Override
+                public void onError(Status status) {
+                    // TODO: Handle the error.
+                    Log.i("CreatePost: ", "An error occurred: " + status);
+                }
+            });
+
+        }
+
+
 
 
     }
@@ -225,6 +256,8 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
+        newPost.setLocation(geoPoint);
+        newPost.setPlaceName(placeName);
 
         newPost.saveInBackground(
                 new SaveCallback() {

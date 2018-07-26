@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -32,6 +33,8 @@ public class Post extends ParseObject {
     private static  final String KEY_CREATOR = "creator_user";
     private static  final String KEY_CREATED_AT = "createdAt";
     private static  final String KEY_TITLE = "title";
+    private static  final String KEY_LOCATION = "location";
+    private static  final  String KEY_PLACE_NAME =  "placename";
 
     public String getName() {return getString(KEY_NAME);}
     public void setName(String name) {
@@ -76,9 +79,19 @@ public class Post extends ParseObject {
         long dateMillis = getCreatedAt().getTime();
         return DateUtils.getRelativeTimeSpanString(dateMillis, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
     }
+    public void setLocation(ParseGeoPoint parseGeoPoint){
+        put(KEY_LOCATION, parseGeoPoint);
+    }
+    public ParseGeoPoint getLocation(){
+        return getParseGeoPoint(KEY_LOCATION);
+    }
 
-
-
+    public void setPlaceName(String name){
+        put(KEY_PLACE_NAME, name);
+    }
+    public String getPlaceName(){
+        return getString(KEY_PLACE_NAME);
+    }
 
 
     public ParseUser getUser(){

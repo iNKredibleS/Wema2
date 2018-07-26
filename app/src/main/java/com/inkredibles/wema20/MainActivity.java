@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
     final Fragment createGroupFragment = new CreateGroupFragment();
+    final Fragment placesFragment = new PlacesFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
         final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
+        final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
 
 
     // create the drawer and remember the `Drawer` result object
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 reflection,
                 archive,
                 group,
-                new SecondaryDrawerItem().withName("othername"))
+                places)
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {
                   @Override
@@ -89,7 +91,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
                         nextFragment(createGroupFragment);
-
+                    }
+                    else if (drawerItem == places){
+                        //nextFragment();
+                        nextFragment(placesFragment);
                     }
 
                     return true;

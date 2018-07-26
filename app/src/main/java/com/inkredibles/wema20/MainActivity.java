@@ -19,6 +19,11 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
+import com.parse.ParseRole;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
@@ -32,15 +37,20 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment createGroupFragment = new CreateGroupFragment();
     final Fragment placesFragment = new PlacesFragment();
     final Fragment addUsersFragment = new AddUsersFragment();
+    final Fragment currentGroupFragment = new CurrentGroupFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
+    private SecondaryDrawerItem rak;
+    private SecondaryDrawerItem group;
 
 
 
 
     public static boolean archiveBool = false;
+    public boolean isGroup = false;
+    public boolean isReflection = false;
+    public boolean isRak = false;
 
-   // private onItemSelectedListener itemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
-        final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
-        final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
+        rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
+        group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
         final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
         final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
 
@@ -86,7 +96,12 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                   @Override
                   public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                     if (drawerItem == reflection) {
-                      nextFragment(createPostFragment);
+                        isReflection = true;
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isReflection", isReflection);
+                        createPostFragment.setArguments(bundle);
+                        nextFragment(createPostFragment);
+
                     }else if (drawerItem == archive){
                         archiveBool = true;
                         nextFragment(archiveFragment);
@@ -133,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
     public boolean getArchiveBool(){return archiveBool;}
 
+
+
+
     @Override
     public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
         Fragment detailFragment = new DetailFragment();
@@ -165,11 +183,15 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     @Override
     //after new post created go back to feed fragment
     public void fromRAKtoCreatePost(Rak rak) {
+
         Bundle bundle = new Bundle();
+        isRak = true;
+        bundle.putBoolean("isRak", isRak);
         bundle.putParcelable("RAK", rak );
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        //result.setSelection(rak);
 
     }
 
@@ -196,5 +218,55 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
               fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, rakFragment).commit();
   }
+
+  @Override
+  public void fromAddUserstoCreateGroup(List<ParseUser> addedUsers){
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("added_users", new ArrayList<ParseUser>(addedUsers));
+        createGroupFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, createGroupFragment).commit();
+
+
+  }
+
+  @Override
+  public void fromCreateGrouptoCurrentGroup(ParseRole newRole){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("newRole", newRole);
+        currentGroupFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
+  }
+
+  @Override
+  public void fromCurrentGrouptoCreatePost(ParseRole currentRole){
+
+        isGroup = true;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isGroup", isGroup);
+        bundle.putParcelable("currentRole", currentRole);
+        createPostFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+  }
+
+  @Override
+  public void setIsGroup(Boolean bool){
+        isGroup = bool;
+  }
+
+  @Override
+  public void setIsReflection (Boolean bool){
+        isReflection = bool;
+  }
+
+    @Override
+    public void setIsRak (Boolean bool){
+        isRak = bool;
+    }
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.inkredibles.wema20;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -21,7 +23,10 @@ public class AddUsersFragment extends Fragment {
 
     private RecyclerView rvUsers;
     private ArrayList<ParseUser> allUsers;
+    private List<ParseUser> addedUsers;
     private UsersAdapter adapter;
+    private onItemSelectedListener listener;
+
 
 
 
@@ -34,15 +39,32 @@ public class AddUsersFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         View mainView = getView();
         //get the recyclerview
+        Button usersAddedBtn = (Button) mainView.findViewById(R.id.doneAddedUsersBtn);
         rvUsers = (RecyclerView) mainView.findViewById(R.id.rvUsers);
         allUsers = new ArrayList<>();
-        adapter = new UsersAdapter(allUsers);
+        addedUsers = new ArrayList<>();
+        addedUsers.add(ParseUser.getCurrentUser());
+        adapter = new UsersAdapter(allUsers, addedUsers);
         rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         rvUsers.setAdapter(adapter);
 
         loadUsers();
+
+
+        usersAddedBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                addedUsers = adapter.getAddedUsers();
+                for(int i = 0; i < addedUsers.size(); i++){
+                    Log.i("add user fragment", "users[" + i + "]" + "=" + addedUsers.get(i).getUsername());
+                }
+                listener.fromAddUserstoCreateGroup(addedUsers);
+
+            }
+        });
 
 
     }
@@ -55,13 +77,6 @@ public class AddUsersFragment extends Fragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.d(
-                                "HomeFragment",
-                                "Post["
-                                        + i
-                                        + "] = "
-                                        + objects.get(i).getUsername());
-
                         allUsers.add(objects.get(i));
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
@@ -79,4 +94,16 @@ public class AddUsersFragment extends Fragment {
     }
 
 
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onItemSelectedListener) {
+            listener = (onItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnItemSelectedListener");
+        }
+    }
 }

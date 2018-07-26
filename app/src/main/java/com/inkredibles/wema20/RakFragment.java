@@ -12,23 +12,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,9 +32,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.impl.client.BasicResponseHandler;
 
 public class RakFragment extends Fragment {
 
@@ -56,9 +48,7 @@ public class RakFragment extends Fragment {
     Button newRakBtn;
     ArrayList<Rak> rakList;
     ArrayList<User> userList;
-    Rak currentRak;
     private static Rak rak;
-    //private static Rak rak;
     String text;
     boolean created = false;
 
@@ -86,7 +76,10 @@ public class RakFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        query = ParseQuery.getQuery(Rak.class);
+        //query.setLimit(10);
 
+        rakList = new ArrayList<Rak>();
 
 
     }
@@ -196,7 +189,7 @@ public class RakFragment extends Fragment {
 
     @OnClick(R.id.doneBtn)
     protected void goToPost() {
-        listener.fromRAKtoCreatePost(currentRak);
+        listener.fromRAKtoCreatePost(rak);
     }
 
     @OnClick(R.id.newRakBtn)
@@ -222,7 +215,7 @@ public class RakFragment extends Fragment {
 
         //get title
         Rak rak = rakList.get(randomNum - 1);
-        //title = currentRak.getTitle();
+
 
         return rak;
     }

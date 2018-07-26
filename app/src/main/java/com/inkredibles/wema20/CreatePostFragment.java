@@ -34,6 +34,7 @@ import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -72,6 +73,9 @@ public class CreatePostFragment extends Fragment {
     private ParseGeoPoint geoPoint;
     private String placeName;
     Rak rak;
+    private ParseRole currentRole;
+    private Bundle bundle;
+
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -93,27 +97,47 @@ public class CreatePostFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        filesDir = getContext().getFilesDir();
-
         //butterknife bind
         ButterKnife.bind(this, view);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        setUpView();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setUpView();
+
+    }
+
+
+    public void setUpView() {
+
+        filesDir = getContext().getFilesDir();
+
+        bundle = this.getArguments();
+        Boolean isGroup = bundle.getBoolean("isGroup");
+        Boolean isReflection = bundle.getBoolean("isReflection");
+        Boolean isRak = bundle.getBoolean("isRak");
+        if (isGroup) {
+            currentRole = bundle.getParcelable("currentRole");
+
+        } else if (isRak) { //comes from rak
             rak = bundle.getParcelable("RAK");
-            Log.d("RAk text", rak.getTitle());
             et_title.setText(rak.getTitle());
             //set the cursor position to end of input title
-            //found on stack overflow
             int position = et_title.length();
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
+        } else if (isReflection) {
+            //any Reflection specific posts
         } else {
             System.out.println("-------------");
         }
 
-
-
+        //TODO change this to a radio button or spinner
         //setting up switches
         switch_pub_pri.setChecked(true);
         switch_give_rec.setChecked(true);
@@ -123,15 +147,15 @@ public class CreatePostFragment extends Fragment {
         //default type and privacy values
         type = "give";
         privacy = "public";
-        //Location autocomplete
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        if (autocompleteFragment != null){
+        if (autocompleteFragment != null) {
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
                     // TODO: Get info about the selected place.
-                    LatLng latLong= place.getLatLng(); //get a lat long
+                    LatLng latLong = place.getLatLng(); //get a lat long
                     geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
                     placeName = place.getName().toString();
                 }
@@ -143,45 +167,11 @@ public class CreatePostFragment extends Fragment {
                 }
             });
 
+
         }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        filesDir = getContext().getFilesDir();
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            rak = bundle.getParcelable("RAK");
-            Log.d("RAk text", rak.getTitle());
-            et_title.setText(rak.getTitle());
-            //set the cursor position to end of input title
-            //found on stack overflow
-            int position = et_title.length();
-            Editable etext = et_title.getText();
-            Selection.setSelection(etext, position);
-        } else {
-            System.out.println("-------------");
-        }
-
-        //setting up switches
-        switch_pub_pri.setChecked(true);
-        switch_give_rec.setChecked(true);
-        tvGiveRec.setText("Given");
-        tvPubPri.setText("Public");
-
-        //default type and privacy values
-        type = "give";
-        privacy = "public";
-
-
     }
 
 
-    //TODO change to teriary format
     //when button changes the type, change the textview that displays type and the type field in
     //posts model
     @OnCheckedChanged(R.id.switch_give_rec)
@@ -218,11 +208,10 @@ public class CreatePostFragment extends Fragment {
         final ParseUser user = ParseUser.getCurrentUser();
         final String finalPrivacy = privacy;
         final String finalType = type;
-
         if(file != null) parseFile = new ParseFile(file);
+        final ParseRole role = currentRole;
 
-
-        createPost(title, message, user, parseFile, finalPrivacy, finalType);
+        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
 
 
     }
@@ -246,7 +235,7 @@ public class CreatePostFragment extends Fragment {
 
     //create post and store to parse server
     //set the title, message, user, image, privacy, give, receive
-    private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type) {
+    private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
         final Post newPost = new Post();
         newPost.setTitle(title);
         newPost.setMessage(message);
@@ -256,6 +245,7 @@ public class CreatePostFragment extends Fragment {
         newPost.setType(type);
         newPost.setLocation(geoPoint);
         newPost.setPlaceName(placeName);
+        if(role != null) newPost.setRole(role);
 
         newPost.saveInBackground(
                 new SaveCallback() {
@@ -264,8 +254,7 @@ public class CreatePostFragment extends Fragment {
                         if (e == null) {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
-                            et_message.setText("");
-                            et_title.setText("");
+                            resetCreatePost();
                             listener.toFeed();
 
                         } else {
@@ -273,6 +262,19 @@ public class CreatePostFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    protected void resetCreatePost() {
+        et_message.setText("");
+        et_title.setText("");
+        listener.setIsGroup(false);
+        listener.setIsRak(false);
+        listener.setIsReflection(false);
+        bundle = null;
+        currentRole = null;
+        file = null;
+        parseFile = null;
+
     }
 
 

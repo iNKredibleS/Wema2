@@ -8,6 +8,7 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.Date;
@@ -32,6 +33,8 @@ public class Post extends ParseObject {
     private static  final String KEY_TITLE = "title";
     private static  final String KEY_LOCATION = "location";
     private static  final  String KEY_PLACE_NAME =  "placename";
+    private static final String KEY_ROLE = "role";
+
 
     public String getName() {return getString(KEY_NAME);}
     public void setName(String name) {
@@ -100,12 +103,22 @@ public class Post extends ParseObject {
 
     }
 
+    //TODO Figure out how to get ROLE
+    //public ParseRole getRole() {return get(KEY_ROLE); }
+
+    public void setRole (ParseRole parseRole) {
+        put(KEY_ROLE, parseRole);
+    }
+
+
+
     public static class Query extends ParseQuery<Post> {
         public Query() {
             super(Post.class);
         }
 
         public Query getTop(){
+
             orderByDescending(KEY_CREATED_AT);
             whereContains(KEY_PRIVACY, "public");
             setLimit(20);

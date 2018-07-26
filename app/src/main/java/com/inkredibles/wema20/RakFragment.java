@@ -151,10 +151,10 @@ public class RakFragment extends Fragment {
         //params.put("response_type", )
     }
     private void getPopularPhoto() {
-        String url = API_BASE_URL + "/photos/random";
+        String url = API_BASE_URL + "photos/random/?client_id=" + R.string.api_key;
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("client_id", R.string.api_key);
+        //params.put("client_id", R.string.api_key);
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

@@ -24,10 +24,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -44,6 +50,9 @@ import butterknife.OnClick;
 import static android.app.Activity.RESULT_OK;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
+/*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
+ *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
+  *  is private, only they can see it in their archive.*/
 public class CreatePostFragment extends Fragment {
 
     @BindView(R.id.Title) EditText et_title;
@@ -60,6 +69,8 @@ public class CreatePostFragment extends Fragment {
     private String type;
     private String privacy;
     private onItemSelectedListener listener;
+    private ParseGeoPoint geoPoint;
+    private String placeName;
     Rak rak;
 
     // Storage Permissions
@@ -90,16 +101,71 @@ public class CreatePostFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             rak = bundle.getParcelable("RAK");
+            Log.d("RAk text", rak.getTitle());
+            et_title.setText(rak.getTitle());
+            //set the cursor position to end of input title
+            //found on stack overflow
+            int position = et_title.length();
+            Editable etext = et_title.getText();
+            Selection.setSelection(etext, position);
         } else {
             System.out.println("-------------");
         }
 
-        et_title.setText(rak.getTitle());
-        //set the cursor position to end of input title
-        //found on stack overflow
-        int position = et_title.length();
-        Editable etext = et_title.getText();
-        Selection.setSelection(etext, position);
+
+
+        //setting up switches
+        switch_pub_pri.setChecked(true);
+        switch_give_rec.setChecked(true);
+        tvGiveRec.setText("Given");
+        tvPubPri.setText("Public");
+
+        //default type and privacy values
+        type = "give";
+        privacy = "public";
+        //Location autocomplete
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        if (autocompleteFragment != null){
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    // TODO: Get info about the selected place.
+                    LatLng latLong= place.getLatLng(); //get a lat long
+                    geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
+                    placeName = place.getName().toString();
+                }
+
+                @Override
+                public void onError(Status status) {
+                    // TODO: Handle the error.
+                    Log.i("CreatePost: ", "An error occurred: " + status);
+                }
+            });
+
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        filesDir = getContext().getFilesDir();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            rak = bundle.getParcelable("RAK");
+            Log.d("RAk text", rak.getTitle());
+            et_title.setText(rak.getTitle());
+            //set the cursor position to end of input title
+            //found on stack overflow
+            int position = et_title.length();
+            Editable etext = et_title.getText();
+            Selection.setSelection(etext, position);
+        } else {
+            System.out.println("-------------");
+        }
 
         //setting up switches
         switch_pub_pri.setChecked(true);
@@ -113,7 +179,6 @@ public class CreatePostFragment extends Fragment {
 
 
     }
-
 
 
     //TODO change to teriary format
@@ -156,7 +221,10 @@ public class CreatePostFragment extends Fragment {
 
         if(file != null) parseFile = new ParseFile(file);
 
+
         createPost(title, message, user, parseFile, finalPrivacy, finalType);
+
+
     }
 
     //launch activity to choose a photo from gallery
@@ -186,6 +254,8 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
+        newPost.setLocation(geoPoint);
+        newPost.setPlaceName(placeName);
 
         newPost.saveInBackground(
                 new SaveCallback() {
@@ -194,6 +264,8 @@ public class CreatePostFragment extends Fragment {
                         if (e == null) {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
+                            et_message.setText("");
+                            et_title.setText("");
                             listener.toFeed();
 
                         } else {
@@ -269,6 +341,7 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
+    // Initializes the listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

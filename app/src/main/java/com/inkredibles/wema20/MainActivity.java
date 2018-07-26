@@ -1,12 +1,15 @@
 package com.inkredibles.wema20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -14,7 +17,10 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
+/*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
 
     private Toolbar toolbar;
@@ -23,10 +29,17 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment feedFragment = new FeedFragment();
     final Fragment rakFragment = new RakFragment();
     final Fragment createRakFragment = new CreateRakFragment();
+    final Fragment createGroupFragment = new CreateGroupFragment();
+    final Fragment placesFragment = new PlacesFragment();
+    private Drawer result;
+    private SecondaryDrawerItem feed;
+
+
 
 
     public static boolean archiveBool = false;
 
+   // private onItemSelectedListener itemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +50,23 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         setSupportActionBar(toolbar);
 
 
+
         new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
-        final SecondaryDrawerItem feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
+        feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
         final SecondaryDrawerItem rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
+        final SecondaryDrawerItem group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
+        final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
+        final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
 
 
 
     // create the drawer and remember the `Drawer` result object
-    Drawer result =
+    result =
         new DrawerBuilder()
             .withActivity(this)
             .withToolbar(toolbar)
@@ -60,7 +77,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 rak,
                 reflection,
                 archive,
-                new SecondaryDrawerItem().withName("othername"))
+                group,
+                places,
+                logout)
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {
                   @Override
@@ -77,11 +96,23 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
                         archiveBool = false;
                         nextFragment(feedFragment);
+                    }else if (drawerItem == group){
+                        nextFragment(createGroupFragment);
                     }
+                    else if (drawerItem == places){
+                        //nextFragment();
+                        nextFragment(placesFragment);
+                    }else if (drawerItem == logout){
+                        ParseUser.logOut();
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+
                     return true;
                   }
                 })
             .build();
+
 
             nextFragment(feedFragment);
     }
@@ -89,13 +120,36 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void nextFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, fragment);
+        ft.addToBackStack("added to stack");
         ft.commit();
-
+        closeDrawer();
     }
+    //This method closes the drawer
+    private void closeDrawer(){
+        if (result.isDrawerOpen()) result.closeDrawer();
+    }
+
 
     public boolean getArchiveBool(){return archiveBool;}
 
-    //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    @Override
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
+        Fragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("post", post);
+        detailFragment.setArguments(bundle);
+        Log.d("Main Activity", "feed");
+        //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(parseImageView, "postTransition")
+                .replace(R.id.placeholder, detailFragment)
+                .addToBackStack("Added to stack")
+                .commit();
+
+        nextFragment(detailFragment);
+    }
+
 
     @Override
     //after new post created go back to feed fragment
@@ -103,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         //Need to begin a new fragment transaction for any fragment operation
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, feedFragment).commit();
+        result.setSelection(feed);
+
     }
 
     @Override
@@ -118,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
   public void toCreatePost() {
-
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
   }

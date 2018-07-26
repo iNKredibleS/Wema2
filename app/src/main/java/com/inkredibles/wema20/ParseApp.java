@@ -26,7 +26,7 @@ public class ParseApp extends Application {
         //custom parse model that we need to implement
         ParseObject.registerSubclass(Rak.class);
         ParseObject.registerSubclass(Post.class);
-        //ParseObject.registerSubclass(User.class);
+//        ParseObject.registerSubclass(Group.class);
 
         //set up parse...clientKey is masterkey
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)

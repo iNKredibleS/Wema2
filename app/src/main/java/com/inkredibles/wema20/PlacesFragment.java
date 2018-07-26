@@ -47,7 +47,7 @@ import java.util.List;
         @Override
         public void onMapReady(GoogleMap googleMap1) {
             final  GoogleMap googleMap = googleMap1;
-            // Add a marker in Sydney, Australia,
+            googleMap.getUiSettings().setZoomControlsEnabled(true); //make it zoomable
             Post randPost = new Post();
             final Post.Query allPosts = new Post.Query();
             allPosts.getMany().withUser();

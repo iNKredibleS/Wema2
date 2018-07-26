@@ -121,13 +121,12 @@ public class CreatePostFragment extends Fragment {
             Editable etext = et_title.getText();
             Selection.setSelection(etext, position);
         } else if (isReflection){
-//            et_message.setText("");
-//            et_title.setText("");
+            //any Reflection specific posts
         } else{
             System.out.println("-------------");
         }
 
-
+        //TODO change this to a radio button or spinner
         //setting up switches
         switch_pub_pri.setChecked(true);
         switch_give_rec.setChecked(true);
@@ -179,7 +178,6 @@ public class CreatePostFragment extends Fragment {
         final String finalType = type;
         if(file != null) parseFile = new ParseFile(file);
         final ParseRole role = currentRole;
-
 
         createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
 

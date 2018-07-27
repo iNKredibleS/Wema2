@@ -32,11 +32,15 @@ public interface onItemSelectedListener {
 
     void fromCurrentGrouptoCreatePost (ParseRole currentRole);
 
-    void setIsGroup (Boolean bool);
+    void fromCurrentGrouptoCreateRak(ParseRole currentRole);
 
-    void setIsReflection (Boolean bool);
+    void toCurrentGroup();
 
-    void setIsRak(Boolean bool);
+//    void setIsGroup (Boolean bool);
+//
+//    void setIsReflection (Boolean bool);
+//
+//    void setIsRak(Boolean bool);
 
 
 

@@ -260,8 +260,8 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
-        newPost.setLocation(geoPoint);
-        newPost.setPlaceName(placeName);
+        if(geoPoint != null) newPost.setLocation(geoPoint);
+        if(placeName != null) newPost.setPlaceName(placeName);
         if(role != null) newPost.setRole(role);
 
         newPost.saveInBackground(
@@ -284,9 +284,9 @@ public class CreatePostFragment extends Fragment {
     protected void resetCreatePost() {
         et_message.setText("");
         et_title.setText("");
-        listener.setIsGroup(false);
-        listener.setIsRak(false);
-        listener.setIsReflection(false);
+//        listener.setIsGroup(false);
+//        listener.setIsRak(false);
+//        listener.setIsReflection(false);
         bundle = null;
         currentRole = null;
         file = null;
@@ -377,6 +377,7 @@ public class CreatePostFragment extends Fragment {
                 .findFragmentById(R.id.place_autocomplete_fragment);
         if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
     }
+
 
 }
 

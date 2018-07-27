@@ -95,16 +95,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="103dp"
         android:text="Post" />
-    <!--<LinearLayout-->
-        <!--android:orientation="vertical"-->
-        <!--android:id="@+id/autocompleteHolder"-->
-        <!--android:layout_width="345dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@+id/pictureHolder"-->
-        <!--android:layout_centerHorizontal="true">-->
 
-
-    <!--</LinearLayout>-->
 
     <fragment
         android:id="@+id/place_autocomplete_fragment"
@@ -114,6 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/pictureHolder"
         android:layout_centerHorizontal="true" />
+
 
     <TextView
         android:id="@+id/textView2"

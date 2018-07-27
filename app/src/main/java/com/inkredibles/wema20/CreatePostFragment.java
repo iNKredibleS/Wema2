@@ -11,9 +11,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.Selection;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,8 @@ public class CreatePostFragment extends Fragment {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_GALLERY_IMAGE = 2;
+    private static View view;
+
     private static File filesDir;
     private String type;
     private String privacy;
@@ -88,9 +92,20 @@ public class CreatePostFragment extends Fragment {
     private File file;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        return inflater.inflate(R.layout.fragment_create_post, parent, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.fragment_create_post, container, false);
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
+        return view;
+       // return inflater.inflate(R.layout.fragment_create_post, parent, false);
     }
 
 
@@ -101,7 +116,7 @@ public class CreatePostFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         setUpView();
-
+        setupAutoComplete();
     }
 
     @Override
@@ -125,12 +140,15 @@ public class CreatePostFragment extends Fragment {
             currentRole = bundle.getParcelable("currentRole");
 
         } else if (isRak) { //comes from rak
-            rak = bundle.getParcelable("RAK");
-            et_title.setText(rak.getTitle());
-            //set the cursor position to end of input title
-            int position = et_title.length();
-            Editable etext = et_title.getText();
-            Selection.setSelection(etext, position);
+            if (rak != null){
+                rak = bundle.getParcelable("RAK");
+                et_title.setText(rak.getTitle());
+                //set the cursor position to end of input title
+                int position = et_title.length();
+                Editable etext = et_title.getText();
+                Selection.setSelection(etext, position);
+            }
+
         } else if (isReflection) {
             //any Reflection specific posts
         } else {
@@ -148,26 +166,25 @@ public class CreatePostFragment extends Fragment {
         type = "give";
         privacy = "public";
 
+    }
+
+    /*Sets up the location autocomplete*/
+    private void setupAutoComplete(){
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         if (autocompleteFragment != null) {
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
-                    // TODO: Get info about the selected place.
                     LatLng latLong = place.getLatLng(); //get a lat long
                     geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
                     placeName = place.getName().toString();
                 }
-
                 @Override
                 public void onError(Status status) {
-                    // TODO: Handle the error.
                     Log.i("CreatePost: ", "An error occurred: " + status);
                 }
             });
-
-
         }
     }
 
@@ -274,7 +291,6 @@ public class CreatePostFragment extends Fragment {
         currentRole = null;
         file = null;
         parseFile = null;
-
     }
 
 
@@ -324,7 +340,6 @@ public class CreatePostFragment extends Fragment {
                 Log.v("Create Post Fragment","Permission is granted");
                 return true;
             } else {
-
                 Log.v("Create Post Fragment","Permission is revoked");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return false;
@@ -353,6 +368,14 @@ public class CreatePostFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnItemSelectedListener");
         }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment f = (Fragment) fragmentManager
+                .findFragmentById(R.id.place_autocomplete_fragment);
+        if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
     }
 
 }

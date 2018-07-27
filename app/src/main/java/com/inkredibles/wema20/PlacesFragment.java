@@ -1,26 +1,26 @@
     package com.inkredibles.wema20;
 
     import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+    import android.support.v4.app.Fragment;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.view.ViewGroup;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.inkredibles.wema20.models.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseUser;
+    import com.google.android.gms.maps.GoogleMap;
+    import com.google.android.gms.maps.OnMapReadyCallback;
+    import com.google.android.gms.maps.SupportMapFragment;
+    import com.google.android.gms.maps.model.BitmapDescriptor;
+    import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+    import com.google.android.gms.maps.model.LatLng;
+    import com.google.android.gms.maps.model.Marker;
+    import com.google.android.gms.maps.model.MarkerOptions;
+    import com.inkredibles.wema20.models.Post;
+    import com.parse.FindCallback;
+    import com.parse.ParseException;
+    import com.parse.ParseGeoPoint;
+    import com.parse.ParseUser;
 
-import java.util.List;
+    import java.util.List;
 
     /*The PlacesFragment handles the logic of displaying the map and sets the markers on the map*/
 
@@ -41,6 +41,7 @@ import java.util.List;
             SupportMapFragment mapFragment = (SupportMapFragment)  getChildFragmentManager()
                     .findFragmentById(R.id.map); //getChildFragmentManager()  is used for fragments instead of getFragmentManager
             mapFragment.getMapAsync(this);
+
         }
 
 

@@ -5,6 +5,7 @@ import android.app.Application;
 
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
+import com.inkredibles.wema20.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 /*
@@ -26,6 +27,7 @@ public class ParseApp extends Application {
         //custom parse model that we need to implement
         ParseObject.registerSubclass(Rak.class);
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(User.class);
 //        ParseObject.registerSubclass(Group.class);
 
         //set up parse...clientKey is masterkey

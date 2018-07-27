@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
+
 public class RakFragment extends Fragment {
 
 
@@ -43,7 +44,6 @@ public class RakFragment extends Fragment {
     @BindView(R.id.doLaterBtn) ImageButton doLaterBtn;
     @BindView(R.id.doneBtn) ImageButton doneBtn;
 
-    int total;
     private  Random rand;
     Button newRakBtn;
     ArrayList<Rak> rakList;
@@ -55,11 +55,6 @@ public class RakFragment extends Fragment {
     ParseQuery<Rak> query;
 
     private onItemSelectedListener listener;
-
-    public final static String API_BASE_URL = "https://api.unsplash.com/";
-    public final static String OATH_URL = "https://unsplash.com/oauth/authorize";
-    //public final static String API_KEY_PARAM = "api_key";
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,15 +90,22 @@ public class RakFragment extends Fragment {
 
         rand = new Random();
 
+        //if you create a new RAK with the create button
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String title = bundle.getString("new_rak_title");
+            User user = (User) ParseUser.getCurrentUser();
+
             rakTxt.setText(title);
 
+            //create new Rak
             Rak newRak = new Rak();
             newRak.setTitle(title);
-            newRak.setUser(ParseUser.getCurrentUser());
+            newRak.setUser(user);
             newRak.saveInBackground();
+
+            //save new rak to current user
+            user.setRak(newRak);
 
         } else {
             query.findInBackground(new FindCallback<Rak>() {
@@ -116,10 +118,11 @@ public class RakFragment extends Fragment {
 
                         if(rak == null) {
                             rak = RAKGenerator(rakList, rakList.size(), false);
+
                         }
-                        rakTxt.setText(rak.getTitle());
+
                         //add RAK field to current user
-                        ParseUser user = ParseUser.getCurrentUser();
+                        User user  = (User) ParseUser.getCurrentUser();
 
                         if (user.get("current_rak") == null) {
                             user.put("current_rak", rak);
@@ -131,6 +134,15 @@ public class RakFragment extends Fragment {
                     }
                 }
             });
+
+            User user = (User) ParseUser.getCurrentUser();
+            try {
+                rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
             getPopularPhoto();
         }
 
@@ -141,28 +153,20 @@ public class RakFragment extends Fragment {
             super.onResume();
 
     }
-
-    private void getAuthorization() {
-        String url = OATH_URL;
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("client_id", R.string.api_key);
-        params.put("redirect_uri", R.string.redirect_uri);
-        //params.put("response_type", )
-    }
     private void getPopularPhoto() {
-        String url = API_BASE_URL + "photos/random/?client_id=" + R.string.api_key;
+        String url ="https://api.unsplash.com/photos/random/?client_id=" + getString(R.string.api_key);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        //params.put("client_id", R.string.api_key);
+        params.put("collections", "1922729, 981639" );
+
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 Log.d("RequestSuccess", "Unsplash request successful");
+
+
             }
-
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -175,10 +179,16 @@ public class RakFragment extends Fragment {
 
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
-        Rak rak = RAKGenerator(rakList, rakList.size(), false);
-        System.out.println(rakList.size());
+        Rak rak = RAKGenerator(rakList, rakList.size(), true);
+        User user = (User) ParseUser.getCurrentUser();
+        user.setRak(rak);
+        user.saveInBackground();
 
-        rakTxt.setText(rak.getTitle());
+        try {
+            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.feedBtn)
@@ -189,7 +199,8 @@ public class RakFragment extends Fragment {
 
     @OnClick(R.id.doneBtn)
     protected void goToPost() {
-        listener.fromRAKtoCreatePost(rak);
+        User user = (User) ParseUser.getCurrentUser();
+        listener.fromRAKtoCreatePost(user.getRak());
     }
 
     @OnClick(R.id.newRakBtn)

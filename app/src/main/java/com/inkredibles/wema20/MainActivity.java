@@ -18,7 +18,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
-import com.parse.ParseUser;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 
@@ -101,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         bundle.putBoolean("isReflection", isReflection);
                         createPostFragment.setArguments(bundle);
                         nextFragment(createPostFragment);
+                        isReflection = false;
 
                     }else if (drawerItem == archive){
                         archiveBool = true;
@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        isRak = false;
         //result.setSelection(rak);
 
     }
@@ -204,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
     public void toCreateRak() {
+     // Bundle bundle = null;
+     // createRakFragment.setArguments(null);
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, createRakFragment).commit();
   }
@@ -214,8 +217,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
       bundle.putString("new_rak_title", rakTitle);
       rakFragment.setArguments(bundle);
 
-      FragmentTransaction
-              fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.placeholder, rakFragment).commit();
   }
 
@@ -249,22 +251,42 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         createPostFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        isGroup = false;
   }
 
   @Override
-  public void setIsGroup(Boolean bool){
-        isGroup = bool;
+  public void fromCurrentGrouptoCreateRak(ParseRole currentRole){
+
+        isGroup = true;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isGroup", isGroup);
+        bundle.putParcelable("currentRole", currentRole);
+        createRakFragment.setArguments(bundle);
+        nextFragment(createRakFragment);
+        isGroup = false;
+        //this code can be optimized
   }
+
 
   @Override
-  public void setIsReflection (Boolean bool){
-        isReflection = bool;
-  }
+    public void toCurrentGroup() {
+        nextFragment(currentGroupFragment);
 
-    @Override
-    public void setIsRak (Boolean bool){
-        isRak = bool;
-    }
+  }
+//  @Override
+//  public void setIsGroup(Boolean bool){
+//        isGroup = bool;
+//  }
+//
+//  @Override
+//  public void setIsReflection (Boolean bool){
+//        isReflection = bool;
+//  }
+//
+//    @Override
+//    public void setIsRak (Boolean bool){
+//        isRak = bool;
+//    }
 
 
 

@@ -243,8 +243,8 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
-        newPost.setLocation(geoPoint);
-        newPost.setPlaceName(placeName);
+        //newPost.setLocation(geoPoint);
+ //       newPost.setPlaceName(placeName);
         if(role != null) newPost.setRole(role);
 
         newPost.saveInBackground(
@@ -267,9 +267,9 @@ public class CreatePostFragment extends Fragment {
     protected void resetCreatePost() {
         et_message.setText("");
         et_title.setText("");
-        listener.setIsGroup(false);
-        listener.setIsRak(false);
-        listener.setIsReflection(false);
+//        listener.setIsGroup(false);
+//        listener.setIsRak(false);
+//        listener.setIsReflection(false);
         bundle = null;
         currentRole = null;
         file = null;
@@ -353,6 +353,12 @@ public class CreatePostFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnItemSelectedListener");
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.getArguments().clear();
     }
 
 }

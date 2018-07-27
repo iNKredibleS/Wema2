@@ -19,4 +19,12 @@
         android:layout_below="@id/tvGroupName"
         android:text="Create Group Post"/>
 
+    <Button
+        android:id="@+id/btnCreateGroupRak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGroupName"
+        android:layout_toRightOf="@id/btnCreateGroupPost"
+        android:text="Create Group Rak"/>
+
 </RelativeLayout>

@@ -58,51 +58,17 @@ public class CurrentGroupFragment extends Fragment {
 
     @OnClick(R.id.btnCreateGroupPost)
     protected void createGroupPost() {
-        listener.setIsGroup(true);
-        //TODO figure out how to unset isGroup
+     //   listener.setIsGroup(true);
         listener.fromCurrentGrouptoCreatePost(currentRole);
-
-
-
-
-
-
-
-
-
-
-        //TODO probably delete all this stuff
-//        final Post groupPost = new Post();
-//        groupPost.setTitle("Group Post please");
-//        groupPost.setMessage("First Group Post hoping that it attaches");
-//        groupPost.setPrivacy("private");
-//        groupPost.setUser(ParseUser.getCurrentUser());
-//        groupPost.setType("received");
-
-
-
-
-       // currentRole.getRelation("groupPosts").add(groupPost);
-
-
-//        currentRole.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e == null) {
-//                    Log.d("CurrentGroupFragment", "create group post success");
-//
-//                    } else {
-//                        e.printStackTrace();
-//                    }
-//            }
-//        });
-
-
-
 
 
     }
 
+    @OnClick(R.id.btnCreateGroupRak)
+    protected void createGroupRak(){
+        listener.fromCurrentGrouptoCreateRak(currentRole);
+
+    }
 
 
 

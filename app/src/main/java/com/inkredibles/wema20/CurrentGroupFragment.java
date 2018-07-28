@@ -34,7 +34,7 @@ public class CurrentGroupFragment extends Fragment {
 
         //get the newly created group from args
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        if (bundle != null && bundle.getParcelable("newRole") != null ) {
             currentRole = bundle.getParcelable("newRole");
             tvGroupName.setText(currentRole.getName());
         }else {
@@ -68,6 +68,12 @@ public class CurrentGroupFragment extends Fragment {
     protected void createGroupRak(){
         listener.fromCurrentGrouptoCreateRak(currentRole);
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(this.getArguments() != null){this.getArguments().clear(); }
     }
 
 

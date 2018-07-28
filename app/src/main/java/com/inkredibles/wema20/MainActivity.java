@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment placesFragment = new PlacesFragment();
     final Fragment addUsersFragment = new AddUsersFragment();
     final Fragment currentGroupFragment = new CurrentGroupFragment();
+    final Fragment groupsFragment = new GroupsFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
     private SecondaryDrawerItem rak;
@@ -113,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         archiveBool = false;
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
-                        nextFragment(createGroupFragment);
+
+                        nextFragment(groupsFragment);
                     }
                     else if (drawerItem == places){
                         //nextFragment();
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void nextFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, fragment);
-        ft.addToBackStack("added to stack");
+        ft.addToBackStack(fragment.getClass().toString());
         ft.commit();
         closeDrawer();
     }
@@ -269,10 +271,31 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
   @Override
-    public void toCurrentGroup() {
-        nextFragment(currentGroupFragment);
+    public void toCurrentGroup(ParseRole newRole) {
+     Bundle bundle = new Bundle();
+     bundle.putParcelable("newRole", newRole);
+     currentGroupFragment.setArguments(bundle);
+      nextFragment(currentGroupFragment);
+
 
   }
+
+
+  @Override
+  public void fromGroupAdaptertoCurrentGroup(ParseRole newRole){
+      Bundle bundle = new Bundle();
+      bundle.putParcelable("newRole", newRole);
+      currentGroupFragment.setArguments(bundle);
+      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
+
+  }
+
+  @Override
+  public void fromGroupstoCreateGroup(){
+        nextFragment(createGroupFragment);
+  }
+
 //  @Override
 //  public void setIsGroup(Boolean bool){
 //        isGroup = bool;

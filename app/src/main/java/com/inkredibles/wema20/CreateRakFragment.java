@@ -61,7 +61,7 @@ public class CreateRakFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null && bundle.getBoolean("isGroup")){
             //you can make this it's own function
-            ParseRole currentRole = bundle.getParcelable("currentRole");
+            final ParseRole currentRole = bundle.getParcelable("currentRole");
             Rak groupRak = new Rak();
             groupRak.setTitle(createRakTxt.getText().toString());
             groupRak.setUser(ParseUser.getCurrentUser());
@@ -75,7 +75,7 @@ public class CreateRakFragment extends Fragment {
                                 Log.d("CreateRakFragment", "create grouprak success");
                                 Toast.makeText(getActivity(), "Group Rak Created", Toast.LENGTH_SHORT).show();
                                 createRakTxt.setText("");
-                                listener.toCurrentGroup();
+                                listener.toCurrentGroup(currentRole);
 
                             } else {
                                 e.printStackTrace();

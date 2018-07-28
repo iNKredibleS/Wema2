@@ -63,7 +63,7 @@ public class CreateGroupFragment extends Fragment {
         String roleTestText = etTestText.getText().toString();
         ParseACL roleAcl = new ParseACL();
         roleAcl.setPublicWriteAccess(false);
-        roleAcl.setPublicReadAccess(false);
+        roleAcl.setPublicReadAccess(true);
 
         final ParseRole newRole = new ParseRole(roleName, roleAcl);
         for(int i = 0; i < addedUsers.size(); i++){

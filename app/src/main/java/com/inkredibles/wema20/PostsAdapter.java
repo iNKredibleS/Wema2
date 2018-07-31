@@ -12,6 +12,7 @@ import com.inkredibles.wema20.models.Post;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -58,7 +59,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 //intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(selectedPost));
                // context.startActivity(intent);
                 //ivPostImageView.
-                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position);
+                ArrayList<Post> arrayList = new ArrayList<>();
+                arrayList.addAll(mPosts);
+                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position, position,  arrayList);
 
             }
 
@@ -122,7 +125,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface ViewHolderListener{
-        public void onViewHolderClicked(Post post,ParseImageView parseImageView, String transitionName);
+        public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post>posts);
     }
 //
     public void setViewHolderListener(ViewHolderListener viewHolderListener){

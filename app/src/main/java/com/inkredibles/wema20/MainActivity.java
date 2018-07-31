@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     @Override
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName) {
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts) {
         Context context = feedFragment.getContext();
         Fragment detailFragment = new DetailFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -171,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         //fragmentTransaction.addToBackStack(tag);
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
+        bundle.putParcelableArrayList("all_posts", posts);
+        bundle.putInt("position", position);
         bundle.putString("transitionName", sharedTransitionName);
         detailFragment.setArguments(bundle);
 //        Log.d("Main Activity", "feed");

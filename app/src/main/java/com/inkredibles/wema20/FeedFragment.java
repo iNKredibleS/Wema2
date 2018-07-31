@@ -78,9 +78,9 @@ public class FeedFragment extends Fragment {
         //this is called by the viewholder
         adapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
             @Override
-            public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName) {
+            public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts) {
                //now move this post from the feed fragment to the main activity
-                if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView, transitionName);
+                if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts );
             }
         });
     }

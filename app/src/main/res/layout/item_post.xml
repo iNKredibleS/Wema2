@@ -19,7 +19,6 @@
         tools:background="@android:color/darker_gray">
 
         <com.parse.ParseImageView
-            android:transitionName="postTransition"
             android:id="@+id/ivPostImage"
             android:layout_width="match_parent"
             android:layout_height="130dp"

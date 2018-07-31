@@ -53,6 +53,8 @@ import butterknife.OnClick;
 import static android.app.Activity.RESULT_OK;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
+//import android.app.Fragment;
+
 /*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
  *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
   *  is private, only they can see it in their archive.*/
@@ -79,6 +81,8 @@ public class CreatePostFragment extends Fragment {
     Rak rak;
     private ParseRole currentRole;
     private Bundle bundle;
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private CreatePostFragment createPostFragment;
 
 
     // Storage Permissions
@@ -93,6 +97,7 @@ public class CreatePostFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (autocompleteFragment != null)autocompleteFragment.setText("");
         // Defines the xml file for the fragment
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
@@ -105,40 +110,28 @@ public class CreatePostFragment extends Fragment {
             /* map is already there, just return view as it is */
         }
         return view;
-       // return inflater.inflate(R.layout.fragment_create_post, parent, false);
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        createPostFragment = this;
         //butterknife bind
         ButterKnife.bind(this, view);
-
         setUpView();
         setupAutoComplete();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        setUpView();
-
-    }
 
 
     public void setUpView() {
-
         filesDir = getContext().getFilesDir();
-
         bundle = this.getArguments();
         Boolean isGroup = bundle.getBoolean("isGroup");
         Boolean isReflection = bundle.getBoolean("isReflection");
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
-
         } else if (isRak) { //comes from rak
             if (rak != null){
                 rak = bundle.getParcelable("RAK");
@@ -170,9 +163,9 @@ public class CreatePostFragment extends Fragment {
 
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         if (autocompleteFragment != null) {
+            autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
@@ -184,9 +177,11 @@ public class CreatePostFragment extends Fragment {
                 public void onError(Status status) {
                     Log.i("CreatePost: ", "An error occurred: " + status);
                 }
+
             });
         }
     }
+
 
 
     //when button changes the type, change the textview that displays type and the type field in
@@ -200,7 +195,6 @@ public class CreatePostFragment extends Fragment {
             tvGiveRec.setText("Received");
             type = "receive";
         }
-
     }
 
     @OnCheckedChanged(R.id.switch_pub_pri)
@@ -229,7 +223,6 @@ public class CreatePostFragment extends Fragment {
         final ParseRole role = currentRole;
 
         createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
-
 
     }
 
@@ -311,6 +304,10 @@ public class CreatePostFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            Log.d("CRTPST", "Finished autocomplete");
+            System.out.print(data.toString());
+
         }
     }
 
@@ -377,7 +374,5 @@ public class CreatePostFragment extends Fragment {
                 .findFragmentById(R.id.place_autocomplete_fragment);
         if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
     }
-
-
 }
 

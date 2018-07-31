@@ -1,12 +1,15 @@
 package com.inkredibles.wema20;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.transition.TransitionInflater;
 import android.view.View;
 
 import com.inkredibles.wema20.models.Post;
@@ -150,23 +153,32 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
-
     @Override
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName) {
+        Context context = feedFragment.getContext();
         Fragment detailFragment = new DetailFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        ViewCompat.setTransitionName(parseImageView, sharedTransitionName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            feedFragment.setSharedElementReturnTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
+            feedFragment.setExitTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
+
+            detailFragment.setSharedElementEnterTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
+            detailFragment.setEnterTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
+            fragmentTransaction.addSharedElement(parseImageView,sharedTransitionName);
+        }
+        //fragmentTransaction.replace(R.id.fragment_pla, newFragment, tag);
+        //fragmentTransaction.addToBackStack(tag);
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
+        bundle.putString("transitionName", sharedTransitionName);
         detailFragment.setArguments(bundle);
-        Log.d("Main Activity", "feed");
+//        Log.d("Main Activity", "feed");
         //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addSharedElement(parseImageView, "postTransition")
-                .replace(R.id.placeholder, detailFragment)
-                .addToBackStack("Added to stack")
+        fragmentTransaction.replace(R.id.placeholder, detailFragment)
+                .addToBackStack(detailFragment.getClass().toString())
                 .commit();
-
-        nextFragment(detailFragment);
+        //nextFragment(detailFragment);
     }
 
 

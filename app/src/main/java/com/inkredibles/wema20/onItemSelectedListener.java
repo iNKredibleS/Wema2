@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface onItemSelectedListener {
 
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView);
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName);
 
     //Transitions from any fragment to the feed fragment
     void toFeed();

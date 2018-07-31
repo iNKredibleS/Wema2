@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
+import com.parse.ParseFile;
 import com.parse.ParseImageView;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 //intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(selectedPost));
                // context.startActivity(intent);
                 //ivPostImageView.
-                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView);
+                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position);
 
             }
 
@@ -92,9 +93,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         // Get the post at the current position
         Post post = mPosts.get(position);
         viewHolder.tvItemTitle.setText(post.getTitle());
-        //ParseFile file = post.getImage();
-        viewHolder.ivPostImageView.setParseFile(post.getImage());
-        viewHolder.ivPostImageView.loadInBackground();
+        ParseFile file = post.getImage();
+        if (file != null) {
+            viewHolder.ivPostImageView.setParseFile(post.getImage());
+            viewHolder.ivPostImageView.loadInBackground();
+        }else{
+            viewHolder.ivPostImageView.getLayoutParams().height = 0;
+        }
+       // viewHolder.ivPostImageView.setParseFile(post.getImage());
         if(main.getArchiveBool()) viewHolder.tvUsername.setText(post.getUser().getUsername());
     }
 
@@ -116,7 +122,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface ViewHolderListener{
-        public void onViewHolderClicked(Post post,ParseImageView parseImageView);
+        public void onViewHolderClicked(Post post,ParseImageView parseImageView, String transitionName);
     }
 //
     public void setViewHolderListener(ViewHolderListener viewHolderListener){

@@ -2,7 +2,6 @@ package com.inkredibles.wema20;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import com.inkredibles.wema20.models.Post;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -49,16 +49,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            Log.d("PostsAdapter","Clicked view");
-           // Intent intent = new Intent(context,MainActivity.class );
+            // Intent intent = new Intent(context,MainActivity.class );
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION){
                 Post selectedPost = mPosts.get(position);
                 //for parcels to be defined, remember to add the parcel dependencies in the build.gradle file
                 //intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(selectedPost));
-               // context.startActivity(intent);
+                // context.startActivity(intent);
                 //ivPostImageView.
-                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position);
+                ArrayList<Post> arrayList = new ArrayList<>();
+                arrayList.addAll(mPosts);
+                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position, position,  arrayList, tvItemTitle, "titleTransition"+position);
 
             }
 
@@ -76,7 +77,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             View contactView = inflater.inflate(R.layout.item_archive, parent, false);
             // Return a new holder instance
             ViewHolder viewHolder = new ViewHolder(contactView);
-           return viewHolder;
+            return viewHolder;
         } else {
             // Inflate the custom layout
             View postView = inflater.inflate(R.layout.item_post, parent, false);
@@ -100,7 +101,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }else{
             viewHolder.ivPostImageView.getLayoutParams().height = 0;
         }
-       // viewHolder.ivPostImageView.setParseFile(post.getImage());
+        // viewHolder.ivPostImageView.setParseFile(post.getImage());
         if(main.getArchiveBool()) viewHolder.tvUsername.setText(post.getUser().getUsername());
     }
 
@@ -122,9 +123,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface ViewHolderListener{
-        public void onViewHolderClicked(Post post,ParseImageView parseImageView, String transitionName);
+        public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition);
     }
-//
+    //
     public void setViewHolderListener(ViewHolderListener viewHolderListener){
         this.viewHolderListener = viewHolderListener;
     }

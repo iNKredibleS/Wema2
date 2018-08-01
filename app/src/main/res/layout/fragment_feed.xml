@@ -10,18 +10,17 @@
     android:background="@color/wema"
   >
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
+        android:background="@color/md_orange_100"
         android:layout_height="match_parent">
-
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPosts"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
 
     </android.support.v4.widget.SwipeRefreshLayout>

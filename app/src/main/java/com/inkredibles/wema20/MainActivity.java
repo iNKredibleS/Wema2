@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
@@ -157,24 +158,30 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     @Override
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName) {
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition) {
         Context context = feedFragment.getContext();
         Fragment detailFragment = new DetailFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ViewCompat.setTransitionName(parseImageView, sharedTransitionName);
+        ViewCompat.setTransitionName(title, titleTransition);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             feedFragment.setSharedElementReturnTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
             feedFragment.setExitTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
 
             detailFragment.setSharedElementEnterTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
             detailFragment.setEnterTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
+
             fragmentTransaction.addSharedElement(parseImageView,sharedTransitionName);
+            fragmentTransaction.addSharedElement(title,titleTransition);
         }
         //fragmentTransaction.replace(R.id.fragment_pla, newFragment, tag);
         //fragmentTransaction.addToBackStack(tag);
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
+        bundle.putParcelableArrayList("all_posts", posts);
+        bundle.putInt("position", position);
         bundle.putString("transitionName", sharedTransitionName);
+        bundle.putString("titleTransition", titleTransition);
         detailFragment.setArguments(bundle);
 //        Log.d("Main Activity", "feed");
         //ViewCompat.setTransitionName(parseImageView, "postPicTransition");

@@ -136,6 +136,7 @@ public class RakFragment extends Fragment {
             });
 
             User user = (User) ParseUser.getCurrentUser();
+//            Rak r = user.getRak();
             try {
                 rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
             } catch (ParseException e) {

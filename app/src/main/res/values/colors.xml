@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="backgroundColor">#C8C7C7</color>
+    <!--<color name="wema">#e3d3ac</color>-->
+    <color name="wema">@color/md_orange_100</color>
+    <color name="wema_transparent">#14e3d3ac</color>
+    <color name="black">#010609</color>
 </resources>

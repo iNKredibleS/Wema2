@@ -28,15 +28,15 @@ public interface onItemSelectedListener {
 
     void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
 
-    void fromCreateGrouptoCurrentGroup (ParseRole newRole);
+    void fromCreateGrouptoCurrentGroup (ParseRole currentRole);
 
     void fromCurrentGrouptoCreatePost (ParseRole currentRole);
 
     void fromCurrentGrouptoCreateRak(ParseRole currentRole);
 
-    void toCurrentGroup(ParseRole newRole);
+    void toCurrentGroup(ParseRole currentRole);
 
-    void fromGroupAdaptertoCurrentGroup(ParseRole newRole);
+  //  void fromGroupAdaptertoCurrentGroup(ParseRole currentRole);
 
     void fromGroupstoCreateGroup();
 

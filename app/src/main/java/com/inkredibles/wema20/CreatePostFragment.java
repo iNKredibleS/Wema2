@@ -55,7 +55,10 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 /*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
  *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
-  *  is private, only they can see it in their archive.*/
+  *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
+  *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
+  *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
+  *  go back to feed fragment*/
 public class CreatePostFragment extends Fragment {
 
     @BindView(R.id.Title) EditText et_title;
@@ -128,6 +131,7 @@ public class CreatePostFragment extends Fragment {
     }
 
 
+    //set up the create post based on the circumstance (group, rak or reflection)
     public void setUpView() {
 
         filesDir = getContext().getFilesDir();
@@ -138,8 +142,9 @@ public class CreatePostFragment extends Fragment {
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
+            //TODO set the type for the post to private
 
-        } else if (isRak) { //comes from rak
+        } else if (isRak) {
             if (rak != null){
                 rak = bundle.getParcelable("RAK");
                 et_title.setText(rak.getTitle());
@@ -217,22 +222,6 @@ public class CreatePostFragment extends Fragment {
 
 
 
-    //on post button clicked
-    @OnClick(R.id.btn_post)
-    protected void postButtonClicked(){
-        final String title = et_title.getText().toString();
-        final String message = et_message.getText().toString();
-        final ParseUser user = ParseUser.getCurrentUser();
-        final String finalPrivacy = privacy;
-        final String finalType = type;
-        if(file != null) parseFile = new ParseFile(file);
-        final ParseRole role = currentRole;
-
-        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
-
-
-    }
-
     //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)
     protected void gallery(){
@@ -249,9 +238,24 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
+    //on post button clicked
+    @OnClick(R.id.btn_post)
+    protected void postButtonClicked(){
+        final String title = et_title.getText().toString();
+        final String message = et_message.getText().toString();
+        final ParseUser user = ParseUser.getCurrentUser();
+        final String finalPrivacy = privacy;
+        final String finalType = type;
+        if(file != null) parseFile = new ParseFile(file);
+        final ParseRole role = currentRole;
+
+        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+
+    }
+
 
     //create post and store to parse server
-    //set the title, message, user, image, privacy, give, receive
+    //set the title, message, user, image, privacy, give, receive, location
     private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
         final Post newPost = new Post();
         newPost.setTitle(title);
@@ -281,12 +285,10 @@ public class CreatePostFragment extends Fragment {
                 });
     }
 
-    protected void resetCreatePost() {
+    //clear any information from a previous post to reuse fragment
+    private void resetCreatePost() {
         et_message.setText("");
         et_title.setText("");
-//        listener.setIsGroup(false);
-//        listener.setIsRak(false);
-//        listener.setIsReflection(false);
         bundle = null;
         currentRole = null;
         file = null;
@@ -369,6 +371,8 @@ public class CreatePostFragment extends Fragment {
                     + " must implement OnItemSelectedListener");
         }
     }
+
+    //What does this do?
     @Override
     public void onDestroyView() {
         super.onDestroyView();

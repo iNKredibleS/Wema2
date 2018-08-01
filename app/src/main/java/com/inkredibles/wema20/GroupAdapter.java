@@ -14,6 +14,12 @@ import com.parse.ParseRole;
 
 import java.util.ArrayList;
 
+/*
+The group adapter binds the array of user's groups to the inflated views of the recycler view. When
+the view holder is clicked the group or role at that position is sent to the CurrentGroup Fragment
+which is essentially a group details page.
+ */
+
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
     private ArrayList<ParseRole> mGroups;
@@ -40,15 +46,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         }
 
+        //obtain the current group/role and launch CurrentGroupFragment
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                ParseRole newRole = mGroups.get(position);
-                if(newRole != null){
+                ParseRole currentRole = mGroups.get(position);
+                if(currentRole != null){
                     if (context instanceof onItemSelectedListener) {
                         listener = (onItemSelectedListener) context;
-                        listener.fromGroupAdaptertoCurrentGroup(newRole);
+                        listener.toCurrentGroup(currentRole);
                     } else {
                         throw new ClassCastException(context.toString()
                                 + " must implement OnItemSelectedListener");

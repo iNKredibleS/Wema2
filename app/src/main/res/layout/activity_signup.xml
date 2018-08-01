@@ -1,51 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    tools:context=".SignupActivity"
+    android:background="@color/md_black_1000">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/signup_background"/>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
 
     <EditText
         android:id="@+id/et_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:ems="10"
-        android:hint="email"
-        android:inputType="textPersonName" />
+        android:layout_marginTop="250dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="Email"
+        android:textColorHint="@color/md_white_1000"
+        android:inputType="textPersonName"
+        android:textColor="@color/md_white_1000"/>
 
     <EditText
         android:id="@+id/et_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="124dp"
-        android:ems="10"
+        android:layout_below="@id/et_email"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:textColorHint="@color/md_white_1000"
         android:hint="Username"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="@color/md_white_1000"/>
 
     <EditText
         android:id="@+id/et_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="185dp"
-        android:ems="10"
-        android:hint="password"
-        android:inputType="textPersonName" />
+        android:layout_below="@id/et_username"
+        android:layout_marginTop="10dp"
+        android:textColorHint="@color/md_white_1000"
+        android:background="@drawable/edit_text_background"
+        android:hint="Password"
+        android:inputType="textPersonName"
+        android:textColor="@color/md_white_1000"/>
 
     <Button
         android:id="@+id/btn_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="196dp"
+        android:layout_below="@id/et_password"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_background"
         android:text="SignUp" />
 
 </RelativeLayout>
+
+</FrameLayout>

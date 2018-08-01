@@ -22,14 +22,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+    The purpose of this fragment is to show all of the user's groups that they belong to. When
+    a user clicks on one of the groups the user belongs to, this will direct them to the current group
+    fragment. That fragment can be thought of as a groupDetails page (consider renaming). This fragment
+    also acts as an entry point for the user to create a new group.
+ */
+
 public class GroupsFragment extends Fragment {
 
     @BindView(R.id.rvGroups) RecyclerView rvGroups;
 
-   // private RecyclerView rvGroups;
     private ArrayList<ParseRole> usersGroups;
     private GroupAdapter groupAdapter;
     private onItemSelectedListener listener;
+
 
 
 
@@ -42,19 +49,19 @@ public class GroupsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //attach the xml views to the java
         ButterKnife.bind(this, view);
-        //View mainView = getView();
-        //rvGroups = mainView.findViewById(R.id.rvGroups);
         usersGroups = new ArrayList<>();
         groupAdapter = new GroupAdapter(usersGroups);
         //set layout manager and adapter to recycler view
         rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
         rvGroups.setAdapter(groupAdapter);
 
+
         loadGroups();
 
     }
 
 
+    //searches for groups the user belongs to and adds them to adapter
     protected void loadGroups() {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -82,6 +89,7 @@ public class GroupsFragment extends Fragment {
     }
 
 
+    //Create a new group
     @OnClick(R.id.CreateNewGroupBtn)
     public void launchCreateGroupFrag(){
         listener.fromGroupstoCreateGroup();
@@ -98,11 +106,6 @@ public class GroupsFragment extends Fragment {
                     + " must implement OnItemSelectedListener");
         }
     }
-
-
-
-
-
 
 
 

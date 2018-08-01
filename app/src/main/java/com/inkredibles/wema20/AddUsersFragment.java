@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,11 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+/*
+Add users fragment allows the user to choose which users he or she would like to be in their group.
+The user can choose from a list of all users and when a user is chosen their view in the recyclerview
+is highlighted in background.
+ */
 
 public class AddUsersFragment extends Fragment {
 
@@ -58,9 +62,6 @@ public class AddUsersFragment extends Fragment {
             public void onClick(View v) {
 
                 addedUsers = adapter.getAddedUsers();
-                for(int i = 0; i < addedUsers.size(); i++){
-                    Log.i("add user fragment", "users[" + i + "]" + "=" + addedUsers.get(i).getUsername());
-                }
                 listener.fromAddUserstoCreateGroup(addedUsers);
 
             }

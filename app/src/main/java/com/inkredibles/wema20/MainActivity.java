@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         archiveBool = false;
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
-
+                        //launch groups Fragment to see user's groups
                         nextFragment(groupsFragment);
                     }
                     else if (drawerItem == places){
@@ -191,8 +191,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putBoolean("isRak", isRak);
         bundle.putParcelable("RAK", rak );
         createPostFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        nextFragment(createPostFragment);
         isRak = false;
         //result.setSelection(rak);
 
@@ -207,10 +206,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
     public void toCreateRak() {
-     // Bundle bundle = null;
-     // createRakFragment.setArguments(null);
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, createRakFragment).commit();
+     nextFragment(createRakFragment);
+
   }
 
   @Override
@@ -218,9 +215,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
       rakFragment.setArguments(bundle);
-
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, rakFragment).commit();
+      nextFragment(rakFragment);
   }
 
   @Override
@@ -228,20 +223,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("added_users", new ArrayList<ParseUser>(addedUsers));
         createGroupFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createGroupFragment).commit();
-
-
+        nextFragment(createGroupFragment);
   }
 
-  @Override
-  public void fromCreateGrouptoCurrentGroup(ParseRole newRole){
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("newRole", newRole);
-        currentGroupFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
-  }
 
   @Override
   public void fromCurrentGrouptoCreatePost(ParseRole currentRole){
@@ -251,8 +235,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putBoolean("isGroup", isGroup);
         bundle.putParcelable("currentRole", currentRole);
         createPostFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        nextFragment(createPostFragment);
         isGroup = false;
   }
 
@@ -269,47 +252,31 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         //this code can be optimized
   }
 
+  @Override
+  public void fromCreateGrouptoCurrentGroup(ParseRole currentRole){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("currentRole", currentRole);
+        currentGroupFragment.setArguments(bundle);
+        nextFragment(currentGroupFragment);
+    }
 
   @Override
-    public void toCurrentGroup(ParseRole newRole) {
+    public void toCurrentGroup(ParseRole currentRole) {
      Bundle bundle = new Bundle();
-     bundle.putParcelable("newRole", newRole);
+     bundle.putParcelable("currentRole", currentRole);
      currentGroupFragment.setArguments(bundle);
-      nextFragment(currentGroupFragment);
+     nextFragment(currentGroupFragment);
 
 
   }
 
-
-  @Override
-  public void fromGroupAdaptertoCurrentGroup(ParseRole newRole){
-      Bundle bundle = new Bundle();
-      bundle.putParcelable("newRole", newRole);
-      currentGroupFragment.setArguments(bundle);
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
-
-  }
 
   @Override
   public void fromGroupstoCreateGroup(){
         nextFragment(createGroupFragment);
   }
 
-//  @Override
-//  public void setIsGroup(Boolean bool){
-//        isGroup = bool;
-//  }
-//
-//  @Override
-//  public void setIsReflection (Boolean bool){
-//        isReflection = bool;
-//  }
-//
-//    @Override
-//    public void setIsRak (Boolean bool){
-//        isRak = bool;
-//    }
+
 
 
 

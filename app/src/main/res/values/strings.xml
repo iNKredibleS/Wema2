@@ -3,4 +3,9 @@
     <string name="api_key">8fd7cdaf46d1c5240e4920966317fa93fa0b5809c5718155b846cdfe15c20c69</string>
     <string name ="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
     <string name="google_maps_api_key">AIzaSyCEYBGoqPCyj0QSqI3KjNsqmYeCTbEnI0Q</string>
+
+    <string-array name="groups_array">
+        <item>Rak</item>
+        <item>Post</item>
+    </string-array>
 </resources>

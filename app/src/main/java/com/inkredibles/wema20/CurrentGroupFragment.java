@@ -13,12 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseRole;
 
@@ -41,6 +41,8 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     @BindView(R.id.rvGroupItem) RecyclerView rvGroupItem;
     @BindView(R.id.group_spinner) Spinner spinner;
 
+    AdapterView.OnItemSelectedListener spinnerListener;
+
     private onItemSelectedListener listener;
     private ParseRole currentRole;
     private ArrayList<Rak> groupRaks;
@@ -48,6 +50,8 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
     private ArrayList<Post> groupPosts;
     private PostsAdapter postsAdapter;
+
+    private SaveInfo saveInfo;
 
 
     //tells the recyclerview in the fragment whether to upload the group raks or posts
@@ -79,24 +83,27 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onResume() {
         super.onResume();
-        bundleAndSetUp();
+
+
         //if you put loadrvGroupItem here w/o a check of some sort you will get the recyclerview
         //loaded twice
         //loadRvGroupItem(isItemRak);
+
+
     }
 
 
 
 
 
-    private void bundleAndSetUp() {
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            currentRole = bundle.getParcelable("currentRole");
-            tvGroupName.setText(currentRole.getName());
-        }else {
-            Toast.makeText(getContext(), "bundle not gotten", Toast.LENGTH_SHORT);
-        }
+    private void bundleAndSetUp(){
+//        Bundle bundle = this.getArguments();
+//            if (bundle != null) {
+//                currentRole = bundle.getParcelable("currentRole");
+//                tvGroupName.setText(currentRole.getName());
+
+        currentRole = Singleton.getInstance().getRole();
+        tvGroupName.setText(currentRole.getName());
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.groups_array, android.R.layout.simple_spinner_item);
@@ -104,7 +111,10 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(this);
+
+
 
     }
 
@@ -133,7 +143,19 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
             rvGroupItem.setLayoutManager(new LinearLayoutManager(getContext()));
             rvGroupItem.setAdapter(postsAdapter);
             loadGroupPosts();
-            Toast.makeText(getContext(),"post should load", Toast.LENGTH_SHORT).show();
+
+            //implement on click listener to view details of group post
+            postsAdapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
+                @Override
+                public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition) {
+                    //now move this post from the feed fragment to the main activity
+                    if (listener != null) {
+                        listener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition);
+                    }
+                }
+            });
+
+
 
         }
     }
@@ -147,6 +169,7 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void done(List<Rak> objects, ParseException e) {
                 if (e == null){
+                    if(objects.size() == 0){ }
                     rakAdapter.addAll(objects);
                     Log.i("current group fragment", "successful finding group raks");
                 }else{
@@ -191,7 +214,8 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(this.getArguments() != null){this.getArguments().clear(); }
+        if(this.getArguments() != null){this.getArguments().clear();
+        }
     }
 
 
@@ -210,11 +234,15 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        if(parent.getItemAtPosition(pos).equals("Rak")){
-            loadRvGroupItem(true);
-        }else if(parent.getItemAtPosition(pos).equals("Post")){
-            loadRvGroupItem(false);
+        if (view != null) {
+            if (parent.getItemAtPosition(pos).equals("Rak")) {
+                loadRvGroupItem(true);
+            } else if (parent.getItemAtPosition(pos).equals("Post")) {
+                loadRvGroupItem(false);
 
+            }
+        } else{
+            loadRvGroupItem(true);
         }
 
     }

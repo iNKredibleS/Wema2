@@ -1,7 +1,5 @@
 package com.inkredibles.wema20;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -28,7 +26,6 @@ import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
@@ -157,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
+    //TODO is there a way to make this code more concise?
     @Override
     public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition) {
         Context context = feedFragment.getContext();
@@ -282,9 +280,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
     public void toCurrentGroup(ParseRole currentRole) {
-     Bundle bundle = new Bundle();
-     bundle.putParcelable("currentRole", currentRole);
-     currentGroupFragment.setArguments(bundle);
+//     Bundle bundle = new Bundle();
+//     bundle.putParcelable("currentRole", currentRole);
+//     currentGroupFragment.setArguments(bundle);
+      Singleton.getInstance().setRole(currentRole);
      nextFragment(currentGroupFragment);
 
 

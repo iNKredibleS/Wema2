@@ -9,16 +9,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:text="Current Group Name"
-        android:textSize="32dp"/>
+        android:textSize="24dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rvGroupItem"
-        android:layout_below="@id/tvGroupName">
+        android:layout_below="@id/rlGroupSpinner">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -27,7 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rvGroupItem"
-        android:text="Create Group Post"/>
+        android:text="Create Group Post"
+        android:background="@drawable/button_background"/>
 
     <Button
         android:id="@+id/btnCreateGroupRak"
@@ -35,16 +37,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rvGroupItem"
         android:layout_toRightOf="@id/btnCreateGroupPost"
-        android:text="Create Group Rak"/>
+        android:text="Create Group Rak"
+        android:background="@drawable/button_background"/>
 
-    <Spinner
-        android:id="@+id/group_spinner"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rvGroupItem"
-        android:layout_toRightOf="@id/btnCreateGroupRak"
         android:layout_marginTop="10dp"
-        />
+        android:background="@color/md_grey_200"
+        android:layout_below="@id/tvGroupName"
+        android:id="@+id/rlGroupSpinner">
+        <Spinner
+            android:id="@+id/group_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            />
+    </FrameLayout>
+
 
 
 </RelativeLayout>

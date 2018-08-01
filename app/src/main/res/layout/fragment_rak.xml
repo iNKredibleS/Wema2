@@ -1,78 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rakLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RakFragment">
+    tools:context=".RakFragment"
+    android:background="@color/md_black_1000">
 
-    <TextView
-        android:id="@+id/rakTxt"
-        android:layout_width="243dp"
-        android:layout_height="232dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="76dp"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/rak_bck"/>
 
-    <Button
-        android:id="@+id/newRakBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="new rak"
-        tools:ignore="VectorDrawableCompat" />
+    <RelativeLayout
+        android:id="@+id/rakLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/doLaterBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignTop="@+id/feedBtn"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+        <TextView
+            android:id="@+id/rakTxt"
+            android:layout_width="243dp"
+            android:layout_height="232dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="76dp"
+            android:gravity="center"
+            android:textColor="@color/wema"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/doneBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignEnd="@+id/rakTxt"
-        android:layout_alignRight="@+id/rakTxt"
-        android:layout_alignTop="@+id/doLaterBtn"
-        android:contentDescription=""
-        app:srcCompat="@android:drawable/checkbox_on_background" />
+        <Button
+            android:id="@+id/newRakBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/lighter_bck"
+            android:shadowColor="#50FFFFFF"
+            android:text="Feeling Inspired? Create your own Rak"
+            android:textColor="@color/wema"
+            android:textSize="12sp" />
 
-    <ImageButton
-        android:id="@+id/feedBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignLeft="@+id/rakTxt"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/rakTxt"
-        android:layout_marginBottom="135dp"
-        app:srcCompat="@drawable/ic_people_outline_black_24dp"
-        tools:ignore="VectorDrawableCompat" />
+        <ImageButton
+            android:id="@+id/doLaterBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/newRakBtn"
+            android:layout_marginBottom="5dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_background"
+            app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
-    <ImageButton
-        android:id="@+id/refreshBtn"
-        android:layout_width="38dp"
-        android:layout_height="39dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ic_refresh_black_24dp"
-        tools:ignore="VectorDrawableCompat" />
+        <ImageButton
+            android:id="@+id/doneBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/newRakBtn"
+            android:background="@drawable/button_background"
+            android:layout_alignEnd="@+id/rakTxt"
+            android:layout_marginBottom="5dp"
+            android:contentDescription=""
+            android:src="@drawable/ic_check_black_24dp" />
 
-    <Button
-        android:id="@+id/notifyBtn"
-        android:layout_width="76dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="61dp"
-        android:text="NOTIFY" />
+        <ImageButton
+            android:id="@+id/feedBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/newRakBtn"
+            android:layout_alignStart="@+id/rakTxt"
+            android:background="@drawable/button_background"
+            android:layout_marginBottom="5dp"
+            app:srcCompat="@drawable/ic_people_outline_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/refreshBtn"
+            android:layout_width="38dp"
+            android:layout_height="39dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/button_background"
+            android:layout_marginRight="5dp"
+            app:srcCompat="@drawable/ic_refresh_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -3,6 +3,7 @@ package com.inkredibles.wema20;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +64,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
+import static com.inkredibles.wema20.R.drawable.wemabck0;
 
 
 public class RakFragment extends Fragment {
@@ -73,7 +76,8 @@ public class RakFragment extends Fragment {
     @BindView(R.id.doLaterBtn) ImageButton doLaterBtn;
     @BindView(R.id.doneBtn) ImageButton doneBtn;
     @BindView(R.id.rakLayout) RelativeLayout rlayout;
-    @BindView(R.id.notifyBtn) Button notifyBtn;
+    //@BindView(R.id.notifyBtn) Button notifyBtn;
+    @BindView(R.id.rak_bck) ImageView rackBck;
 
     private  Random rand;
     Button newRakBtn;
@@ -96,6 +100,8 @@ public class RakFragment extends Fragment {
 
     ParseFile rakFile;
 
+    static int currentBck;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,8 +123,6 @@ public class RakFragment extends Fragment {
         //query.setLimit(10);
 
         rakList = new ArrayList<Rak>();
-
-
 
     }
 
@@ -160,7 +164,7 @@ public class RakFragment extends Fragment {
 
             //save new rak to current user
             user.setRak(newRak);
-
+        //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {
                 @Override
@@ -197,39 +201,51 @@ public class RakFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Rak r = null;
-        try {
-            r = (Rak) user.fetchIfNeeded().getParseObject("current_rak");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseFile i = null;
-        try {
-            i = r.fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        GlideApp.with(this)
-                .load(i.getUrl())
-                .format(DecodeFormat.PREFER_ARGB_8888)
-                .into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            rlayout.setBackground(resource);
-                        }
 
-                    }
+        currentBck = R.drawable.wemabck0;
+        rackBck.setImageBitmap(
+                decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
 
-                });
+
+
+
+
+//        Rak r = null;
+//        try {
+//            r = (Rak) user.fetchIfNeeded().getParseObject("current_rak");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        ParseFile i = null;
+//        try {
+//            i = r.fetchIfNeeded().getParseFile("image");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        GlideApp.with(this)
+//                .load(i.getUrl())
+//                .format(DecodeFormat.PREFER_ARGB_8888)
+//                .into(new SimpleTarget<Drawable>() {
+//                    @Override
+//                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                            rlayout.setBackground(resource);
+//                        }
+//
+//                    }
+//
+//                });
 
 
 
     }
 
+
     @Override
     public void onResume() {
             super.onResume();
+
+
 //        getPopularPhoto();
 //
 //        User user = (User) ParseUser.getCurrentUser();
@@ -254,6 +270,49 @@ public class RakFragment extends Fragment {
 //        });
 
     }
+
+    //function to load a properly sized background image:
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 3;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+
     private void getPopularPhoto() {
         String url ="https://api.unsplash.com/photos/random/?client_id=" + getString(R.string.api_key);
         AsyncHttpClient client = new AsyncHttpClient();
@@ -290,19 +349,19 @@ public class RakFragment extends Fragment {
         });
     }
 
-    @OnClick(R.id.notifyBtn)
-    protected void notifyClick() {
-
-        NotificationCompat.Builder mBuilder =
-                // Builder class for devices targeting API 26+ requires a channel ID
-                new NotificationCompat.Builder(getContext(), "myChannelId")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
-
-        NotificationManager notificationManager = (NotificationManager) this.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, mBuilder.build());
-    }
+//    @OnClick(R.id.notifyBtn)
+//    protected void notifyClick() {
+//
+//        NotificationCompat.Builder mBuilder =
+//                // Builder class for devices targeting API 26+ requires a channel ID
+//                new NotificationCompat.Builder(getContext(), "myChannelId")
+//                        .setSmallIcon(R.drawable.ic_launcher_background)
+//                        .setContentTitle("My notification")
+//                        .setContentText("Hello World!");
+//
+//        NotificationManager notificationManager = (NotificationManager) this.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(1, mBuilder.build());
+//    }
 
 
     @OnClick(R.id.refreshBtn)
@@ -317,6 +376,22 @@ public class RakFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck1, R.drawable.wemabck2, R.drawable.wemabck3, R.drawable.wemabck4,
+                 R.drawable.wemabck5, R.drawable.wemabck6};
+
+        int randomNum = rand.nextInt(6) + 1;
+
+        while(randomNum == currentBck ) {
+            randomNum = rand.nextInt(6) + 1;
+        }
+
+        int newBckg = randomBckg[randomNum];
+
+        rackBck.setImageBitmap(
+                decodeSampledBitmapFromResource(getResources(), newBckg, 500, 600));
+
+-
     }
 
     @OnClick(R.id.feedBtn)

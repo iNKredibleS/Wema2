@@ -5,6 +5,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.io.File;
+
 /*
     Data schema for the RAK (random act of kindness of the day). The title of the RAK is the suggested daily random act of kindess
     for the user for the day. In terms of UI, the image we hope to underlay the RAK post.
@@ -34,10 +36,6 @@ public class Rak extends ParseObject {
         return getParseFile(KEY_IMAGE);
     }
 
-    public void setImage(ParseFile image) {
-        put(KEY_IMAGE, image);
-    }
-
     public ParseUser getUser(){
         return getParseUser(KEY_CREATOR);
     }
@@ -46,7 +44,7 @@ public class Rak extends ParseObject {
         put(KEY_CREATOR, parseUser);
 
     }
-
-
-
+    public void setImage(ParseFile file) {
+        put(KEY_IMAGE, file);
+    }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 * Setting the adapter occurs in the findInbackground method since by then, we have gotten a list of posts*/
 public class FeedFragment extends Fragment {
 
-    private static final  int SPAN_COUNT = 3;
+    private static final  int SPAN_COUNT = 2;
 
 
     private ArrayList<Post> posts;

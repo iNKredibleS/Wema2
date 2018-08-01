@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rakLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RakFragment">
@@ -39,39 +40,39 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignEnd="@+id/rakTxt"
+        android:layout_alignRight="@+id/rakTxt"
         android:layout_alignTop="@+id/doLaterBtn"
         android:contentDescription=""
-        app:srcCompat="@android:drawable/checkbox_on_background"
-        android:layout_alignRight="@+id/rakTxt" />
+        app:srcCompat="@android:drawable/checkbox_on_background" />
 
     <ImageButton
         android:id="@+id/feedBtn"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_alignLeft="@+id/rakTxt"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/rakTxt"
         android:layout_marginBottom="135dp"
         app:srcCompat="@drawable/ic_people_outline_black_24dp"
-        tools:ignore="VectorDrawableCompat"
-        android:layout_alignLeft="@+id/rakTxt" />
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
         android:id="@+id/refreshBtn"
         android:layout_width="38dp"
         android:layout_height="39dp"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         app:srcCompat="@drawable/ic_refresh_black_24dp"
-        tools:ignore="VectorDrawableCompat"
-        android:layout_alignParentRight="true" />
+        tools:ignore="VectorDrawableCompat" />
 
-    <ImageButton
-        android:id="@+id/imgBtn"
-        android:layout_width="42dp"
-        android:layout_height="39dp"
+    <Button
+        android:id="@+id/notifyBtn"
+        android:layout_width="76dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="49dp"
-        app:srcCompat="@drawable/ic_camera_alt_black_24dp"
-        tools:ignore="VectorDrawableCompat" />
+        android:layout_marginBottom="61dp"
+        android:text="NOTIFY" />
+
 </RelativeLayout>

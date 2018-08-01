@@ -3,6 +3,7 @@ package com.inkredibles.wema20;
 
 import android.app.Application;
 
+import com.inkredibles.wema20.models.NewFile;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
@@ -37,8 +38,12 @@ public class ParseApp extends Application {
                 .server("http://wema-rak.herokuapp.com/parse")
                 .build();
 
+
         //intialize the parse
         Parse.initialize(configuration);
+
+        //PushService.setDefaultPushCallback(this, MainActivity.class);
+
     }
 }
 

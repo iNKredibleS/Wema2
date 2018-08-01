@@ -31,13 +31,13 @@
         </activity>
         <activity android:name=".SignupActivity"
             />
-
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <!--The meta tag below sets the API key to use the place autocomplete API. Without it, the fragment will appear then disappear shortly.-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key"/>
+
     </application>
 
 </manifest>

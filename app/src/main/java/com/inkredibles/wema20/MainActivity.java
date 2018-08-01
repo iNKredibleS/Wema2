@@ -1,5 +1,8 @@
 package com.inkredibles.wema20;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +26,7 @@ import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
@@ -59,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         new DrawerBuilder().withActivity(this).build();
 

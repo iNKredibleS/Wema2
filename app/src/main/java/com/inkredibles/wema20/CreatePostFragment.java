@@ -33,6 +33,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
+import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -142,7 +143,10 @@ public class CreatePostFragment extends Fragment {
         } else if (isRak) { //comes from rak
             if (rak != null){
                 rak = bundle.getParcelable("RAK");
-                et_title.setText(rak.getTitle());
+               // et_title.setText(rak.getTitle());
+                User user = (User) ParseUser.getCurrentUser();
+                et_title.setText(user.getRak().getTitle());
+                System.out.println(user.getRak().getTitle());
                 //set the cursor position to end of input title
                 int position = et_title.length();
                 Editable etext = et_title.getText();

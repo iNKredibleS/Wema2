@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import butterknife.BindView;
@@ -26,10 +27,14 @@ public class SignupActivity extends AppCompatActivity {
     @BindView(R.id.et_email) EditText et_email;
     @BindView(R.id.et_username) EditText et_username;
     @BindView (R.id.et_password) EditText et_password;
+    @BindView(R.id.signup_background) ImageView signupBackground;
 
     private String email;
     private String username;
     private String password;
+    //is this good practice?
+    LoginActivity loginActivity = new LoginActivity();
+
 
 
     @Override
@@ -38,6 +43,9 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);
+
+       signupBackground.setImageBitmap(
+                loginActivity.decodeSampledBitmapFromResource(getResources(), R.drawable.signup_new, 500, 600));
     }
 
     @OnClick(R.id.btn_signup)
@@ -51,7 +59,7 @@ public class SignupActivity extends AppCompatActivity {
 
     public void SignUp(){
         // Create the ParseUser
-        ParseUser user = new ParseUser();
+        User user = new User();
         // Set core properties
         user.setUsername(username);
         user.setPassword(password);
@@ -73,6 +81,48 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
+
+//    //function to load a properly sized background image:
+//    public static int calculateInSampleSize(
+//            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+//        // Raw height and width of image
+//        final int height = options.outHeight;
+//        final int width = options.outWidth;
+//        int inSampleSize = 1;
+//
+//        if (height > reqHeight || width > reqWidth) {
+//
+//            final int halfHeight = height / 2;
+//            final int halfWidth = width / 2;
+//
+//            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+//            // height and width larger than the requested height and width.
+//            while ((halfHeight / inSampleSize) >= reqHeight
+//                    && (halfWidth / inSampleSize) >= reqWidth) {
+//                inSampleSize *= 2;
+//            }
+//        }
+//
+//        return inSampleSize;
+//    }
+//
+//
+//    //extract this out to its own class!- used in both login and signup. Should only be defined once
+//    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+//                                                         int reqWidth, int reqHeight) {
+//
+//        // First decode with inJustDecodeBounds=true to check dimensions
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeResource(res, resId, options);
+//
+//        // Calculate inSampleSize
+//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+//
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeResource(res, resId, options);
+//    }
 
 
 }

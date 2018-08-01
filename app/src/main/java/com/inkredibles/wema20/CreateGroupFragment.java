@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+/*
+Create Group Fragment allows users to create a new group and then save that group to parse. The user
+can input a group name and add parse users by searching through a list of current Wema users.
+
+ */
+
 
 public class CreateGroupFragment extends Fragment {
 
@@ -28,7 +34,7 @@ public class CreateGroupFragment extends Fragment {
 
 
     @BindView(R.id.etGroupName) EditText etGroupName;
-    @BindView(R.id.etTestText) EditText etTestText;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -49,9 +55,6 @@ public class CreateGroupFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             addedUsers = bundle.getParcelableArrayList("added_users");
-            for(int i = 0; i < addedUsers.size(); i++){
-                Log.i("create group fragment", "users[" + i + "]" + "=" + addedUsers.get(i).getUsername());
-            }
         }
     }
 
@@ -60,23 +63,24 @@ public class CreateGroupFragment extends Fragment {
     protected void createGroup(){
 
         String roleName = etGroupName.getText().toString();
-        String roleTestText = etTestText.getText().toString();
+        //the line below is not necessary also figure out what the ACL does
         ParseACL roleAcl = new ParseACL();
         roleAcl.setPublicWriteAccess(false);
-        roleAcl.setPublicReadAccess(false);
+        roleAcl.setPublicReadAccess(true);
 
-        final ParseRole newRole = new ParseRole(roleName, roleAcl);
+        //currentRole maybe should be called new Role... maybe it shouldn't be currentRole or newRole
+        //this could all be resolved if it were just called roll
+        final ParseRole currentRole = new ParseRole(roleName, roleAcl);
         for(int i = 0; i < addedUsers.size(); i++){
-            newRole.getUsers().add(addedUsers.get(i));
+            currentRole.getUsers().add(addedUsers.get(i));
         }
-        newRole.put("testString", roleTestText);
 
-        newRole.saveInBackground(
+        currentRole.saveInBackground(
         new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    listener.fromCreateGrouptoCurrentGroup(newRole);
+                    listener.fromCreateGrouptoCurrentGroup(currentRole);
                     Log.d("CreateGroup", "create group success");
 
                 } else {

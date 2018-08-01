@@ -3,6 +3,7 @@ package com.inkredibles.wema20.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.io.File;
@@ -22,6 +23,7 @@ public class Rak extends ParseObject {
     private static final String KEY_TITLE = "title";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_CREATOR = "current_user";
+    private static final String KEY_ROLE = "role";
 
 
     public String getTitle() {
@@ -44,7 +46,17 @@ public class Rak extends ParseObject {
         put(KEY_CREATOR, parseUser);
 
     }
+
     public void setImage(ParseFile file) {
         put(KEY_IMAGE, file);
     }
+
+
+    public void setRole (ParseRole parseRole) {
+        put(KEY_ROLE, parseRole);
+    }
+
+
+
+
 }

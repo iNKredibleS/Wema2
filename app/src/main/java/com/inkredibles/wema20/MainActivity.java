@@ -4,12 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.transition.TransitionInflater;
 import android.view.View;
 
 import com.inkredibles.wema20.models.Post;
@@ -21,7 +23,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.parse.ParseImageView;
-import com.parse.ParseUser;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment placesFragment = new PlacesFragment();
     final Fragment addUsersFragment = new AddUsersFragment();
     final Fragment currentGroupFragment = new CurrentGroupFragment();
+    final Fragment groupsFragment = new GroupsFragment();
     private Drawer result;
     private SecondaryDrawerItem feed;
     private SecondaryDrawerItem rak;
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         bundle.putBoolean("isReflection", isReflection);
                         createPostFragment.setArguments(bundle);
                         nextFragment(createPostFragment);
+                        isReflection = false;
 
                     }else if (drawerItem == archive){
                         archiveBool = true;
@@ -115,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         archiveBool = false;
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
-                        nextFragment(createGroupFragment);
+                        //launch groups Fragment to see user's groups
+                        nextFragment(groupsFragment);
                     }
                     else if (drawerItem == places){
                         //nextFragment();
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void nextFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.placeholder, fragment);
-        ft.addToBackStack("added to stack");
+        ft.addToBackStack(fragment.getClass().toString());
         ft.commit();
         closeDrawer();
     }
@@ -152,23 +156,32 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
-
     @Override
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView) {
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName) {
+        Context context = feedFragment.getContext();
         Fragment detailFragment = new DetailFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        ViewCompat.setTransitionName(parseImageView, sharedTransitionName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            feedFragment.setSharedElementReturnTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
+            feedFragment.setExitTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
+
+            detailFragment.setSharedElementEnterTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
+            detailFragment.setEnterTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
+            fragmentTransaction.addSharedElement(parseImageView,sharedTransitionName);
+        }
+        //fragmentTransaction.replace(R.id.fragment_pla, newFragment, tag);
+        //fragmentTransaction.addToBackStack(tag);
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
+        bundle.putString("transitionName", sharedTransitionName);
         detailFragment.setArguments(bundle);
-        Log.d("Main Activity", "feed");
+//        Log.d("Main Activity", "feed");
         //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addSharedElement(parseImageView, "postTransition")
-                .replace(R.id.placeholder, detailFragment)
-                .addToBackStack("Added to stack")
+        fragmentTransaction.replace(R.id.placeholder, detailFragment)
+                .addToBackStack(detailFragment.getClass().toString())
                 .commit();
-
-        nextFragment(detailFragment);
+        //nextFragment(detailFragment);
     }
 
 
@@ -191,8 +204,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putBoolean("isRak", isRak);
         bundle.putParcelable("RAK", rak );
         createPostFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        nextFragment(createPostFragment);
+        isRak = false;
         //result.setSelection(rak);
 
     }
@@ -206,8 +219,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
     public void toCreateRak() {
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, createRakFragment).commit();
+     nextFragment(createRakFragment);
+
   }
 
   @Override
@@ -215,10 +228,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
       rakFragment.setArguments(bundle);
-
-      FragmentTransaction
-              fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.placeholder, rakFragment).commit();
+      nextFragment(rakFragment);
   }
 
   @Override
@@ -226,20 +236,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("added_users", new ArrayList<ParseUser>(addedUsers));
         createGroupFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createGroupFragment).commit();
-
-
+        nextFragment(createGroupFragment);
   }
 
-  @Override
-  public void fromCreateGrouptoCurrentGroup(ParseRole newRole){
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("newRole", newRole);
-        currentGroupFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, currentGroupFragment).commit();
-  }
 
   @Override
   public void fromCurrentGrouptoCreatePost(ParseRole currentRole){
@@ -249,24 +248,48 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putBoolean("isGroup", isGroup);
         bundle.putParcelable("currentRole", currentRole);
         createPostFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, createPostFragment).commit();
+        nextFragment(createPostFragment);
+        isGroup = false;
   }
 
   @Override
-  public void setIsGroup(Boolean bool){
-        isGroup = bool;
+  public void fromCurrentGrouptoCreateRak(ParseRole currentRole){
+
+        isGroup = true;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isGroup", isGroup);
+        bundle.putParcelable("currentRole", currentRole);
+        createRakFragment.setArguments(bundle);
+        nextFragment(createRakFragment);
+        isGroup = false;
+        //this code can be optimized
   }
 
   @Override
-  public void setIsReflection (Boolean bool){
-        isReflection = bool;
-  }
-
-    @Override
-    public void setIsRak (Boolean bool){
-        isRak = bool;
+  public void fromCreateGrouptoCurrentGroup(ParseRole currentRole){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("currentRole", currentRole);
+        currentGroupFragment.setArguments(bundle);
+        nextFragment(currentGroupFragment);
     }
+
+  @Override
+    public void toCurrentGroup(ParseRole currentRole) {
+     Bundle bundle = new Bundle();
+     bundle.putParcelable("currentRole", currentRole);
+     currentGroupFragment.setArguments(bundle);
+     nextFragment(currentGroupFragment);
+
+
+  }
+
+
+  @Override
+  public void fromGroupstoCreateGroup(){
+        nextFragment(createGroupFragment);
+  }
+
+
 
 
 

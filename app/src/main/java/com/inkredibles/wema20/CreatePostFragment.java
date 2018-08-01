@@ -54,9 +54,14 @@ import butterknife.OnClick;
 import static android.app.Activity.RESULT_OK;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
+//import android.app.Fragment;
+
 /*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
  *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
-  *  is private, only they can see it in their archive.*/
+  *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
+  *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
+  *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
+  *  go back to feed fragment*/
 public class CreatePostFragment extends Fragment {
 
     @BindView(R.id.Title) EditText et_title;
@@ -80,6 +85,8 @@ public class CreatePostFragment extends Fragment {
     Rak rak;
     private ParseRole currentRole;
     private Bundle bundle;
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private CreatePostFragment createPostFragment;
 
 
     // Storage Permissions
@@ -94,6 +101,7 @@ public class CreatePostFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (autocompleteFragment != null)autocompleteFragment.setText("");
         // Defines the xml file for the fragment
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
@@ -106,41 +114,30 @@ public class CreatePostFragment extends Fragment {
             /* map is already there, just return view as it is */
         }
         return view;
-       // return inflater.inflate(R.layout.fragment_create_post, parent, false);
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        createPostFragment = this;
         //butterknife bind
         ButterKnife.bind(this, view);
-
         setUpView();
         setupAutoComplete();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        setUpView();
-
-    }
 
 
+    //set up the create post based on the circumstance (group, rak or reflection)
     public void setUpView() {
-
         filesDir = getContext().getFilesDir();
-
         bundle = this.getArguments();
         Boolean isGroup = bundle.getBoolean("isGroup");
         Boolean isReflection = bundle.getBoolean("isReflection");
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
-
-        } else if (isRak) { //comes from rak
+        } else if (isRak) {
             if (rak != null){
                 rak = bundle.getParcelable("RAK");
                // et_title.setText(rak.getTitle());
@@ -174,9 +171,9 @@ public class CreatePostFragment extends Fragment {
 
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         if (autocompleteFragment != null) {
+            autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
@@ -188,9 +185,11 @@ public class CreatePostFragment extends Fragment {
                 public void onError(Status status) {
                     Log.i("CreatePost: ", "An error occurred: " + status);
                 }
+
             });
         }
     }
+
 
 
     //when button changes the type, change the textview that displays type and the type field in
@@ -204,7 +203,6 @@ public class CreatePostFragment extends Fragment {
             tvGiveRec.setText("Received");
             type = "receive";
         }
-
     }
 
     @OnCheckedChanged(R.id.switch_pub_pri)
@@ -216,25 +214,6 @@ public class CreatePostFragment extends Fragment {
             tvPubPri.setText("Just for me");
             privacy = "private";
         }
-    }
-
-
-
-
-    //on post button clicked
-    @OnClick(R.id.btn_post)
-    protected void postButtonClicked(){
-        final String title = et_title.getText().toString();
-        final String message = et_message.getText().toString();
-        final ParseUser user = ParseUser.getCurrentUser();
-        final String finalPrivacy = privacy;
-        final String finalType = type;
-        if(file != null) parseFile = new ParseFile(file);
-        final ParseRole role = currentRole;
-
-        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
-
-
     }
 
     //launch activity to choose a photo from gallery
@@ -253,9 +232,24 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
+    //on post button clicked
+    @OnClick(R.id.btn_post)
+    protected void postButtonClicked(){
+        final String title = et_title.getText().toString();
+        final String message = et_message.getText().toString();
+        final ParseUser user = ParseUser.getCurrentUser();
+        final String finalPrivacy = privacy;
+        final String finalType = type;
+        if(file != null) parseFile = new ParseFile(file);
+        final ParseRole role = currentRole;
+
+        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+
+    }
+
 
     //create post and store to parse server
-    //set the title, message, user, image, privacy, give, receive
+    //set the title, message, user, image, privacy, give, receive, location
     private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
         final Post newPost = new Post();
         newPost.setTitle(title);
@@ -264,8 +258,8 @@ public class CreatePostFragment extends Fragment {
         if(parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
-        newPost.setLocation(geoPoint);
-        newPost.setPlaceName(placeName);
+        if(geoPoint != null) newPost.setLocation(geoPoint);
+        if(placeName != null) newPost.setPlaceName(placeName);
         if(role != null) newPost.setRole(role);
 
         newPost.saveInBackground(
@@ -285,12 +279,10 @@ public class CreatePostFragment extends Fragment {
                 });
     }
 
-    protected void resetCreatePost() {
+    //clear any information from a previous post to reuse fragment
+    private void resetCreatePost() {
         et_message.setText("");
         et_title.setText("");
-        listener.setIsGroup(false);
-        listener.setIsRak(false);
-        listener.setIsReflection(false);
         bundle = null;
         currentRole = null;
         file = null;
@@ -315,6 +307,10 @@ public class CreatePostFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            Log.d("CRTPST", "Finished autocomplete");
+            System.out.print(data.toString());
+
         }
     }
 
@@ -373,6 +369,8 @@ public class CreatePostFragment extends Fragment {
                     + " must implement OnItemSelectedListener");
         }
     }
+
+    //What does this do?
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -381,6 +379,5 @@ public class CreatePostFragment extends Fragment {
                 .findFragmentById(R.id.place_autocomplete_fragment);
         if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
     }
-
 }
 

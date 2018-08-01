@@ -72,6 +72,8 @@ dependencies {
     implementation "android.arch.paging:runtime:1.0.0"
     //google play
     compile 'com.google.android.gms:play-services-places:11.0.2'
+    //share to facebook
+    compile 'com.facebook.android:facebook-share:[4,5)'
 
     implementation 'org.apache.commons:commons-io:1.3.2'
 

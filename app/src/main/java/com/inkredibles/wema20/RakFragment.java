@@ -187,6 +187,7 @@ public class RakFragment extends Fragment {
                 }
             });
 
+
         }
         getPopularPhoto();
 

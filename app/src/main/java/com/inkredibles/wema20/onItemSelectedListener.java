@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface onItemSelectedListener {
 
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView);
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName);
 
     //Transitions from any fragment to the feed fragment
     void toFeed();
@@ -28,15 +28,25 @@ public interface onItemSelectedListener {
 
     void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
 
-    void fromCreateGrouptoCurrentGroup (ParseRole newRole);
+    void fromCreateGrouptoCurrentGroup (ParseRole currentRole);
 
     void fromCurrentGrouptoCreatePost (ParseRole currentRole);
 
-    void setIsGroup (Boolean bool);
+    void fromCurrentGrouptoCreateRak(ParseRole currentRole);
 
-    void setIsReflection (Boolean bool);
+    void toCurrentGroup(ParseRole currentRole);
 
-    void setIsRak(Boolean bool);
+  //  void fromGroupAdaptertoCurrentGroup(ParseRole currentRole);
+
+    void fromGroupstoCreateGroup();
+
+
+
+//    void setIsGroup (Boolean bool);
+//
+//    void setIsReflection (Boolean bool);
+//
+//    void setIsRak(Boolean bool);
 
 
 

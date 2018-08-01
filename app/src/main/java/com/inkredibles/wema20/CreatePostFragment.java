@@ -246,6 +246,14 @@ public class CreatePostFragment extends Fragment {
     //create post and store to parse server
     //set the title, message, user, image, privacy, give, receive
     private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
+        if (title.trim().equals("")) {
+            Toast.makeText(getContext(),"Title is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (message.trim().equals("")){
+            Toast.makeText(getContext(),"A reflection is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final Post newPost = new Post();
         newPost.setTitle(title);
         newPost.setMessage(message);

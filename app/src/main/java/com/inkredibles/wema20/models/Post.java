@@ -34,6 +34,7 @@ public class Post extends ParseObject {
     private static  final String KEY_LOCATION = "location";
     private static  final  String KEY_PLACE_NAME =  "placename";
     private static final String KEY_ROLE = "role";
+    private static final String KEY_CLAP = "claps";
 
 
     public String getName() {return getString(KEY_NAME);}
@@ -102,6 +103,15 @@ public class Post extends ParseObject {
         put(KEY_CREATOR, parseUser);
 
     }
+    //methods that adds one clap to  a post
+    public void clapForPost(){
+        int numClaps = getInt(KEY_CLAP);
+      //  if (numClaps == null)
+        put(KEY_CLAP, numClaps+1);
+    }
+    public int getNumClaps(){
+        return  getInt(KEY_CLAP);
+    }
 
     //TODO Figure out how to get ROLE
     //public ParseRole getRole() {return get(KEY_ROLE); }
@@ -129,6 +139,8 @@ public class Post extends ParseObject {
             include(KEY_CREATOR);
             return this;
         }
+
+
         public Query getPrivate(){
             orderByDescending(KEY_CREATED_AT);
             setLimit(50);

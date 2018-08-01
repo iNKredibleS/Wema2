@@ -1,25 +1,27 @@
     package com.inkredibles.wema20;
 
     import android.annotation.SuppressLint;
-    import android.content.Context;
-    import android.os.Build;
-    import android.os.Bundle;
-    import android.support.v4.app.Fragment;
-    import android.support.v7.widget.CardView;
-    import android.util.Log;
-    import android.view.LayoutInflater;
-    import android.view.View;
-    import android.view.ViewGroup;
-    import android.widget.TextView;
-    import android.widget.Toast;
+import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-    import com.inkredibles.wema20.models.Post;
-    import com.parse.ParseImageView;
+import com.inkredibles.wema20.models.Post;
+import com.parse.ParseException;
+import com.parse.ParseImageView;
+import com.parse.SaveCallback;
 
-    import java.util.ArrayList;
+import java.util.ArrayList;
 
-    import butterknife.BindView;
-    import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
     /*The detail fragment shows more information about the post that has been selected from the recyclerview*/
     public class DetailFragment extends Fragment {
@@ -29,6 +31,10 @@
         @BindView(R.id.ivPostImg)ParseImageView ivPostImage;
         @BindView(R.id.tvLocation) TextView tvLocation;
         @BindView(R.id.cvCardview) CardView cardView;
+        @BindView(R.id.tvDate) TextView tvDate;
+        @BindView(R.id.tvClap) TextView tvClap;
+        @BindView(R.id.tvNumClaps) TextView tvNumClaps;
+        @BindView(R.id.ivLocation) ParseImageView ivLocation;
 
 
 
@@ -56,44 +62,44 @@
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivPostImage.setTransitionName(bundle.getString("transitionName"));
+                tvtTitle.setTransitionName(bundle.getString("titleTransition"));
             }
-
             post = bundle.getParcelable("post");
             allPosts = bundle.getParcelableArrayList("all_posts");
             currPosition  = bundle.getInt("position");
 
             tvtTitle.setText(post.getTitle());
             String location = post.getPlaceName();
-            if (location != null || location != ""){
+            if (location != null && location != ""){
                 tvLocation.setText(location);
             }else{
                 tvLocation.setText("No Location");
             }
             tvMessage.setText(post.getMessage());
+            tvDate.setText(post.getRelativeTimeAgo());
+            tvNumClaps.setText(Integer.toString(post.getNumClaps()));
             ivPostImage.setParseFile(post.getImage());
             ivPostImage.loadInBackground();
-//            ivPostImage.setOnTouchListener(new onSw);
-
+            int color = getResources().getColor(R.color.md_blue_200);
+            ivLocation.setColorFilter(color);
             cardView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
                 @Override
                 public void onSwipeDown() {
-                    Toast.makeText(getContext(), "Down", Toast.LENGTH_SHORT).show();
+                    //do something when the user swipes down
                 }
 
                 @Override
                 public void onSwipeLeft() {
-                    Toast.makeText(getContext(), "Left", Toast.LENGTH_SHORT).show();
                     nextElement(true);
                 }
 
                 @Override
                 public void onSwipeUp() {
-                    Toast.makeText(getContext(), "Up", Toast.LENGTH_SHORT).show();
+                    //do somthing when the user swipes up
                 }
 
                 @Override
                 public void onSwipeRight() {
-                    Toast.makeText(getContext(), "Right", Toast.LENGTH_SHORT).show();
                     nextElement(false);
                 }
             });
@@ -121,6 +127,21 @@
                         + " must implement OnItemSelectedListener");
             }
         }
+        @OnClick(R.id.tvClap)
+        public void onClickClap(){
+            post.clapForPost();
+            post.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    int numClaps = post.getNumClaps();
+                    tvNumClaps.setText(numClaps+" claps");
+
+
+                }
+            });
+        }
+
+
 
 
     }

@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
             .build();
 
 
-            nextFragment(feedFragment);
+            nextFragment(rakFragment);
     }
 
     private void nextFragment(Fragment fragment){

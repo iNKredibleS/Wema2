@@ -23,13 +23,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+This fragment allows the user to create their own random act of kindness either for themselves
+as an alternative to the Rak of the day or as a rak for a group to do together.
+
+TODO implement a time and place aspect
+ */
+
 public class CreateRakFragment extends Fragment {
 
     @BindView(R.id.createRakTxt) EditText createRakTxt;
     @BindView(R.id.createBtn) Button createBtn;
 
     private onItemSelectedListener listener;
-    //Bundle bundle;
 
 
     @Override
@@ -60,41 +66,40 @@ public class CreateRakFragment extends Fragment {
     protected void createRak() {
         Bundle bundle = this.getArguments();
         if(bundle != null && bundle.getBoolean("isGroup")){
-            //you can make this it's own function
-            ParseRole currentRole = bundle.getParcelable("currentRole");
-            Rak groupRak = new Rak();
-            groupRak.setTitle(createRakTxt.getText().toString());
-            groupRak.setUser(ParseUser.getCurrentUser());
-            groupRak.setRole(currentRole);
-
-            groupRak.saveInBackground(
-                    new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Log.d("CreateRakFragment", "create grouprak success");
-                                Toast.makeText(getActivity(), "Group Rak Created", Toast.LENGTH_SHORT).show();
-                                createRakTxt.setText("");
-                                listener.toCurrentGroup();
-
-                            } else {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
+            createGroupRak(bundle);
 
         }else{
+            //complete normal flow of creating a rak
             listener.addRakToServer(createRakTxt.getText().toString());
         }
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-       // bundle = null;
+    //create a new Group Rak and save to Parse
+    private void createGroupRak(Bundle bundle){
+        final ParseRole currentRole = bundle.getParcelable("currentRole");
+        Rak groupRak = new Rak();
+        groupRak.setTitle(createRakTxt.getText().toString());
+        groupRak.setUser(ParseUser.getCurrentUser());
+        groupRak.setRole(currentRole);
+
+        groupRak.saveInBackground(
+                new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("CreateRakFragment", "create grouprak success");
+                            Toast.makeText(getActivity(), "Group Rak Created", Toast.LENGTH_SHORT).show();
+                            createRakTxt.setText("");
+                            listener.toCurrentGroup(currentRole);
+
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
+
 
     @Override
     public void onDestroyView() {

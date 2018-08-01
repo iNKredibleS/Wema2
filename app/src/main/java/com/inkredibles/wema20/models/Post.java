@@ -147,6 +147,12 @@ public class Post extends ParseObject {
             whereContains(KEY_PRIVACY, "public");
             return this;
         }
+        public Query getGroupPosts(ParseRole role){
+            orderByDescending(KEY_CREATED_AT);
+            whereEqualTo(KEY_ROLE, role);
+            return this;
+
+        }
     }
 
 }

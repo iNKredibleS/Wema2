@@ -14,6 +14,11 @@ import android.widget.TextView;
 import com.parse.ParseUser;
 
 import java.util.List;
+/*
+Add users fragment allows the user to choose which users he or she would like to be in their group.
+The user can choose from a list of all users and when a user is chosen their view in the recyclerview
+is highlighted in background.
+ */
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 

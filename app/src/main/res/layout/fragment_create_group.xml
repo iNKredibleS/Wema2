@@ -11,21 +11,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
 
-    <EditText
-        android:id="@+id/etTestText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Testing text"
-        android:layout_below="@id/etGroupName"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/addUsersBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/etTestText"
+        android:layout_below="@id/etGroupName"
         android:text="Add users"
         android:layout_centerHorizontal="true"/>
 

@@ -4,4 +4,8 @@
     <string name ="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
     <string name="google_maps_api_key">AIzaSyCEYBGoqPCyj0QSqI3KjNsqmYeCTbEnI0Q</string>
     <string name="facebook_app_id">471933783315123</string>
+    <string-array name="groups_array">
+        <item>Rak</item>
+        <item>Post</item>
+    </string-array>
 </resources>

@@ -94,7 +94,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="103dp"
-        android:text="Post" />
+        android:text="Post"
+        android:background="@drawable/button_background"
+        />
 
 
     <fragment

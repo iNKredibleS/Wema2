@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--important in getting the path to an image so that it can be shared-->
+<paths>
+    <external-files-path
+        name="images"
+        path="Pictures" />
+</paths>

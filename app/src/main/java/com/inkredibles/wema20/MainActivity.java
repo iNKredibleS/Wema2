@@ -13,6 +13,8 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.mikepenz.materialdrawer.Drawer;
@@ -47,13 +49,19 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private SecondaryDrawerItem rak;
     private SecondaryDrawerItem group;
 
-
+    FirebaseAuth mAuth;
 
 
     public static boolean archiveBool = false;
     public boolean isGroup = false;
     public boolean isReflection = false;
     public boolean isRak = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
 
 
     @Override
@@ -66,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
         new DrawerBuilder().withActivity(this).build();
 
+        mAuth = FirebaseAuth.getInstance();
+
         //if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
@@ -75,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
         final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
         final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
-
 
 
     // create the drawer and remember the `Drawer` result object
@@ -124,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(placesFragment);
                     }else if (drawerItem == logout){
                         ParseUser.logOut();
+                        mAuth.signOut();
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                     }
@@ -134,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
             .build();
 
 
-            nextFragment(rakFragment);
+            nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){

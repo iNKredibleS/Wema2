@@ -124,6 +124,8 @@ public class CreatePostFragment extends Fragment {
         ButterKnife.bind(this, view);
         setUpView();
         setupAutoComplete();
+
+
     }
 
 
@@ -137,25 +139,21 @@ public class CreatePostFragment extends Fragment {
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
-        } else if (isRak) {
-            if (rak != null){
-                rak = bundle.getParcelable("RAK");
-               // et_title.setText(rak.getTitle());
-                User user = (User) ParseUser.getCurrentUser();
-                et_title.setText(user.getRak().getTitle());
-                System.out.println(user.getRak().getTitle());
-                //set the cursor position to end of input title
-                int position = et_title.length();
-                Editable etext = et_title.getText();
-                Selection.setSelection(etext, position);
-            }
-
-        } else if (isReflection) {
+//        } else if (isRak) {
+//            rak = bundle.getParcelable("RAK");
+//            if (rak != null){
+//                User user = (User) ParseUser.getCurrentUser();
+//                Rak r = (Rak) user.getRak();
+//                et_title.setText(r.getTitle());
+//                //set the cursor position to end of input title
+//                int position = et_title.length();
+//                Editable etext = et_title.getText();
+//                Selection.setSelection(etext, position);
+//            }
+//
+//        } else if (isReflection) {
             //any Reflection specific posts
-        } else {
-            System.out.println("-------------");
         }
-
         //TODO change this to a radio button or spinner
         //setting up switches
         switch_pub_pri.setChecked(true);
@@ -168,6 +166,18 @@ public class CreatePostFragment extends Fragment {
         privacy = "public";
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        User user = (User) ParseUser.getCurrentUser();
+        Rak r = (Rak) user.getRak();
+        et_title.setText(r.getTitle());
+
+    }
+
+
 
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){

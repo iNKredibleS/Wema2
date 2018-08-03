@@ -2,14 +2,26 @@ package com.inkredibles.wema20;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +47,9 @@ public class SignupActivity extends AppCompatActivity {
     //is this good practice?
     LoginActivity loginActivity = new LoginActivity();
 
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+
 
 
     @Override
@@ -43,6 +58,10 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);
+
+
+        mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
        signupBackground.setImageBitmap(
                 loginActivity.decodeSampledBitmapFromResource(getResources(), R.drawable.signup_new, 500, 600));
@@ -53,10 +72,32 @@ public class SignupActivity extends AppCompatActivity {
          email = et_email.getText().toString();
          username = et_username.getText().toString();
          password = et_password.getText().toString();
-         SignUp();
+
+        SignUp();
+
+        mAuth.createUserWithEmailAndPassword(et_email.getText().toString(),et_password.getText().toString() ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    Log.d("SigninSuccess", "Signing user into firebase successful");
+
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("name", username);
+
+                    mFirestore.collection("Users").document("user_id").set(userMap);
+                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+//                   //TODO start the main activity
+//                   // Hooray! Let them use the app now.
+//
+
+                } else {
+                    Log.d("SignUpFailed", "Signing into firebase failed");
+                    System.out.println("------" + task.getException().getMessage());
+                }
+            }
+        });
 
     }
-
     public void SignUp(){
         // Create the ParseUser
         User user = new User();
@@ -70,13 +111,12 @@ public class SignupActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Toast.makeText(SignupActivity.this, "new user created", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                    //TODO start the main activity
-                    // Hooray! Let them use the app now.
+
                 } else {
                     Toast.makeText(SignupActivity.this, "user not created!", Toast.LENGTH_LONG).show();
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
+                    e.printStackTrace();
                 }
             }
         });

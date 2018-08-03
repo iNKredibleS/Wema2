@@ -33,6 +33,9 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.loopj.android.http.AsyncHttpClient;
@@ -42,6 +45,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -102,6 +106,8 @@ public class RakFragment extends Fragment {
 
     static int currentBck;
 
+    User user;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -124,18 +130,7 @@ public class RakFragment extends Fragment {
 
         rakList = new ArrayList<Rak>();
 
-    }
 
-    private void createNotification(int nId, int iconRes, String title, String body) {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                getContext()).setSmallIcon(iconRes)
-                .setContentTitle(title)
-                .setContentText(body);
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(nId, mBuilder.build());
     }
 
     @Override
@@ -145,7 +140,6 @@ public class RakFragment extends Fragment {
         query = ParseQuery.getQuery(Rak.class);
         rakList = new ArrayList();
         userList = new ArrayList();
-
         rand = new Random();
 
         //if you create a new RAK with the create button
@@ -163,7 +157,8 @@ public class RakFragment extends Fragment {
             newRak.saveInBackground();
 
             //save new rak to current user
-            user.setRak(newRak);
+            //user.setRak(newRak);
+            user.put("current_rak", newRak);
         //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {
@@ -179,12 +174,43 @@ public class RakFragment extends Fragment {
 
                         }
                         //add RAK field to current user
-                        User user = (User) ParseUser.getCurrentUser();
+                        //User user = (User) ParseUser.getCurrentUser();
+
+                        user.getUsername();
 
                         if (user.get("current_rak") == null) {
                             user.put("current_rak", rak);
                             user.saveInBackground();
                         }
+
+                        getPopularPhoto();
+                        Rak r = null;
+                        rakTxt.setText(rak.getTitle());
+
+                        try {
+                            r = (Rak) user.fetchIfNeeded().get("current_rak");
+                        } catch (ParseException e1) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            if (r.fetchIfNeeded().get("current_background") == null) {
+                                r.put("current_background", R.drawable.wemabck5);
+                                r.saveInBackground();
+                            }
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+                        try {
+                            rackBck.setImageBitmap(
+                                    decodeSampledBitmapFromResource(getResources(), r.fetchIfNeeded().getInt("current_background"), 500, 600));
+                        } catch (ParseException e2) {
+                            e.printStackTrace();
+                        }
+
+
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
                     }
@@ -193,50 +219,6 @@ public class RakFragment extends Fragment {
 
 
         }
-        getPopularPhoto();
-
-        User user = (User) ParseUser.getCurrentUser();
-        try {
-            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        currentBck = R.drawable.wemabck0;
-        rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
-
-
-
-
-
-//        Rak r = null;
-//        try {
-//            r = (Rak) user.fetchIfNeeded().getParseObject("current_rak");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        ParseFile i = null;
-//        try {
-//            i = r.fetchIfNeeded().getParseFile("image");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        GlideApp.with(this)
-//                .load(i.getUrl())
-//                .format(DecodeFormat.PREFER_ARGB_8888)
-//                .into(new SimpleTarget<Drawable>() {
-//                    @Override
-//                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                            rlayout.setBackground(resource);
-//                        }
-//
-//                    }
-//
-//                });
-
-
 
     }
 
@@ -245,29 +227,6 @@ public class RakFragment extends Fragment {
     public void onResume() {
             super.onResume();
 
-
-//        getPopularPhoto();
-//
-//        User user = (User) ParseUser.getCurrentUser();
-//
-//       // ParseFile backgroundImage = null;
-//        try {
-//            backgroundImage = user.getRak().fetchIfNeeded().getParseFile("image");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //User user = (User) ParseUser.getCurrentUser();
-//
-//        GlideApp.with(this).load(backgroundImage.getUrl()).into(new SimpleTarget<Drawable>() {
-//            @Override
-//            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                    rlayout.setBackground(resource);ckibcctbktvgdvlreeckklkvvhiklkii
-//                }
-//            }
-//
-//        });
 
     }
 
@@ -349,20 +308,6 @@ public class RakFragment extends Fragment {
         });
     }
 
-//    @OnClick(R.id.notifyBtn)
-//    protected void notifyClick() {
-//
-//        NotificationCompat.Builder mBuilder =
-//                // Builder class for devices targeting API 26+ requires a channel ID
-//                new NotificationCompat.Builder(getContext(), "myChannelId")
-//                        .setSmallIcon(R.drawable.ic_launcher_background)
-//                        .setContentTitle("My notification")
-//                        .setContentText("Hello World!");
-//
-//        NotificationManager notificationManager = (NotificationManager) this.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(1, mBuilder.build());
-//    }
-
 
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
@@ -391,7 +336,18 @@ public class RakFragment extends Fragment {
         rackBck.setImageBitmap(
                 decodeSampledBitmapFromResource(getResources(), newBckg, 500, 600));
 
--
+        Rak r = null;
+
+        try {
+            r = (Rak) user.fetchIfNeeded().get("current_rak");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        r.put("current_background", newBckg);
+        r.saveInBackground();
+
+
     }
 
     @OnClick(R.id.feedBtn)
@@ -401,9 +357,11 @@ public class RakFragment extends Fragment {
 
 
     @OnClick(R.id.doneBtn)
-    protected void goToPost() {
+    protected void goToPost()  {
         User user = (User) ParseUser.getCurrentUser();
+
         listener.fromRAKtoCreatePost(user.getRak());
+
     }
 
     @OnClick(R.id.newRakBtn)

@@ -21,4 +21,6 @@ class Singleton {
     public void setRole(ParseRole role) {
         this.role = role;
     }
+
+
 }

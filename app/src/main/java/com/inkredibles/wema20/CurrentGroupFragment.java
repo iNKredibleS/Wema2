@@ -51,7 +51,7 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     private ArrayList<Post> groupPosts;
     private PostsAdapter postsAdapter;
 
-    private SaveInfo saveInfo;
+    //private SaveInfo saveInfo;
 
 
     //tells the recyclerview in the fragment whether to upload the group raks or posts

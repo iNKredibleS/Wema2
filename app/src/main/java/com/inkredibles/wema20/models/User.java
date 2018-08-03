@@ -20,5 +20,9 @@ public class User extends ParseUser {
         return (Rak) getParseObject("current_rak");
     }
 
+    public User getUser() {
+        return (User) ParseUser.getCurrentUser();
+    }
+
 
 }

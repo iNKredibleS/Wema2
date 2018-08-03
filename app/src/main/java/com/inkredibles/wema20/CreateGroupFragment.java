@@ -82,6 +82,8 @@ public class CreateGroupFragment extends Fragment {
                 if (e == null) {
                     listener.fromCreateGrouptoCurrentGroup(currentRole);
                     Log.d("CreateGroup", "create group success");
+                    Singleton.getInstance().setRole(currentRole);
+                    etGroupName.setText("");
 
                 } else {
                     e.printStackTrace();

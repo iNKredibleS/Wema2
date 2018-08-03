@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ is highlighted in background.
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
-    private List<ParseUser> mUsers;
+    protected List<ParseUser> mUsers;
     private Context context;
-    private List<ParseUser> mAddedUsers;
+    protected List<ParseUser> mAddedUsers;
 
     MainActivity main = new MainActivity();
 
@@ -36,7 +35,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     public class ViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
         public ImageView ivUserProfile;
         public TextView tvUser;
@@ -54,24 +52,34 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         public void onClick(View view) {
             ParseUser user = mUsers.get(getAdapterPosition());
 
-            if (selectedItems.get(getAdapterPosition(), false)) {
-                selectedItems.delete(getAdapterPosition());
+            if (isSelected(user)){
+
+//               selectedItems.get(getAdapterPosition(), false)) {
+//               selectedItems.delete(getAdapterPosition());
                 view.setSelected(false);
-                mAddedUsers.remove(user);
+                removeUser(user);
                 for(int i = 0; i < mAddedUsers.size(); i++){
-                    Log.i("users adapter", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
+                    Log.i("adaper added users", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
                 }
             }
-            else {
-                selectedItems.put(getAdapterPosition(), true);
+            else{
+                //selectedItems.put(getAdapterPosition(), true);
                 view.setSelected(true);
                 mAddedUsers.add(user);
                 for(int i = 0; i < mAddedUsers.size(); i++){
-                    Log.i("users adapter", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
+                    Log.i("adapter users added", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
                 }
             }
 
         }
+
+        public void removeUser(ParseUser user){
+            for(int i = 0; i < mAddedUsers.size(); i++){
+                if(mAddedUsers.get(i).getUsername().equals(user.getUsername())) mAddedUsers.remove(i);
+            }
+
+        }
+
 
 
     }
@@ -89,10 +97,26 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ParseUser user = mUsers.get(position);
         holder.tvUser.setText(user.getUsername());
+        holder.itemView.setSelected(isSelected(user));
+    }
+
+    public boolean isSelected(ParseUser user){
+        for(int i = 0; i < mAddedUsers.size(); i++){
+            if(mAddedUsers.get(i).getUsername().equals(user.getUsername())) return true;
+        }
+        return false;
+
     }
 
     @Override
     public int getItemCount() { return mUsers.size(); }
 
     public List<ParseUser> getAddedUsers() { return mAddedUsers; }
+
+    public void clear(){
+        mUsers.clear();
+        notifyDataSetChanged();
+    }
+
+
 }

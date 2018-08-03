@@ -3,6 +3,7 @@ package com.inkredibles.wema20;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -70,11 +71,16 @@ public class SignupActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Toast.makeText(SignupActivity.this, "new user created", Toast.LENGTH_LONG).show();
+                    Log.i("Signup activity", "user created");
                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                     //TODO start the main activity
                     // Hooray! Let them use the app now.
                 } else {
-                    Toast.makeText(SignupActivity.this, "user not created!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "user not created-sign!", Toast.LENGTH_LONG).show();
+                    et_email.setText("");
+                    et_password.setText("");
+                    et_username.setText("");
+                    Log.i("signup activity", "user not created");
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
                 }

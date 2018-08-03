@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
             .build();
 
 
-            nextFragment(rakFragment);
+            nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){
@@ -151,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     public boolean getArchiveBool(){return archiveBool;}
+
+
 
 
 
@@ -194,9 +196,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     //after new post created go back to feed fragment
     public void toFeed() {
         //Need to begin a new fragment transaction for any fragment operation
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, feedFragment).commit();
-        result.setSelection(feed);
+        archiveBool = false;
+        nextFragment(feedFragment);
 
     }
 
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 //     bundle.putParcelable("currentRole", currentRole);
 //     currentGroupFragment.setArguments(bundle);
       Singleton.getInstance().setRole(currentRole);
-     nextFragment(currentGroupFragment);
+      nextFragment(currentGroupFragment);
 
 
   }

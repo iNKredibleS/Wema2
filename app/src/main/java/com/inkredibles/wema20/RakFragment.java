@@ -1,18 +1,12 @@
 package com.inkredibles.wema20;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,11 +22,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.loopj.android.http.AsyncHttpClient;
@@ -63,8 +52,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
-
-import static com.inkredibles.wema20.R.drawable.wemabck0;
 
 
 public class RakFragment extends Fragment {
@@ -391,7 +378,7 @@ public class RakFragment extends Fragment {
         rackBck.setImageBitmap(
                 decodeSampledBitmapFromResource(getResources(), newBckg, 500, 600));
 
--
+
     }
 
     @OnClick(R.id.feedBtn)
@@ -403,7 +390,11 @@ public class RakFragment extends Fragment {
     @OnClick(R.id.doneBtn)
     protected void goToPost() {
         User user = (User) ParseUser.getCurrentUser();
-        listener.fromRAKtoCreatePost(user.getRak());
+        try {
+            listener.fromRAKtoCreatePost((Rak) user.fetchIfNeeded().get("current_rak"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.newRakBtn)

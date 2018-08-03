@@ -51,7 +51,7 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     private ArrayList<Post> groupPosts;
     private PostsAdapter postsAdapter;
 
-    private SaveInfo saveInfo;
+
 
 
     //tells the recyclerview in the fragment whether to upload the group raks or posts
@@ -83,11 +83,6 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onResume() {
         super.onResume();
-
-
-        //if you put loadrvGroupItem here w/o a check of some sort you will get the recyclerview
-        //loaded twice
-        //loadRvGroupItem(isItemRak);
 
 
     }

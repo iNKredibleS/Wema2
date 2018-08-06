@@ -151,6 +151,11 @@ public class RakFragment extends Fragment {
 
             //save new rak to current user
             user.setRak(newRak);
+
+            rakTxt.setText(newRak.getTitle());
+            currentBck = R.drawable.wemabck0;
+            rackBck.setImageBitmap(
+                    decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
         //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {
@@ -166,32 +171,47 @@ public class RakFragment extends Fragment {
 
                         }
                         //add RAK field to current user
-                        User user = (User) ParseUser.getCurrentUser();
+                        final User user = (User) ParseUser.getCurrentUser();
 
                         if (user.get("current_rak") == null) {
                             user.put("current_rak", rak);
                             user.saveInBackground();
                         }
+
+                        rakTxt.setText(rak.getTitle());
+
+                        getPopularPhoto();
+
+//
+//              try{          ////        try {
+//            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
+//             } catch (ParseException e1) {
+//            e1.printStackTrace();
+//            }
+
+
+                        currentBck = R.drawable.wemabck0;
+                        rackBck.setImageBitmap(
+                                decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
+
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
                     }
+
+
+//                    User user = (User) ParseUser.getCurrentUser();
+//                    user.saveInBackground();
+////        try {
+//            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
                 }
             });
 
 
         }
-        getPopularPhoto();
-
-        User user = (User) ParseUser.getCurrentUser();
-        try {
-            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        currentBck = R.drawable.wemabck0;
-        rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
 
 
 
@@ -358,11 +378,13 @@ public class RakFragment extends Fragment {
         user.setRak(rak);
         user.saveInBackground();
 
-        try {
-            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        String s = user.getRak().getTitle();
+        rakTxt.setText(user.getRak().getTitle());
 
         int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck1, R.drawable.wemabck2, R.drawable.wemabck3, R.drawable.wemabck4,
                  R.drawable.wemabck5, R.drawable.wemabck6};

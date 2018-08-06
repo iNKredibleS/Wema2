@@ -1,17 +1,11 @@
 package com.inkredibles.wema20;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,11 +20,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.loopj.android.http.AsyncHttpClient;
@@ -181,48 +170,26 @@ public class RakFragment extends Fragment {
                             user.put("current_rak", rak);
                             user.saveInBackground();
                         }
+
+                        getPopularPhoto();
+
+                        try {
+                            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
+                        } catch (ParseException er) {
+                            er.printStackTrace();
+                        }
+
+
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
                     }
+
+
                 }
             });
 
 
         }
-        getPopularPhoto();
-
-        User user = (User) ParseUser.getCurrentUser();
-        try {
-            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Rak r = null;
-        try {
-            r = (Rak) user.fetchIfNeeded().getParseObject("current_rak");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseFile i = null;
-        try {
-            i = r.fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        GlideApp.with(this)
-                .load(i.getUrl())
-                .format(DecodeFormat.PREFER_ARGB_8888)
-                .into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            rlayout.setBackground(resource);
-                        }
-
-                    }
-
-                });
-
 
 
     }
@@ -340,7 +307,6 @@ public class RakFragment extends Fragment {
     //This method returns a random RAK
     private  Rak RAKGenerator(ArrayList<Rak> list,  int size, boolean refresh) {
         String title = "";
-
         //get random rak from list
         int randomNum = rand.nextInt(rakList.size()) + 1;
         int current = randomNum;

@@ -169,7 +169,7 @@
         //click handler for the share button.
         @OnClick(R.id.ivShare)
         public void onClickShare(){
-            String message = post.getMessage() +" \n "+"\n"+"Created with Wema with ❤️.";
+            String message = post.getMessage() +" \n "+"\n"+" A reflection created on Wema with ❤️.";
             Intent shareIntent = new Intent();
             ParseFile image = post.getImage();
             shareIntent.setAction(Intent.ACTION_SEND);

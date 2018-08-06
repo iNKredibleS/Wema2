@@ -138,8 +138,9 @@ public class CreatePostFragment extends Fragment {
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
         } else if (isRak) {
+            rak = bundle.getParcelable("RAK");
             if (rak != null){
-                rak = bundle.getParcelable("RAK");
+
                // et_title.setText(rak.getTitle());
                 User user = (User) ParseUser.getCurrentUser();
                 et_title.setText(user.getRak().getTitle());
@@ -242,8 +243,21 @@ public class CreatePostFragment extends Fragment {
         final String finalType = type;
         if(file != null) parseFile = new ParseFile(file);
         final ParseRole role = currentRole;
+//        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
 
-        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+        if(isStoragePermissionGranted()) {
+            parseFile.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    // If successful add file to user and signUpInBackground
+                    if(null == e)createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+                    else Toast.makeText(getContext(),"ERROR",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+
+
 
     }
 

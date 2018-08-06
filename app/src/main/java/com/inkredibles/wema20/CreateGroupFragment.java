@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseRole;
@@ -35,6 +36,8 @@ public class CreateGroupFragment extends Fragment {
 
     @BindView(R.id.etGroupName) EditText etGroupName;
 
+    private FirebaseFirestore mFirestore;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -75,6 +80,8 @@ public class CreateGroupFragment extends Fragment {
             currentRole.getUsers().add(addedUsers.get(i));
         }
 
+
+
         currentRole.saveInBackground(
         new SaveCallback() {
             @Override
@@ -82,6 +89,8 @@ public class CreateGroupFragment extends Fragment {
                 if (e == null) {
                     listener.fromCreateGrouptoCurrentGroup(currentRole);
                     Log.d("CreateGroup", "create group success");
+                    Singleton.getInstance().setRole(currentRole);
+                    etGroupName.setText("");
 
                 } else {
                     e.printStackTrace();

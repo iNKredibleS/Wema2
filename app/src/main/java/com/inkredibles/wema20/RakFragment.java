@@ -1,64 +1,46 @@
 package com.inkredibles.wema20;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -66,9 +48,6 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cz.msebera.android.httpclient.Header;
-
-import static com.inkredibles.wema20.R.drawable.wemabck0;
 
 
 public class RakFragment extends Fragment {
@@ -82,6 +61,8 @@ public class RakFragment extends Fragment {
     @BindView(R.id.rakLayout) RelativeLayout rlayout;
     //@BindView(R.id.notifyBtn) Button notifyBtn;
     @BindView(R.id.rak_bck) ImageView rackBck;
+    @BindView(R.id.dateTxt) TextView dateTxt;
+    @BindView(R.id.locationTxt) TextView locationTxt;
 
     private  Random rand;
     Button newRakBtn;
@@ -100,13 +81,17 @@ public class RakFragment extends Fragment {
 
     private onItemSelectedListener listener;
     Bitmap myBitmap;
-    ParseFile backgroundImage = null;
 
     ParseFile rakFile;
 
     static int currentBck;
 
     User user;
+
+    private PlaceAutocompleteFragment autocompleteFragment;
+
+    NotificationCompat.Builder notification;
+    private static final int CHANNEL_ID = 100;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,6 +118,17 @@ public class RakFragment extends Fragment {
 
     }
 
+    private void createNotification(int nId, int iconRes, String title, String body) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                getContext()).setSmallIcon(iconRes)
+                .setContentTitle(title)
+                .setContentText(body);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(nId, mBuilder.build());
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -142,23 +138,59 @@ public class RakFragment extends Fragment {
         userList = new ArrayList();
         rand = new Random();
 
+        notification = new NotificationCompat.Builder(getContext());
+        notification.setAutoCancel(true);
+
+
+//        // Create an explicit intent for an Activity in your app
+//        Intent intent = new Intent(getActivity(), RakFragment.class);
+//        intent.putExtra("rakFragment", "launchRak");
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
+//                .setSmallIcon(R.drawable.ic_launcher_background)
+//                .setContentTitle("My notification")
+//                .setContentText("Hello World!")
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                // Set the intent that will fire when the user taps the notification
+//                //.setContentIntent(pendingIntent)
+//                .setAutoCancel(true);
+
+
+
         //if you create a new RAK with the create button
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String title = bundle.getString("new_rak_title");
+            String date = bundle.getString("date");
+            String location = bundle.getString("location");
             User user = (User) ParseUser.getCurrentUser();
 
             rakTxt.setText(title);
+            if(date != null) {
+                dateTxt.setText(date);
+            }
+            if(location != null) {
+                locationTxt.setText(location);
+            }
 
             //create new Rak
             Rak newRak = new Rak();
             newRak.setTitle(title);
             newRak.setUser(user);
+            newRak.setBackground(R.drawable.wemabck5);
             newRak.saveInBackground();
 
             //save new rak to current user
-            //user.setRak(newRak);
-            user.put("current_rak", newRak);
+           user.setRak(newRak);
+
+           rakTxt.setText(title);
+
+           currentBck = newRak.getBackground();
+           rackBck.setImageBitmap(
+                    decodeSampledBitmapFromResource(getResources(), newRak.getBackground(),
+                            500, 600));
         //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {
@@ -171,45 +203,20 @@ public class RakFragment extends Fragment {
 
                         if (rak == null) {
                             rak = RAKGenerator(rakList, rakList.size(), false);
+                            rak.setBackground(R.drawable.wemabck0);
+                            rak.saveInBackground();
+                            Log.d("RakGenerator", "Generating random RAK successful");
 
                         }
                         //add RAK field to current user
-                        //User user = (User) ParseUser.getCurrentUser();
+                        User user = (User) ParseUser.getCurrentUser();
 
-                        user.getUsername();
 
                         if (user.get("current_rak") == null) {
                             user.put("current_rak", rak);
                             user.saveInBackground();
+                            Log.d("RakToUser", "Adding rak to user successful");
                         }
-
-                        getPopularPhoto();
-                        Rak r = null;
-                        rakTxt.setText(rak.getTitle());
-
-                        try {
-                            r = (Rak) user.fetchIfNeeded().get("current_rak");
-                        } catch (ParseException e1) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            if (r.fetchIfNeeded().get("current_background") == null) {
-                                r.put("current_background", R.drawable.wemabck5);
-                                r.saveInBackground();
-                            }
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-
-
-                        try {
-                            rackBck.setImageBitmap(
-                                    decodeSampledBitmapFromResource(getResources(), r.fetchIfNeeded().getInt("current_background"), 500, 600));
-                        } catch (ParseException e2) {
-                            e.printStackTrace();
-                        }
-
 
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
@@ -217,8 +224,47 @@ public class RakFragment extends Fragment {
                 }
             });
 
+            User user = (User) ParseUser.getCurrentUser();
+
+            Rak rak = null;
+            try {
+                rak = (Rak) user.fetchIfNeeded().get("current_rak");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            ParseQuery<Rak> query = ParseQuery.getQuery(Rak.class);
+            query.getInBackground(rak.getObjectId(), new GetCallback<Rak>() {
+                public void done(Rak object, ParseException e) {
+                    if (e == null) {
+                        Log.d("Success", "Finding user to set title and background Success");
+                        rakTxt.setText(object.getTitle());
+
+                        rackBck.setImageBitmap(
+                        decodeSampledBitmapFromResource(getResources(), object.getBackground(),
+                                500, 600));
+
+                        currentBck = object.getBackground();
+                    } else {
+                        Log.d("Fail", "Finding RAK failed");
+                    }
+                }
+            });
 
         }
+
+        query.findInBackground(new FindCallback<Rak>() {
+            @Override
+            public void done(List<Rak> objects, ParseException e) {
+                if (e == null) {
+                    Log.d("FindSuccessful", "Finding RAK Successful");
+                    //initialize array list
+                    rakList.addAll(objects);
+                } else {
+                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
+                }
+            }
+        });
 
     }
 
@@ -226,6 +272,25 @@ public class RakFragment extends Fragment {
     @Override
     public void onResume() {
             super.onResume();
+
+            User user = (User) ParseUser.getCurrentUser();
+
+            Rak rak = null;
+            try {
+             rak = (Rak) user.fetchIfNeeded().get("current_rak");
+            } catch (ParseException e) {
+            e.printStackTrace();
+            }
+
+        try {
+            rakTxt.setText(rak.fetchIfNeeded().getString("title"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        rackBck.setImageBitmap(
+                decodeSampledBitmapFromResource(getResources(),rak.getBackground(),
+                        500, 600));
 
 
     }
@@ -272,45 +337,10 @@ public class RakFragment extends Fragment {
     }
 
 
-    private void getPopularPhoto() {
-        String url ="https://api.unsplash.com/photos/random/?client_id=" + getString(R.string.api_key);
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("collections", "1922729" );
-        params.put("w", 320);
-        params.put("h", 420);
-        // 981639"
-
-        client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                Log.d("RequestSuccess", "Unsplash request successful");
-
-                try {
-                   JSONObject urls =  response.getJSONObject("urls");
-                   reg_url = urls.getString("small");
-
-                   new BitmapOperation().execute(reg_url);
-                   // rlayout.setBackground(background);
-
-                } catch (JSONException e) {
-                    Log.d("FetchFailed", "Fetching urls failed");
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("RequestFailure", "Unsplash request failed");
-            }
-
-
-        });
-    }
-
 
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
+
         Rak rak = RAKGenerator(rakList, rakList.size(), true);
         User user = (User) ParseUser.getCurrentUser();
         user.setRak(rak);
@@ -323,18 +353,15 @@ public class RakFragment extends Fragment {
         }
 
         int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck1, R.drawable.wemabck2, R.drawable.wemabck3, R.drawable.wemabck4,
-                 R.drawable.wemabck5, R.drawable.wemabck6};
+                 R.drawable.wemabck6};
 
-        int randomNum = rand.nextInt(6) + 1;
+        int randomNum = rand.nextInt(5) + 1;
 
         while(randomNum == currentBck ) {
-            randomNum = rand.nextInt(6) + 1;
+            randomNum = rand.nextInt(5) + 1;
         }
 
         int newBckg = randomBckg[randomNum];
-
-        rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), newBckg, 500, 600));
 
         Rak r = null;
 
@@ -344,9 +371,13 @@ public class RakFragment extends Fragment {
             e.printStackTrace();
         }
 
-        r.put("current_background", newBckg);
+        r.setBackground(newBckg);
         r.saveInBackground();
 
+        rackBck.setImageBitmap(
+                decodeSampledBitmapFromResource(getResources(), r.getBackground(), 500, 600));
+
+        createNotification(CHANNEL_ID, R.drawable.ic_launcher_background, "Rak", "Complete your RAK before the day is over!");
 
     }
 
@@ -355,6 +386,39 @@ public class RakFragment extends Fragment {
         listener.toFeed();
     }
 
+    @OnClick(R.id.doLaterBtn)
+    protected void goToFeedDoLater() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
+        Intent ii = new Intent(getContext().getApplicationContext(), RakFragment.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText("Click here to complete your Rak and write your reflection! ");
+        bigText.setBigContentTitle("Reminder to complete Rak of the Day");
+        bigText.setSummaryText("RAK");
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Your Title");
+        mBuilder.setContentText("Your text");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_001",
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+
+        listener.toFeed();
+    }
 
     @OnClick(R.id.doneBtn)
     protected void goToPost()  {
@@ -362,6 +426,11 @@ public class RakFragment extends Fragment {
 
         listener.fromRAKtoCreatePost(user.getRak());
 
+        try {
+            listener.fromRAKtoCreatePost((Rak) user.fetchIfNeeded().get("current_rak"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.newRakBtn)
@@ -402,92 +471,6 @@ public class RakFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnItemSelectedListener");
         }
-    }
-
-
-    private class BitmapOperation extends AsyncTask<String, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                URL url = new URL(params[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                myBitmap = BitmapFactory.decodeStream(input);
-
-                return myBitmap;
-
-            } catch (IOException e) {
-                // Log e
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-
-            File file = persistImage(result, "rakPic");
-            rakFile = new ParseFile(file);
-
-            User user = (User) ParseUser.getCurrentUser();
-
-            ParseQuery<Rak> query = ParseQuery.getQuery(Rak.class);
-            query.getInBackground(user.getRak().getObjectId(), new GetCallback<Rak>() {
-                public void done(Rak object, ParseException e) {
-                    if (e == null) {
-                        Log.d("RakSuccess", "Finding current rak succesful");
-                        object.setImage(rakFile);
-                        object.saveInBackground();
-
-
-
-                    } else {
-                        Log.d("RakFailure", "Finding current rak failed");
-                    }
-                }
-            });
-
-
-
-
-
-        }
-
-//        public static Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
-//            Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Config.ARGB_8888);
-//
-//            float scaleX = newWidth / (float) bitmap.getWidth();
-//            float scaleY = newHeight / (float) bitmap.getHeight();
-//            float pivotX = 0;
-//            float pivotY = 0;
-//
-//            Matrix scaleMatrix = new Matrix();
-//            scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
-//
-//            Canvas canvas = new Canvas(scaledBitmap);
-//            canvas.setMatrix(scaleMatrix);
-//            canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
-//
-//            return scaledBitmap;
-//        }
-
-
-    }
-    private File  persistImage(Bitmap bitmap, String name) {
-        File imageFile = new File(filesDir, name + ".jpg");
-        OutputStream os;
-        try {
-            os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.flush();
-            os.close();
-        } catch (Exception e) {
-            Log.d("Create Post Fragment", "Error writing bitmap", e);
-        }
-        return imageFile;
-
     }
 
 }

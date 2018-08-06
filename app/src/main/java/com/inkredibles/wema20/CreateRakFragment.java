@@ -1,23 +1,38 @@
 package com.inkredibles.wema20;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,13 +45,17 @@ as an alternative to the Rak of the day or as a rak for a group to do together.
 TODO implement a time and place aspect
  */
 
-public class CreateRakFragment extends Fragment {
-
+public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
     @BindView(R.id.createRakTxt) EditText createRakTxt;
+    @BindView(R.id.timeTxt) EditText timeTxt;
     @BindView(R.id.createBtn) Button createBtn;
 
+    private ParseGeoPoint geoPoint;
     private onItemSelectedListener listener;
 
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private TimePickerFragment timePickerFragment;
+    private String placeName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,12 +66,12 @@ public class CreateRakFragment extends Fragment {
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+        setupAutoComplete();
 
     }
 
@@ -70,7 +89,7 @@ public class CreateRakFragment extends Fragment {
 
         }else{
             //complete normal flow of creating a rak
-            listener.addRakToServer(createRakTxt.getText().toString());
+            listener.addRakToServer(createRakTxt.getText().toString(), timeTxt.getText().toString(), placeName);
         }
 
     }
@@ -100,6 +119,33 @@ public class CreateRakFragment extends Fragment {
                 });
     }
 
+    /*Sets up the location autocomplete*/
+    private void setupAutoComplete(){
+        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        if (autocompleteFragment != null) {
+            autocompleteFragment.onResume();
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    LatLng latLong = place.getLatLng(); //get a lat long
+                    geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
+                    placeName = place.getName().toString();
+                }
+                @Override
+                public void onError(Status status) {
+                    Log.i("CreatePost: ", "An error occurred: " + status);
+                }
+
+            });
+        }
+    }
+
+    public void showTimeFragment(View v) {
+        TimePickerFragment newFragment = new TimePickerFragment();
+
+
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -118,6 +164,11 @@ public class CreateRakFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+    }
 }
 
 

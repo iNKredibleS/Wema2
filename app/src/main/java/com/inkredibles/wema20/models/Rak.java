@@ -22,7 +22,7 @@ public class Rak extends ParseObject {
     private static final String KEY_IMAGE = "image";
     private static final String KEY_CREATOR = "current_user";
     private static final String KEY_ROLE = "role";
-    private static final String KEY_CURRENT_BACKGROUND = "role";
+    private static final String KEY_CURRENT_BACKGROUND = "current_background";
 
 
     public String getTitle() {
@@ -53,6 +53,14 @@ public class Rak extends ParseObject {
 
     public void setRole (ParseRole parseRole) {
         put(KEY_ROLE, parseRole);
+    }
+
+    public int getBackground() {
+        return (int) getNumber(KEY_CURRENT_BACKGROUND);
+    }
+
+    public void setBackground(Number num) {
+        put(KEY_CURRENT_BACKGROUND, num);
     }
 
 

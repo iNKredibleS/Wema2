@@ -28,6 +28,8 @@ public class ArchiveFragment extends Fragment{
     private RecyclerView rvArchivePosts;
     private PostsAdapter archiveAdapter;
 
+    //MainActivity mainActivity = new MainActivity();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -69,5 +71,12 @@ public class ArchiveFragment extends Fragment{
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //mainActivity.setArchiveBool(false);
+
     }
 }

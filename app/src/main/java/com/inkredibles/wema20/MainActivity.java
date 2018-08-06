@@ -164,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
+
+
     //TODO is there a way to make this code more concise?
     @Override
     public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition) {
@@ -204,9 +206,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     //after new post created go back to feed fragment
     public void toFeed() {
         //Need to begin a new fragment transaction for any fragment operation
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, feedFragment).commit();
-        result.setSelection(feed);
+        archiveBool = false;
+        nextFragment(feedFragment);
 
     }
 
@@ -239,9 +240,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
   }
 
   @Override
-    public void addRakToServer(String rakTitle) {
+    public void addRakToServer(String rakTitle, String date, String location) {
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
+      bundle.putString("date", date);
+      bundle.putString("location", location);
       rakFragment.setArguments(bundle);
       nextFragment(rakFragment);
   }
@@ -294,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 //     bundle.putParcelable("currentRole", currentRole);
 //     currentGroupFragment.setArguments(bundle);
       Singleton.getInstance().setRole(currentRole);
-     nextFragment(currentGroupFragment);
+      nextFragment(currentGroupFragment);
 
 
   }

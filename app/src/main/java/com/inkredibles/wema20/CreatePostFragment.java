@@ -34,9 +34,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
+import com.parse.GetCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -124,11 +127,26 @@ public class CreatePostFragment extends Fragment {
         ButterKnife.bind(this, view);
         setUpView();
         setupAutoComplete();
-
-
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        Boolean isRak = bundle.getBoolean("isRak");
+         if (isRak) {
+             if (rak != null) {
+                 rak = bundle.getParcelable("RAK");
+                 // et_title.setText(rak.getTitle());
+                 User user = (User) ParseUser.getCurrentUser();
+                 et_title.setText(user.getRak().getTitle());
+                 //set the cursor position to end of input title
+                 int position = et_title.length();
+                 Editable etext = et_title.getText();
+                 Selection.setSelection(etext, position);
+             }
+         }
+    }
 
     //set up the create post based on the circumstance (group, rak or reflection)
     public void setUpView() {
@@ -139,19 +157,29 @@ public class CreatePostFragment extends Fragment {
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
             currentRole = bundle.getParcelable("currentRole");
-//        } else if (isRak) {
-//            rak = bundle.getParcelable("RAK");
-//            if (rak != null){
-//                User user = (User) ParseUser.getCurrentUser();
-//                Rak r = (Rak) user.getRak();
-//                et_title.setText(r.getTitle());
-//                //set the cursor position to end of input title
-//                int position = et_title.length();
-//                Editable etext = et_title.getText();
-//                Selection.setSelection(etext, position);
-//            }
-//
-//        } else if (isReflection) {
+
+        }  else if (isReflection) {
+
+        } else if (isRak) {
+            rak = bundle.getParcelable("RAK");
+            if (rak != null){
+               // et_title.setText(rak.getTitle());
+                User user = (User) ParseUser.getCurrentUser();
+
+                try {
+                    et_title.setText(rak.fetchIfNeeded().getString("title"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(user.getRak().getTitle());
+                //set the cursor position to end of input title
+                int position = et_title.length();
+                Editable etext = et_title.getText();
+                Selection.setSelection(etext, position);
+            }
+
+        } else if (isReflection) {
             //any Reflection specific posts
         }
         //TODO change this to a radio button or spinner
@@ -167,15 +195,6 @@ public class CreatePostFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        User user = (User) ParseUser.getCurrentUser();
-        Rak r = (Rak) user.getRak();
-        et_title.setText(r.getTitle());
-
-    }
 
 
 
@@ -247,7 +266,7 @@ public class CreatePostFragment extends Fragment {
     protected void postButtonClicked(){
         final String title = et_title.getText().toString();
         final String message = et_message.getText().toString();
-        final ParseUser user = ParseUser.getCurrentUser();
+        final User user = (User) ParseUser.getCurrentUser();
         final String finalPrivacy = privacy;
         final String finalType = type;
         if(file != null) parseFile = new ParseFile(file);
@@ -279,6 +298,11 @@ public class CreatePostFragment extends Fragment {
         if(geoPoint != null) newPost.setLocation(geoPoint);
         if(placeName != null) newPost.setPlaceName(placeName);
         if(role != null) newPost.setRole(role);
+        ParseACL parseACL = new ParseACL(ParseUser.getCurrentUser());
+        parseACL.setPublicReadAccess(true);
+
+        ParseUser.getCurrentUser().setACL(parseACL);
+
 
         newPost.saveInBackground(
                 new SaveCallback() {

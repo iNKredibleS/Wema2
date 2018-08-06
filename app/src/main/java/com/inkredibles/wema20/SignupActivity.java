@@ -75,27 +75,7 @@ public class SignupActivity extends AppCompatActivity {
 
         SignUp();
 
-        mAuth.createUserWithEmailAndPassword(et_email.getText().toString(),et_password.getText().toString() ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Log.d("SigninSuccess", "Signing user into firebase successful");
 
-                    Map<String, Object> userMap = new HashMap<>();
-                    userMap.put("name", username);
-
-                    mFirestore.collection("Users").document("user_id").set(userMap);
-                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
-//                   //TODO start the main activity
-//                   // Hooray! Let them use the app now.
-//
-
-                } else {
-                    Log.d("SignUpFailed", "Signing into firebase failed");
-                    System.out.println("------" + task.getException().getMessage());
-                }
-            }
-        });
 
     }
     public void SignUp(){
@@ -112,8 +92,17 @@ public class SignupActivity extends AppCompatActivity {
                 if (e == null) {
                     Toast.makeText(SignupActivity.this, "new user created", Toast.LENGTH_LONG).show();
 
+                    Log.i("Signup activity", "user created");
+                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                    //TODO start the main activity
+                    // Hooray! Let them use the app now.
+
                 } else {
-                    Toast.makeText(SignupActivity.this, "user not created!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "user not created-sign!", Toast.LENGTH_LONG).show();
+                    et_email.setText("");
+                    et_password.setText("");
+                    et_username.setText("");
+                    Log.i("signup activity", "user not created");
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
                     e.printStackTrace();

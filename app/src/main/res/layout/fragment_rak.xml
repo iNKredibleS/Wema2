@@ -48,8 +48,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_above="@+id/newRakBtn"
-            android:layout_marginBottom="5dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/button_background"
             app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
@@ -58,9 +58,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_above="@+id/newRakBtn"
-            android:background="@drawable/button_background"
             android:layout_alignEnd="@+id/rakTxt"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/button_background"
             android:contentDescription=""
             android:src="@drawable/ic_check_black_24dp" />
 
@@ -70,8 +70,8 @@
             android:layout_height="40dp"
             android:layout_above="@+id/newRakBtn"
             android:layout_alignStart="@+id/rakTxt"
-            android:background="@drawable/button_background"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/button_background"
             app:srcCompat="@drawable/ic_people_outline_black_24dp"
             tools:ignore="VectorDrawableCompat" />
 
@@ -82,10 +82,34 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/button_background"
             android:layout_marginRight="5dp"
+            android:background="@drawable/button_background"
             app:srcCompat="@drawable/ic_refresh_black_24dp"
             tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/dateTxt"
+            android:layout_width="106dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:textColor="@color/wema"
+            android:textSize="20sp"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/locationTxt"
+            android:layout_width="106dp"
+            android:textAlignment="textStart"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/dateTxt"
+            android:gravity="center"
+            android:textColor="@color/wema"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

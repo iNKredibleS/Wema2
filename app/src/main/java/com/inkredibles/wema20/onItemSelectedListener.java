@@ -27,7 +27,7 @@ public interface onItemSelectedListener {
     void toAddUsers();
 
 
-    void addRakToServer(String rakTitle);
+    void addRakToServer(String s, String title, String rakTitle);
 
     void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
 

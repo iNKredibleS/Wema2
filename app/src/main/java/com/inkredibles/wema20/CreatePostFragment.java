@@ -58,6 +58,7 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
   *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
   *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
   *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
+<<<<<<< HEAD
   *  go back to feed fragment*/
 public class CreatePostFragment extends Fragment implements TagsDialog.TagDialogListener {
 
@@ -300,10 +301,6 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
         } else{
             createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
         }
-
-
-
-
     }
 
 
@@ -332,8 +329,6 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
         parseACL.setPublicReadAccess(true);
 
         ParseUser.getCurrentUser().setACL(parseACL);
-
-
         newPost.saveInBackground(
                 new SaveCallback() {
                     @Override
@@ -386,8 +381,7 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
                 e.printStackTrace();
             }
         }else{
-            Log.d("CRTPST", "Finished autocomplete");
-            System.out.print(data.toString());
+            Log.d("Create post", "Error");
 
         }
     }
@@ -448,14 +442,6 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
         }
     }
 
-    //What does this do?
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment f = (Fragment) fragmentManager
-                .findFragmentById(R.id.place_autocomplete_fragment);
-        if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
-    }
+
 }
 

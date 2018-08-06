@@ -177,19 +177,8 @@ public class RakFragment extends Fragment {
                             user.put("current_rak", rak);
                             user.saveInBackground();
                         }
-
                         rakTxt.setText(rak.getTitle());
-
                         getPopularPhoto();
-
-//
-//              try{          ////        try {
-//            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
-//             } catch (ParseException e1) {
-//            e1.printStackTrace();
-//            }
-
-
                         currentBck = R.drawable.wemabck0;
                         rackBck.setImageBitmap(
                                 decodeSampledBitmapFromResource(getResources(), currentBck, 500, 600));
@@ -199,49 +188,11 @@ public class RakFragment extends Fragment {
                     }
 
 
-//                    User user = (User) ParseUser.getCurrentUser();
-//                    user.saveInBackground();
-////        try {
-//            rakTxt.setText(user.getRak().fetchIfNeeded().getString("title"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-
                 }
             });
 
 
         }
-
-
-
-
-
-//        Rak r = null;
-//        try {
-//            r = (Rak) user.fetchIfNeeded().getParseObject("current_rak");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        ParseFile i = null;
-//        try {
-//            i = r.fetchIfNeeded().getParseFile("image");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        GlideApp.with(this)
-//                .load(i.getUrl())
-//                .format(DecodeFormat.PREFER_ARGB_8888)
-//                .into(new SimpleTarget<Drawable>() {
-//                    @Override
-//                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                            rlayout.setBackground(resource);
-//                        }
-//
-//                    }
-//
-//                });
 
 
 
@@ -428,7 +379,6 @@ public class RakFragment extends Fragment {
     //This method returns a random RAK
     private  Rak RAKGenerator(ArrayList<Rak> list,  int size, boolean refresh) {
         String title = "";
-
         //get random rak from list
         int randomNum = rand.nextInt(rakList.size()) + 1;
         int current = randomNum;

@@ -15,12 +15,15 @@ import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.parse.ParseImageView;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
+      // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
@@ -76,6 +79,22 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
         final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
 
+        ParseUser user = ParseUser.getCurrentUser();
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header_bk)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(user.getUsername()).withEmail(user.getEmail()).withIcon(getResources().getDrawable(R.drawable.prof))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
 
 
     // create the drawer and remember the `Drawer` result object
@@ -83,15 +102,20 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         new DrawerBuilder()
             .withActivity(this)
             .withToolbar(toolbar)
+            .withAccountHeader(headerResult)
             .addDrawerItems(
-                home,
-                new DividerDrawerItem(),
                 feed,
+                    new DividerDrawerItem(),
                 rak,
+                    new DividerDrawerItem(),
                 reflection,
+                    new DividerDrawerItem(),
                 archive,
+                    new DividerDrawerItem(),
                 group,
+                    new DividerDrawerItem(),
                 places,
+                    new DividerDrawerItem(),
                 logout)
             .withOnDrawerItemClickListener(
                 new Drawer.OnDrawerItemClickListener() {

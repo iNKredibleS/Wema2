@@ -4,20 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RadioGroup;
 // ...
 
 public class TagsDialog extends DialogFragment {
 
     private String mType;
-    private String mPrivacy;
+
+    DialogueListener listener;
 
     private RadioGroup rgPrivacy;
     private RadioGroup rgType;
@@ -28,71 +23,68 @@ public class TagsDialog extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static TagsDialog newInstance(String type, String privacy) {
+    public static TagsDialog newInstance(String type) {
         TagsDialog frag = new TagsDialog();
         Bundle args = new Bundle();
         args.putString("type", type);
-        args.putString("privacy", privacy);
         frag.setArguments(args);
         return frag;
     }
 
 
 
-    public interface TagDialogListener {
-        void onFinishTagDialog(String mType, String mPrivacy);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // R.layout.my_layout - that's the layout where your textview is placed
-        View view = inflater.inflate(R.layout.dialog_tags, container, false);
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        rgPrivacy = (RadioGroup) view.findViewById(R.id.radioGroupPrivacy);
-        rgPrivacy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                Log.d("Dialog", "changing priv");
-                switch (i) {
-                    case R.id.radio_public:
-                        mPrivacy = "public"; //set string to public
-                        break;
-                    case R.id.radio_private:
-                        mPrivacy = "private"; // set privacy string to private
-                        break;
-                }
-            }
-        });
-
-        rgType = (RadioGroup) view.findViewById(R.id.radioGroupType);
-        rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                Log.d("Dialog", "canging type");
-                switch (i) {
-                    case R.id.radio_received:
-                        mType = "received";
-                        //set string to received
-                        break;
-                    case R.id.radio_given:
-                        mType = "given";
-                        // set string to given
-                        break;
-
-                }
-            }
-
-        });
-        // you can use your textview.
-
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        // R.layout.my_layout - that's the layout where your textview is placed
+//        View view = inflater.inflate(R.layout.dialog_tags, container, false);
+//
+//        return view;
+//    }
+//
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        rgPrivacy = (RadioGroup) view.findViewById(R.id.radioGroupPrivacy);
+//        rgPrivacy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                Log.d("Dialog", "changing priv");
+//                switch (i) {
+//                    case R.id.radio_public:
+//                        mPrivacy = "public"; //set string to public
+//                        break;
+//                    case R.id.radio_private:
+//                        mPrivacy = "private"; // set privacy string to private
+//                        break;
+//                }
+//            }
+//        });
+//
+//        rgType = (RadioGroup) view.findViewById(R.id.radioGroupType);
+//        rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                Log.d("Dialog", "canging type");
+//                switch (i) {
+//                    case R.id.radio_received:
+//                        mType = "received";
+//                        //set string to received
+//                        break;
+//                    case R.id.radio_given:
+//                        mType = "given";
+//                        // set string to given
+//                        break;
+//
+//                }
+//            }
+//
+//        });
+//        // you can use your textview.
+//
+//    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -102,14 +94,21 @@ public class TagsDialog extends DialogFragment {
 
         // Get the layout inflater
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        //LayoutInflater inflater = getActivity().getLayoutInflater();
 
 
+        final CharSequence[] items = {"Give", "Receive"};
 
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_tags, null))
+        //builder.setView(inflater.inflate(R.layout.dialog_tags, null))
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int item) {
+                        mType = items[item].toString();
+                    }
+                })
+                .setTitle(R.string.dialog_type_question)
                 // Add action buttons
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -124,7 +123,10 @@ public class TagsDialog extends DialogFragment {
                             dialog.dismiss();
                         }
                     }
-                });
+                })
+
+        ;
+
 
         return builder.create();
 
@@ -213,9 +215,9 @@ public class TagsDialog extends DialogFragment {
 
     public void sendBackResult() {
         // Notice the use of `getTargetFragment` which will be set when the dialog is displayed
-        TagDialogListener listener = (TagDialogListener) getTargetFragment();
+        DialogueListener listener = (DialogueListener) getTargetFragment();
         assert listener != null;
-        listener.onFinishTagDialog(mType, mPrivacy);
+        listener.onFinishTagDialog(mType);
         dismiss();
     }
 }

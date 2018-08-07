@@ -10,6 +10,6 @@
     </string-array>
     <string name="empty_message_posts">There are no group reflections, add a new one!</string>
     <string name="empty_message_rak">There are no group random acts of kindness, create a new one!</string>
-    <string name="dialog_type_question">Did you give or receive kindness?</string>
+    <string name="dialog_type_question">Did you give or receive this kindness?</string>
     <string name="dialog_privacy_text">Set the privacy for this post</string>
 </resources>

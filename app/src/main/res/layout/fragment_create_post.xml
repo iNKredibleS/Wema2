@@ -57,8 +57,18 @@
         android:id="@+id/reflectionTagBtn"
         android:text="Tags"
         android:layout_below="@id/et_message"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"/>
+
+    <ImageButton
+        android:id="@+id/privacyBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/et_message"
+        android:layout_toLeftOf="@id/reflectionTagBtn"
+        android:src="@android:drawable/ic_lock_idle_lock"
+        android:background="@drawable/button_background"
+        android:layout_marginRight="10dp"/>
 
 
     <ImageButton
@@ -66,8 +76,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/reflectionTagBtn"
-        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@id/btn_gallery"
+        android:layout_marginLeft="10dp"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:background="@drawable/button_background"
         android:outlineSpotShadowColor="@color/md_grey_50"/>
@@ -77,8 +87,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/btn_camera"
+        android:layout_toLeftOf="@id/privacyBtn"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:background="@drawable/button_background"/>
 
@@ -87,7 +98,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/btn_gallery"
+        android:layout_toLeftOf="@id/btn_camera"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         />
@@ -167,7 +178,6 @@
         android:layout_below="@id/textView2"
         android:layout_centerHorizontal="true"
         app:srcCompat="@android:drawable/ic_menu_mylocation"
-        android:layout_toRightOf="@id/pictureHolder"
         />
 
 
@@ -176,11 +186,12 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_message"
+        android:layout_below="@id/btn_camera"
         android:ems="10"
+        android:layout_marginTop="10dp"
         android:text="Location(Optional)"
-        android:layout_toRightOf="@id/pictureHolder"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
 
         />
 

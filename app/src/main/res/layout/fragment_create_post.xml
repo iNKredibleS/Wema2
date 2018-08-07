@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/postLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/wemapeach"
+    tools:context=".CreatePostFragment"
+    >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="546dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginTop="30dp"
+    android:background="#FFFDF6">
 
     <!--<Switch-->
         <!--android:id="@+id/switch_give_rec"-->
@@ -13,7 +25,7 @@
         <!--android:layout_alignStart="@+id/Title"-->
         <!--android:layout_marginBottom="177dp" />-->
 
-    <!--<TextView-->
+    <!--<Text=========================View-->
         <!--android:id="@+id/tv_give_rec"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -57,8 +69,18 @@
         android:id="@+id/reflectionTagBtn"
         android:text="Tags"
         android:layout_below="@id/et_message"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"/>
+
+    <ImageButton
+        android:id="@+id/privacyBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/et_message"
+        android:layout_toLeftOf="@id/reflectionTagBtn"
+        android:src="@android:drawable/ic_lock_idle_lock"
+        android:background="@drawable/button_background"
+        android:layout_marginRight="10dp"/>
 
 
     <ImageButton
@@ -66,8 +88,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/reflectionTagBtn"
-        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@id/btn_gallery"
+        android:layout_marginLeft="10dp"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:background="@drawable/button_background"
         android:outlineSpotShadowColor="@color/md_grey_50"/>
@@ -77,8 +99,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/btn_camera"
+        android:layout_toLeftOf="@id/privacyBtn"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:background="@drawable/button_background"/>
 
@@ -87,63 +110,10 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@id/et_message"
-        android:layout_toRightOf="@id/btn_gallery"
+        android:layout_toLeftOf="@id/btn_camera"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         />
-
-    <!--<RadioGroup-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_above="@+id/btn_post"-->
-        <!--android:id="@+id/radioGroupPrivacy"-->
-        <!--&gt;-->
-        <!--<RadioButton android:id="@+id/radio_public"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Public"-->
-            <!--/>-->
-        <!--<RadioButton android:id="@+id/radio_private"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Private"-->
-            <!--/>-->
-    <!--</RadioGroup>-->
-
-    <!--<RadioGroup-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_above="@+id/btn_post"-->
-        <!--android:layout_toRightOf="@id/radioGroupPrivacy"-->
-        <!--&gt;-->
-        <!--<RadioButton android:id="@+id/radio_given"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Given"-->
-            <!--/>-->
-        <!--<RadioButton android:id="@+id/radio_received"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Received"-->
-            <!--/>-->
-    <!--</RadioGroup>-->
-
-    <!--<Switch-->
-        <!--android:id="@+id/switch_pub_pri"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@+id/btn_post"-->
-        <!--android:layout_alignStart="@+id/switch_give_rec" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/tv_pub_pri"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignTop="@+id/radio_public"-->
-        <!--android:layout_toEndOf="@+id/switch_give_rec"-->
-        <!--android:text="Text" />-->
 
 
     <Button
@@ -167,7 +137,6 @@
         android:layout_below="@id/textView2"
         android:layout_centerHorizontal="true"
         app:srcCompat="@android:drawable/ic_menu_mylocation"
-        android:layout_toRightOf="@id/pictureHolder"
         />
 
 
@@ -176,13 +145,16 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_message"
+        android:layout_below="@id/btn_camera"
         android:ems="10"
+        android:layout_marginTop="10dp"
         android:text="Location(Optional)"
-        android:layout_toRightOf="@id/pictureHolder"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
 
         />
 
 
 </RelativeLayout>
+
+</FrameLayout>

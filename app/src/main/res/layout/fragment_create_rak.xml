@@ -1,62 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateRakFragment">
+    android:background="@drawable/wemapeach"
+    tools:context=".CreateRakFragment"
+  >
 
 
-    <EditText
-        android:id="@+id/createRakTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="98dp"
-        android:ems="10"
-        android:inputType="textMultiLine" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="546dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="#FFFDF6">
 
-    <Button
-        android:id="@+id/createBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="126dp"
-        android:text="CREATE" />
+        <EditText
+            android:id="@+id/createRakTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="123dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="128dp"
+            android:gravity="bottom"
 
-    <EditText
-        android:id="@+id/timeTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="190dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Time" />
+            android:ems="10"
+            android:inputType="textMultiLine" />
 
-    <fragment
-        android:id="@+id/place_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:layout_width="345dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="256dp"
+        <Button
+            android:id="@+id/createBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="139dp"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/libre_franklin_bold"
+            android:text="CREATE" />
 
-       />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="214dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="71dp"
+            android:fontFamily="@font/libre_franklin_medium"
+            android:text="@string/create_rak_title"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/place_fragment"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:text="Location(Optional)"
-        android:textSize="18sp" />
-
-</RelativeLayout>
+</FrameLayout>

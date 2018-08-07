@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
-    public static boolean archiveBool = false;
     public boolean isGroup = false;
     public boolean isReflection = false;
     public boolean isRak = false;
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
       // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
@@ -135,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(createPostFragment);
                         isReflection = false;
                     }else if (drawerItem == archive){
-                        archiveBool = true;
                         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.rak_tab)); //set raks to be the default
                         nextFragment(archiveFragment);
 
@@ -143,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(rakFragment);
                     }else if (drawerItem == feed){
                         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
-                        archiveBool = false;
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
                         //launch groups Fragment to see user's groups
@@ -164,15 +160,12 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
             .build();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
-
-       // result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //set the adapter mode to feed
         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
         nextFragment(feedFragment);
+        nextFragment(rakFragment);
     }
 
     private void nextFragment(Fragment fragment){
@@ -187,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         if (result.isDrawerOpen()) result.closeDrawer();
     }
 
-
-    public boolean getArchiveBool(){return archiveBool;}
 
 
     //TODO is there a way to make this code more concise?
@@ -229,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     public void toFeed() {
         //Need to begin a new fragment transaction for any fragment operation
         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
-        archiveBool = false;
         nextFragment(feedFragment);
 
     }
@@ -262,11 +252,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
   }
 
   @Override
-    public void addRakToServer(String rakTitle, String date, String location) {
+    public void addRakToServer(String rakTitle) {
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
-      bundle.putString("date", date);
-      bundle.putString("location", location);
+
       rakFragment.setArguments(bundle);
       nextFragment(rakFragment);
   }

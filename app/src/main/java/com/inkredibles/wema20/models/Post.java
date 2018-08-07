@@ -130,7 +130,7 @@ public class Post extends ParseObject {
         public Query getTop(){
 
             orderByDescending(KEY_CREATED_AT);
-            whereContains(KEY_PRIVACY, "public");
+            whereContains(KEY_PRIVACY, "Public");
             setLimit(20);
             return this;
         }
@@ -149,14 +149,14 @@ public class Post extends ParseObject {
         }
         public Query getMore(int skip){
             orderByDescending(KEY_CREATED_AT);
-            whereContains(KEY_PRIVACY, "public");
+            whereContains(KEY_PRIVACY, "Public");
             setSkip(skip);
             setLimit(20);
             return this;
         }
         public Query getMany(){
             orderByDescending(KEY_CREATED_AT);
-            whereContains(KEY_PRIVACY, "public");
+            whereContains(KEY_PRIVACY, "Public");
             return this;
         }
         public Query getGroupPosts(ParseRole role){

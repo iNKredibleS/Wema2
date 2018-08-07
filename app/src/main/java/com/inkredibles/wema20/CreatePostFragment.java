@@ -31,7 +31,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
-import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -62,7 +61,7 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
   *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
 <<<<<<< HEAD
   *  go back to feed fragment*/
-public class CreatePostFragment extends Fragment implements TagsDialog.TagDialogListener {
+public class CreatePostFragment extends Fragment implements DialogueListener {
 
     @BindView(R.id.Title) EditText et_title;
     @BindView(R.id.et_message) EditText et_message;
@@ -154,20 +153,18 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
     //set up the create post based on the circumstance (group, rak or reflection)
     public void setUpView() {
         //default type and privacy values
-        type = "give";
-        privacy = "public";
+        type = "Give";
+        privacy = "Public";
         filesDir = getContext().getFilesDir();
         bundle = this.getArguments();
         isGroup = bundle.getBoolean("isGroup");
         Boolean isReflection = bundle.getBoolean("isReflection");
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
-            currentRole = bundle.getParcelable("currentRole");
-
-        }  else if (isReflection) {
-
             currentRole = Singleton.getInstance().getRole();
-            type = "private";
+            privacy = "Private";
+        }  else if (isReflection) {
+            //TODO is there anything we need to set up if isReflection is true?
         } else if (isRak) {
             rak = bundle.getParcelable("RAK");
             if (rak != null){
@@ -272,7 +269,7 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
         //FragmentManager fm = getFragmentManager();
 
         FragmentManager fm = getFragmentManager();
-        TagsDialog tagsDialog = TagsDialog.newInstance(type, privacy);
+        TagsDialog tagsDialog = TagsDialog.newInstance(type);
         // SETS the target fragment for use later when sending results
         tagsDialog.setTargetFragment(CreatePostFragment.this, 300);
         tagsDialog.show(fm, "fragment_tag");
@@ -280,10 +277,24 @@ public class CreatePostFragment extends Fragment implements TagsDialog.TagDialog
 
     }
 
+    @OnClick(R.id.privacyBtn)
+    protected void showPrivacyDialog(){
+        FragmentManager fm = getFragmentManager();
+        PrivacyDialog privacyDialog = PrivacyDialog.newInstance(privacy);
+        // SETS the target fragment for use later when sending results
+        privacyDialog.setTargetFragment(CreatePostFragment.this, 300);
+        privacyDialog.show(fm, "fragment_tag");
+
+    }
+
     @Override
-    public void onFinishTagDialog(String mType, String mPrivacy) {
-        type = mType;
-        privacy = mPrivacy;
+    public void onFinishTagDialog(String mType) {
+        if(mType != null){ type = mType; }
+    }
+
+    @Override
+    public void onFinishPrivacyDialog(String mPrivacy){
+        if(mPrivacy != null) privacy = mPrivacy;
     }
 
 

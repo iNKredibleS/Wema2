@@ -5,56 +5,56 @@
     android:layout_gravity="center"
     android:orientation="vertical"  >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvDialog"
-        android:text="@string/dialog_type_question"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/tvDialog"-->
+        <!--android:text="@string/dialog_type_question"/>-->
 
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_above="@+id/btn_post"
-        android:layout_toRightOf="@id/radioGroupPrivacy"
-        android:id="@+id/radioGroupType">
+    <!--<RadioGroup-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_above="@+id/btn_post"-->
+        <!--android:layout_toRightOf="@id/radioGroupPrivacy"-->
+        <!--android:id="@+id/radioGroupType">-->
 
-        <RadioButton android:id="@+id/radio_given"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Given" />
+        <!--<RadioButton android:id="@+id/radio_given"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Given" />-->
 
-        <RadioButton android:id="@+id/radio_received"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Received" />
-    </RadioGroup>
+        <!--<RadioButton android:id="@+id/radio_received"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Received" />-->
+    <!--</RadioGroup>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_privacy_text"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dialog_privacy_text"/>-->
 
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_above="@+id/btn_post"
-        android:id="@+id/radioGroupPrivacy">
+    <!--<RadioGroup-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_above="@+id/btn_post"-->
+        <!--android:id="@+id/radioGroupPrivacy">-->
 
-    <RadioButton
-        android:id="@+id/radio_public"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Public"
-        />
+    <!--<RadioButton-->
+        <!--android:id="@+id/radio_public"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Public"-->
+        <!--/>-->
 
-    <RadioButton
-        android:id="@+id/radio_private"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Private" />
-    </RadioGroup>
+    <!--<RadioButton-->
+        <!--android:id="@+id/radio_private"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Private" />-->
+    <!--</RadioGroup>-->
 
 
 

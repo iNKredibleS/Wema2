@@ -63,8 +63,6 @@ public class RakFragment extends Fragment {
     @BindView(R.id.rakLayout) RelativeLayout rlayout;
     //@BindView(R.id.notifyBtn) Button notifyBtn;
     @BindView(R.id.rak_bck) ImageView rackBck;
-    @BindView(R.id.dateTxt) TextView dateTxt;
-    @BindView(R.id.locationTxt) TextView locationTxt;
 
     private  Random rand;
     Button newRakBtn;
@@ -90,6 +88,8 @@ public class RakFragment extends Fragment {
     static int currentBck;
 
     User user;
+
+    int completed;
 
     private PlaceAutocompleteFragment autocompleteFragment;
 
@@ -148,14 +148,6 @@ public class RakFragment extends Fragment {
             String date = bundle.getString("date");
             String location = bundle.getString("location");
             User user = (User) ParseUser.getCurrentUser();
-
-            rakTxt.setText(title);
-            if(date != null) {
-                dateTxt.setText(date);
-            }
-            if(location != null) {
-                locationTxt.setText(location);
-            }
 
             //create new Rak
             Rak newRak = new Rak();
@@ -220,17 +212,24 @@ public class RakFragment extends Fragment {
             e.printStackTrace();
         }
 
-        query.getInBackground(rak.getObjectId(), new GetCallback<Rak>() {
-            public void done(Rak object, ParseException e) {
-                if (e == null) {
-                    rakTxt.setText(object.getTitle());
-                    rackBck.setImageBitmap(
-                            decodeSampledBitmapFromResource(getResources(), object.getBackground(), 500, 600));
-                } else {
-                    // something went wrong
-                }
-            }
-        });
+        String title = null;
+        try {
+            title = rak.fetchIfNeeded().getString("title");
+            rakTxt.setText(title);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Integer background = null;
+        try {
+            background = rak.fetchIfNeeded().getInt("current_background");
+            rackBck.setImageBitmap(
+                           decodeSampledBitmapFromResource(getResources(), background
+                                   , 500, 600));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if(this.getArguments() != null){this.getArguments().clear(); }
 
@@ -321,13 +320,13 @@ public class RakFragment extends Fragment {
 
         rakTxt.setText(rak.getTitle());
 
-        int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck1, R.drawable.wemabck2, R.drawable.wemabck3, R.drawable.wemabck4,
+        int[] randomBckg = { R.drawable.wemabck0, R.drawable.wemabck2, R.drawable.wemabck10, R.drawable.wemabck4,
                  R.drawable.wemabck6};
 
-        int randomNum = rand.nextInt(5) + 1;
+        int randomNum = rand.nextInt(4) + 1;
 
         while(randomNum == currentBck ) {
-            randomNum = rand.nextInt(5) + 1;
+            randomNum = rand.nextInt(4) + 1;
         }
 
         int newBckg = randomBckg[randomNum];
@@ -387,6 +386,8 @@ public class RakFragment extends Fragment {
         User user = (User) ParseUser.getCurrentUser();
 
         listener.fromRAKtoCreatePost(user.getRak());
+
+
 
         try {
             listener.fromRAKtoCreatePost((Rak) user.fetchIfNeeded().get("current_rak"));

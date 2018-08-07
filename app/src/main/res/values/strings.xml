@@ -12,4 +12,8 @@
     <string name="empty_message_rak">There are no group random acts of kindness, create a new one!</string>
     <string name="dialog_type_question">Did you give or receive kindness?</string>
     <string name="dialog_privacy_text">Set the privacy for this post</string>
+    <string name="reflection_tab">reflections</string>
+    <string name="scheduled_tab">scheduled</string>
+    <string name="rak_tab">rak</string>
+    <string name="feed_mode">feed</string>
 </resources>

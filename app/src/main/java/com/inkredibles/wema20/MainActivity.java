@@ -134,15 +134,15 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         createPostFragment.setArguments(bundle);
                         nextFragment(createPostFragment);
                         isReflection = false;
-
                     }else if (drawerItem == archive){
                         archiveBool = true;
+                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.rak_tab)); //set raks to be the default
                         nextFragment(archiveFragment);
 
                     }else if (drawerItem == rak){
                         nextFragment(rakFragment);
                     }else if (drawerItem == feed){
-
+                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
                         archiveBool = false;
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
@@ -168,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
        // result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        //set the adapter mode to feed
+        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
         nextFragment(feedFragment);
     }
 
@@ -185,9 +189,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     public boolean getArchiveBool(){return archiveBool;}
-
-
-
 
 
     //TODO is there a way to make this code more concise?
@@ -217,12 +218,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putString("transitionName", sharedTransitionName);
         bundle.putString("titleTransition", titleTransition);
         detailFragment.setArguments(bundle);
-//        Log.d("Main Activity", "feed");
-        //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
         fragmentTransaction.replace(R.id.placeholder, detailFragment)
                 .addToBackStack(detailFragment.getClass().toString())
                 .commit();
-        //nextFragment(detailFragment);
     }
 
 
@@ -230,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     //after new post created go back to feed fragment
     public void toFeed() {
         //Need to begin a new fragment transaction for any fragment operation
+        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
         archiveBool = false;
         nextFragment(feedFragment);
 

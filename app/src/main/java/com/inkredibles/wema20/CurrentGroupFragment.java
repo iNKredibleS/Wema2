@@ -125,6 +125,7 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
         }
         //set the data, adapter, and recycler view with posts
         else{
+            Singleton.getInstance().setAdapterMode("feed");
             groupPosts = new ArrayList<>();
             postsAdapter = new PostsAdapter(groupPosts);
             rvGroupItem.setLayoutManager(new LinearLayoutManager(getContext()));

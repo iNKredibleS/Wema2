@@ -1,15 +1,16 @@
 package com.inkredibles.wema20;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.inkredibles.wema20.models.Post;
+import com.inkredibles.wema20.models.Rak;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 
@@ -23,10 +24,18 @@ import java.util.List;
  */
 
 public class ArchiveFragment extends Fragment{
+    private static final String  RAK_TAB = "rak";
+    private static final String  REFLECTIONS_TAB = "reflections";
+    private static final String  SCHEDULED_TAB = "scheduled";
+
+
 
     private ArrayList<Post> archivedPosts;
+    private ArrayList<Rak> currentRaks;
     private RecyclerView rvArchivePosts;
     private PostsAdapter archiveAdapter;
+    private RakAdapter raksAdapter;
+    private TabLayout tabLayout;
 
     //MainActivity mainActivity = new MainActivity();
 
@@ -38,10 +47,67 @@ public class ArchiveFragment extends Fragment{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
         archivedPosts = new ArrayList<>();
-        loadArchives();
+        currentRaks = new ArrayList<>();
 
+        rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
+        tabLayout = view.findViewById(R.id.tbLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String nameOfSelectedTab = tab.getText().toString();
+                switch (nameOfSelectedTab){
+                    case "RAKs":
+                        //change the adapter mode in the singleton
+                        Singleton.getInstance().setAdapterMode(RAK_TAB);
+                        loadRaks();
+                    break;
+                    case "Reflections":
+                        Singleton.getInstance().setAdapterMode(REFLECTIONS_TAB);
+                        loadArchives();
+                    break;
+                    case "Scheduled":
+                        Singleton.getInstance().setAdapterMode(SCHEDULED_TAB);
+                        loadRaks();
+                        //loadScheduled();
+                    break;
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        loadRaks(); //By default, we want to show the raks that the user has done
+    }
+
+    private  void loadRaks(){
+        //get the user's private posts
+        currentRaks.clear();
+        final Rak.Query raksQuery = new Rak.Query();
+        raksQuery.getTop().withUser();
+        raksQuery.findInBackground(new FindCallback<Rak>() {
+            @Override
+            public void done(List<Rak> objects, ParseException e) {
+                if (e == null){
+                    currentRaks.addAll(objects);
+                }
+                //create a posts adapter
+                raksAdapter = new RakAdapter(currentRaks);
+                rvArchivePosts.setAdapter(raksAdapter);
+
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                rvArchivePosts.setLayoutManager(mLayoutManager);
+            }
+        });
     }
 
     private void loadArchives(){
@@ -55,7 +121,6 @@ public class ArchiveFragment extends Fragment{
                 if (e == null){
                     for (int i = 0; i < objects.size(); i++){
                         archivedPosts.add(objects.get(i));
-                        Log.d("Post", archivedPosts.get(i).getMessage());
                     }
                     //create a posts adapter
                     archiveAdapter = new PostsAdapter(archivedPosts);
@@ -63,7 +128,6 @@ public class ArchiveFragment extends Fragment{
                     rvArchivePosts.setAdapter(archiveAdapter);
 
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-
                     rvArchivePosts.setLayoutManager(mLayoutManager);
                 }else{
                     e.printStackTrace();

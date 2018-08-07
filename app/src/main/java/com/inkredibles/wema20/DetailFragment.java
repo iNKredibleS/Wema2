@@ -1,6 +1,8 @@
     package com.inkredibles.wema20;
 
     import android.annotation.SuppressLint;
+    import android.content.ClipData;
+    import android.content.ClipboardManager;
     import android.content.Context;
     import android.content.Intent;
     import android.graphics.Bitmap;
@@ -39,9 +41,9 @@
     /*The detail fragment shows more information about the post that has been selected from the recyclerview*/
     public class DetailFragment extends Fragment {
         //bind views
-        @BindView(R.id.tvTitle) TextView tvtTitle;
+        @BindView(R.id.tvItemTitle) TextView tvtTitle;
         @BindView(R.id.tvMessage) TextView tvMessage;
-        @BindView(R.id.ivPostImg)ParseImageView ivPostImage;
+        @BindView(R.id.ivPostImage)ParseImageView ivPostImage;
         @BindView(R.id.tvLocation) TextView tvLocation;
         @BindView(R.id.cvCardview) CardView cardView;
         @BindView(R.id.tvDate) TextView tvDate;
@@ -183,6 +185,11 @@
                 Uri bmpUri = getBitmapFromDrawable(bp);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
             }
+            //copy the message to a clipboard
+            ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Reflection", message);
+            clipboard.setPrimaryClip(clip);
+
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(Intent.createChooser(shareIntent, "Share Reflection..."));
         }

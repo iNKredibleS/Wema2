@@ -23,6 +23,7 @@
             android:id="@+id/ivPostImage"
             android:layout_width="match_parent"
             android:layout_height="130dp"
+            android:scaleType="centerCrop"
             android:layout_below="@+id/tvItemTitle"
             android:transitionName="postTransition"
             app:srcCompat="@color/colorAccent" />
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/open_sans"
             android:text="Title"
             android:textColor="@color/black" />
     </RelativeLayout>

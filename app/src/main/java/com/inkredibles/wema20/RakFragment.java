@@ -35,8 +35,10 @@ import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -74,6 +76,7 @@ public class RakFragment extends Fragment {
     String reg_url;
 
     File filesDir;
+    Bundle bundle;
 
     ParseQuery<Rak> query;
 
@@ -138,30 +141,9 @@ public class RakFragment extends Fragment {
         userList = new ArrayList();
         rand = new Random();
 
-        notification = new NotificationCompat.Builder(getContext());
-        notification.setAutoCancel(true);
-
-
-//        // Create an explicit intent for an Activity in your app
-//        Intent intent = new Intent(getActivity(), RakFragment.class);
-//        intent.putExtra("rakFragment", "launchRak");
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
-
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
-//                .setSmallIcon(R.drawable.ic_launcher_background)
-//                .setContentTitle("My notification")
-//                .setContentText("Hello World!")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                // Set the intent that will fire when the user taps the notification
-//                //.setContentIntent(pendingIntent)
-//                .setAutoCancel(true);
-
-
-
         //if you create a new RAK with the create button
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        bundle = this.getArguments();
+        if (bundle != null && bundle.size() != 0) {
             String title = bundle.getString("new_rak_title");
             String date = bundle.getString("date");
             String location = bundle.getString("location");
@@ -177,20 +159,21 @@ public class RakFragment extends Fragment {
 
             //create new Rak
             Rak newRak = new Rak();
-            newRak.setTitle(title);
+            newRak.put("title", title);
             newRak.setUser(user);
             newRak.setBackground(R.drawable.wemabck5);
             newRak.saveInBackground();
 
             //save new rak to current user
-           user.setRak(newRak);
+            user.setRak(newRak);
+            user.saveInBackground();
 
-           rakTxt.setText(title);
+            rakTxt.setText(title);
+            currentBck = R.drawable.wemabck5;
+            rackBck.setImageBitmap(
+                    decodeSampledBitmapFromResource(getResources(), newRak.getBackground(), 500, 600));
 
-           currentBck = newRak.getBackground();
-           rackBck.setImageBitmap(
-                    decodeSampledBitmapFromResource(getResources(), newRak.getBackground(),
-                            500, 600));
+
         //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {
@@ -209,7 +192,7 @@ public class RakFragment extends Fragment {
 
                         }
                         //add RAK field to current user
-                        User user = (User) ParseUser.getCurrentUser();
+                        final User user = (User) ParseUser.getCurrentUser();
 
 
                         if (user.get("current_rak") == null) {
@@ -217,54 +200,40 @@ public class RakFragment extends Fragment {
                             user.saveInBackground();
                             Log.d("RakToUser", "Adding rak to user successful");
                         }
+                        currentBck = R.drawable.wemabck0;
 
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
                     }
-                }
-            });
 
-            User user = (User) ParseUser.getCurrentUser();
-
-            Rak rak = null;
-            try {
-                rak = (Rak) user.fetchIfNeeded().get("current_rak");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            ParseQuery<Rak> query = ParseQuery.getQuery(Rak.class);
-            query.getInBackground(rak.getObjectId(), new GetCallback<Rak>() {
-                public void done(Rak object, ParseException e) {
-                    if (e == null) {
-                        Log.d("Success", "Finding user to set title and background Success");
-                        rakTxt.setText(object.getTitle());
-
-                        rackBck.setImageBitmap(
-                        decodeSampledBitmapFromResource(getResources(), object.getBackground(),
-                                500, 600));
-
-                        currentBck = object.getBackground();
-                    } else {
-                        Log.d("Fail", "Finding RAK failed");
-                    }
                 }
             });
 
         }
 
-        query.findInBackground(new FindCallback<Rak>() {
-            @Override
-            public void done(List<Rak> objects, ParseException e) {
+        User user = (User) ParseUser.getCurrentUser();
+
+        Rak rak = null;
+        try {
+            rak = (Rak) user.fetchIfNeeded().get("current_rak");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        query.getInBackground(rak.getObjectId(), new GetCallback<Rak>() {
+            public void done(Rak object, ParseException e) {
                 if (e == null) {
-                    Log.d("FindSuccessful", "Finding RAK Successful");
-                    //initialize array list
-                    rakList.addAll(objects);
+                    rakTxt.setText(object.getTitle());
+                    rackBck.setImageBitmap(
+                            decodeSampledBitmapFromResource(getResources(), object.getBackground(), 500, 600));
                 } else {
-                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
+                    // something went wrong
                 }
             }
         });
+
+        if(this.getArguments() != null){this.getArguments().clear(); }
+
 
     }
 
@@ -273,25 +242,21 @@ public class RakFragment extends Fragment {
     public void onResume() {
             super.onResume();
 
-            User user = (User) ParseUser.getCurrentUser();
+        query = ParseQuery.getQuery(Rak.class);
 
-            Rak rak = null;
-            try {
-             rak = (Rak) user.fetchIfNeeded().get("current_rak");
-            } catch (ParseException e) {
-            e.printStackTrace();
+        query.findInBackground(new FindCallback<Rak>() {
+            @Override
+            public void done(List<Rak> objects, ParseException e) {
+                if (e == null) {
+                    Log.d("FindSuccessful", "Finding RAK Successful");
+                    //initialize array list
+                    rakList.addAll(objects);
+
+                } else {
+                    Log.d("FindFailed", "Retrieving RAK unsuccessful");
+                }
             }
-
-        try {
-            rakTxt.setText(rak.fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(),rak.getBackground(),
-                        500, 600));
-
+        });
 
     }
 
@@ -341,16 +306,20 @@ public class RakFragment extends Fragment {
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
 
-        Rak rak = RAKGenerator(rakList, rakList.size(), true);
+//        try {
+//            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+
+
+//        }
+
         User user = (User) ParseUser.getCurrentUser();
+        Rak rak = RAKGenerator(rakList, rakList.size(), true);
         user.setRak(rak);
         user.saveInBackground();
 
-        try {
-            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        rakTxt.setText(rak.getTitle());
 
         int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck1, R.drawable.wemabck2, R.drawable.wemabck3, R.drawable.wemabck4,
                  R.drawable.wemabck6};
@@ -363,21 +332,14 @@ public class RakFragment extends Fragment {
 
         int newBckg = randomBckg[randomNum];
 
-        Rak r = null;
 
-        try {
-            r = (Rak) user.fetchIfNeeded().get("current_rak");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        r.setBackground(newBckg);
-        r.saveInBackground();
+        rak.setBackground(newBckg);
+        rak.saveInBackground();
 
         rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), r.getBackground(), 500, 600));
+                decodeSampledBitmapFromResource(getResources(), rak.getBackground(), 500, 600));
 
-        createNotification(CHANNEL_ID, R.drawable.ic_launcher_background, "Rak", "Complete your RAK before the day is over!");
+        //createNotification(CHANNEL_ID, R.drawable.ic_launcher_background, "Rak", "Complete your RAK before the day is over!");
 
     }
 
@@ -441,10 +403,10 @@ public class RakFragment extends Fragment {
 
     //This method returns a random RAK
     private  Rak RAKGenerator(ArrayList<Rak> list,  int size, boolean refresh) {
-        String title = "";
 
+        String title = "";
         //get random rak from list
-        int randomNum = rand.nextInt(rakList.size()) + 1;
+        int randomNum = rand.nextInt(list.size()) + 1;
         int current = randomNum;
 
         //change random number so RAK won't refresh to the same/current RAK
@@ -473,4 +435,10 @@ public class RakFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(this.getArguments() != null){this.getArguments().clear(); }
+    }
 }

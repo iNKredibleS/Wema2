@@ -19,11 +19,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -51,7 +48,6 @@ import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
@@ -64,24 +60,27 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
   *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
   *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
   *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
+<<<<<<< HEAD
   *  go back to feed fragment*/
-public class CreatePostFragment extends Fragment {
+public class CreatePostFragment extends Fragment implements TagsDialog.TagDialogListener {
 
     @BindView(R.id.Title) EditText et_title;
     @BindView(R.id.et_message) EditText et_message;
-    @BindView(R.id.switch_give_rec) Switch switch_give_rec;
-    @BindView(R.id.switch_pub_pri) Switch switch_pub_pri;
+//    @BindView(R.id.switch_give_rec) Switch switch_give_rec;
+//    @BindView(R.id.switch_pub_pri) Switch switch_pub_pri;
     @BindView(R.id.pictureHolder) ImageView pictureHolder;
-    @BindView(R.id.tv_give_rec) TextView tvGiveRec;
-    @BindView(R.id.tv_pub_pri) TextView tvPubPri;
+    //@BindView(R.id.tv_give_rec) TextView tvGiveRec;
+    //@BindView(R.id.tv_pub_pri) TextView tvPubPri;
+
+
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_GALLERY_IMAGE = 2;
     private static View view;
 
     private static File filesDir;
-    private String type;
-    private String privacy;
+    public String type;
+    public String privacy;
     private onItemSelectedListener listener;
     private ParseGeoPoint geoPoint;
     private String placeName;
@@ -90,6 +89,8 @@ public class CreatePostFragment extends Fragment {
     private Bundle bundle;
     private PlaceAutocompleteFragment autocompleteFragment;
     private CreatePostFragment createPostFragment;
+    private Boolean isGroup;
+    ParseQuery<Rak> query;
 
 
     // Storage Permissions
@@ -101,6 +102,7 @@ public class CreatePostFragment extends Fragment {
 
     private ParseFile parseFile;
     private File file;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public class CreatePostFragment extends Fragment {
         createPostFragment = this;
         //butterknife bind
         ButterKnife.bind(this, view);
+        query = ParseQuery.getQuery(Rak.class);
         setUpView();
         setupAutoComplete();
     }
@@ -132,7 +135,6 @@ public class CreatePostFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         Boolean isRak = bundle.getBoolean("isRak");
          if (isRak) {
              if (rak != null) {
@@ -146,13 +148,17 @@ public class CreatePostFragment extends Fragment {
                  Selection.setSelection(etext, position);
              }
          }
+
     }
 
     //set up the create post based on the circumstance (group, rak or reflection)
     public void setUpView() {
+        //default type and privacy values
+        type = "give";
+        privacy = "public";
         filesDir = getContext().getFilesDir();
         bundle = this.getArguments();
-        Boolean isGroup = bundle.getBoolean("isGroup");
+        isGroup = bundle.getBoolean("isGroup");
         Boolean isReflection = bundle.getBoolean("isReflection");
         Boolean isRak = bundle.getBoolean("isRak");
         if (isGroup) {
@@ -160,6 +166,8 @@ public class CreatePostFragment extends Fragment {
 
         }  else if (isReflection) {
 
+            currentRole = Singleton.getInstance().getRole();
+            type = "private";
         } else if (isRak) {
             rak = bundle.getParcelable("RAK");
             if (rak != null){
@@ -184,14 +192,12 @@ public class CreatePostFragment extends Fragment {
         }
         //TODO change this to a radio button or spinner
         //setting up switches
-        switch_pub_pri.setChecked(true);
-        switch_give_rec.setChecked(true);
-        tvGiveRec.setText("Given");
-        tvPubPri.setText("Public");
+//        switch_pub_pri.setChecked(true);
+//        switch_give_rec.setChecked(true);
+//        tvGiveRec.setText("Given");
+//        tvPubPri.setText("Public");
 
-        //default type and privacy values
-        type = "give";
-        privacy = "public";
+
 
     }
 
@@ -223,27 +229,27 @@ public class CreatePostFragment extends Fragment {
 
     //when button changes the type, change the textview that displays type and the type field in
     //posts model
-    @OnCheckedChanged(R.id.switch_give_rec)
-    void giveRec(CompoundButton compoundButton, boolean checked){
-        if(checked) {
-            tvGiveRec.setText("Given");
-            type = "give";
-        } else {
-            tvGiveRec.setText("Received");
-            type = "receive";
-        }
-    }
+//    @OnCheckedChanged(R.id.switch_give_rec)
+//    void giveRec(CompoundButton compoundButton, boolean checked){
+//        if(checked) {
+//            tvGiveRec.setText("Given");
+//            type = "give";
+//        } else {
+//            tvGiveRec.setText("Received");
+//            type = "receive";
+//        }
+//    }
 
-    @OnCheckedChanged(R.id.switch_pub_pri)
-    void pubPri(CompoundButton compoundButton, boolean checked){
-        if(checked) {
-            tvPubPri.setText("Public");
-            privacy = "public";
-        } else {
-            tvPubPri.setText("Just for me");
-            privacy = "private";
-        }
-    }
+//    @OnCheckedChanged(R.id.switch_pub_pri)
+//    void pubPri(CompoundButton compoundButton, boolean checked){
+//        if(checked) {
+//            tvPubPri.setText("Public");
+//            privacy = "public";
+//        } else {
+//            tvPubPri.setText("Just for me");
+//            privacy = "private";
+//        }
+//    }
 
     //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)
@@ -261,6 +267,27 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.reflectionTagBtn)
+    protected void showTagDialog() {
+        //FragmentManager fm = getFragmentManager();
+
+        FragmentManager fm = getFragmentManager();
+        TagsDialog tagsDialog = TagsDialog.newInstance(type, privacy);
+        // SETS the target fragment for use later when sending results
+        tagsDialog.setTargetFragment(CreatePostFragment.this, 300);
+        tagsDialog.show(fm, "fragment_tag");
+
+
+    }
+
+    @Override
+    public void onFinishTagDialog(String mType, String mPrivacy) {
+        type = mType;
+        privacy = mPrivacy;
+    }
+
+
+
     //on post button clicked
     @OnClick(R.id.btn_post)
     protected void postButtonClicked(){
@@ -269,11 +296,23 @@ public class CreatePostFragment extends Fragment {
         final User user = (User) ParseUser.getCurrentUser();
         final String finalPrivacy = privacy;
         final String finalType = type;
-        if(file != null) parseFile = new ParseFile(file);
         final ParseRole role = currentRole;
+        if(file != null) {
+            parseFile = new ParseFile(file);
+            parseFile.saveInBackground(new SaveCallback() {
+                public void done(ParseException e) {
+                    // If successful add file to user and signUpInBackground
+                    if(null == e) {
+                        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+                    } else{
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-        createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
-
+        } else{
+            createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
+        }
     }
 
 
@@ -302,8 +341,6 @@ public class CreatePostFragment extends Fragment {
         parseACL.setPublicReadAccess(true);
 
         ParseUser.getCurrentUser().setACL(parseACL);
-
-
         newPost.saveInBackground(
                 new SaveCallback() {
                     @Override
@@ -312,7 +349,12 @@ public class CreatePostFragment extends Fragment {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
                             resetCreatePost();
-                            listener.toFeed();
+                            if(isGroup){
+                                listener.toCurrentGroup(Singleton.getInstance().getRole());
+                            }else{
+                                listener.toFeed();
+                            }
+
 
                         } else {
                             e.printStackTrace();
@@ -329,6 +371,7 @@ public class CreatePostFragment extends Fragment {
         currentRole = null;
         file = null;
         parseFile = null;
+        pictureHolder.setImageResource(android.R.color.transparent);
     }
 
 
@@ -350,8 +393,7 @@ public class CreatePostFragment extends Fragment {
                 e.printStackTrace();
             }
         }else{
-            Log.d("CRTPST", "Finished autocomplete");
-            System.out.print(data.toString());
+            Log.d("Create post", "Error");
 
         }
     }
@@ -412,14 +454,6 @@ public class CreatePostFragment extends Fragment {
         }
     }
 
-    //What does this do?
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment f = (Fragment) fragmentManager
-                .findFragmentById(R.id.place_autocomplete_fragment);
-        if (f != null) getFragmentManager().beginTransaction().remove(f).commit();
-    }
+
 }
 

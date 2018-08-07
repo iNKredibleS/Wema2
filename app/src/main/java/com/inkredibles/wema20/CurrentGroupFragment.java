@@ -40,6 +40,7 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     @BindView(R.id.tvGroupName) TextView tvGroupName;
     @BindView(R.id.rvGroupItem) RecyclerView rvGroupItem;
     @BindView(R.id.group_spinner) Spinner spinner;
+    @BindView(R.id.tvEmptyMessage) TextView tvEmptyMessage;
 
     AdapterView.OnItemSelectedListener spinnerListener;
 
@@ -73,17 +74,12 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
         bundleAndSetUp();
 
 
-       // loadRvGroupItem(isItemRak);
-
 
     }
-
-    //TODO on click set the recycler view to specific thing
 
     @Override
     public void onResume() {
         super.onResume();
-
 
     }
 
@@ -92,10 +88,6 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
 
     private void bundleAndSetUp(){
-//        Bundle bundle = this.getArguments();
-//            if (bundle != null) {
-//                currentRole = bundle.getParcelable("currentRole");
-//                tvGroupName.setText(currentRole.getName());
 
         currentRole = Singleton.getInstance().getRole();
         tvGroupName.setText(currentRole.getName());
@@ -164,7 +156,13 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void done(List<Rak> objects, ParseException e) {
                 if (e == null){
-                    if(objects.size() == 0){ }
+                    if(objects.size() == 0) {
+                        tvEmptyMessage.setText(R.string.empty_message_rak);
+                    } else {
+                        tvEmptyMessage.setText("");
+                    }
+
+
                     rakAdapter.addAll(objects);
                     Log.i("current group fragment", "successful finding group raks");
                 }else{
@@ -182,6 +180,12 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null){
+                    if(objects.size() == 0) {
+                        tvEmptyMessage.setText(R.string.empty_message_posts);
+                    } else {
+                        tvEmptyMessage.setText("");
+                    }
+
                     postsAdapter.addAll(objects);
                 }else{
                     e.printStackTrace();

@@ -15,10 +15,18 @@
         android:text="Current Group Name"
         android:textSize="24dp"/>
 
+    <TextView
+        android:id="@+id/tvEmptyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlGroupSpinner"/>
+
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rvGroupItem"
+
         android:layout_below="@id/rlGroupSpinner">
 
     </android.support.v7.widget.RecyclerView>
@@ -29,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rvGroupItem"
         android:text="Create Group Post"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_background"/>
 
     <Button
@@ -38,6 +47,7 @@
         android:layout_below="@id/rvGroupItem"
         android:layout_toRightOf="@id/btnCreateGroupPost"
         android:text="Create Group Rak"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_background"/>
 
     <FrameLayout

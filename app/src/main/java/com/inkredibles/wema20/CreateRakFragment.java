@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +57,25 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
     private PlaceAutocompleteFragment autocompleteFragment;
     private TimePickerFragment timePickerFragment;
     private String placeName;
+    private static View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_rak, container, false);
+
+        if (autocompleteFragment != null)autocompleteFragment.setText("");
+        // Defines the xml file for the fragment
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.fragment_create_rak, container, false);
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
+        return view;
 
     }
 
@@ -121,7 +135,7 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
 
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){
-        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_fragment);
         if (autocompleteFragment != null) {
             autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {

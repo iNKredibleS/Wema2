@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
        // result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        nextFragment(feedFragment);
+        nextFragment(rakFragment);
     }
 
     private void nextFragment(Fragment fragment){
@@ -263,11 +263,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
   }
 
   @Override
-    public void addRakToServer(String rakTitle, String date, String location) {
+    public void addRakToServer(String rakTitle) {
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
-      bundle.putString("date", date);
-      bundle.putString("location", location);
+
       rakFragment.setArguments(bundle);
       nextFragment(rakFragment);
   }

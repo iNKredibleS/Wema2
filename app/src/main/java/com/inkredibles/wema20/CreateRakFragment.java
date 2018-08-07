@@ -4,6 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -48,8 +52,8 @@ TODO implement a time and place aspect
 
 public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
     @BindView(R.id.createRakTxt) EditText createRakTxt;
-    @BindView(R.id.timeTxt) EditText timeTxt;
     @BindView(R.id.createBtn) Button createBtn;
+    @BindView(R.id.createLayout) FrameLayout frameLayout;
 
     private ParseGeoPoint geoPoint;
     private onItemSelectedListener listener;
@@ -85,8 +89,50 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
-        setupAutoComplete();
 
+
+
+    }
+
+    //function to load a properly sized background image:
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 3;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
     }
 
     @Override
@@ -103,13 +149,13 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
 
         }else{
             //complete normal flow of creating a rak
-            listener.addRakToServer(createRakTxt.getText().toString(), timeTxt.getText().toString(), placeName);
+            listener.addRakToServer(createRakTxt.getText().toString());
         }
 
     }
 
     //create a new Group Rak and save to Parse
-    private void createGroupRak(Bundle bundle){
+    private void createGroupRak(Bundle bundle) {
         final ParseRole currentRole = bundle.getParcelable("currentRole");
         Rak groupRak = new Rak();
         groupRak.setTitle(createRakTxt.getText().toString());
@@ -132,34 +178,6 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
                     }
                 });
     }
-
-    /*Sets up the location autocomplete*/
-    private void setupAutoComplete(){
-        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_fragment);
-        if (autocompleteFragment != null) {
-            autocompleteFragment.onResume();
-            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(Place place) {
-                    LatLng latLong = place.getLatLng(); //get a lat long
-                    geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
-                    placeName = place.getName().toString();
-                }
-                @Override
-                public void onError(Status status) {
-                    Log.i("CreatePost: ", "An error occurred: " + status);
-                }
-
-            });
-        }
-    }
-
-    public void showTimeFragment(View v) {
-        TimePickerFragment newFragment = new TimePickerFragment();
-
-
-    }
-
 
     @Override
     public void onDestroyView() {

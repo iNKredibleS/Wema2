@@ -19,13 +19,13 @@
         app:srcCompat="@android:drawable/ic_menu_search"
         android:layout_alignParentTop="true"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvUsers"
-        android:layout_below="@id/etSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvUsers"-->
+        <!--android:layout_below="@id/etSearch"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
 
-    />
+    <!--/>-->
 
     <Button
         android:id="@+id/doneAddedUsersBtn"

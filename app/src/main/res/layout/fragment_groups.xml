@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:text="Create New Group"
         android:layout_below="@id/rvGroups"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

@@ -38,7 +38,6 @@ public class ArchiveFragment extends Fragment{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
         rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
         archivedPosts = new ArrayList<>();
         loadArchives();

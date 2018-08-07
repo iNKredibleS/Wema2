@@ -15,9 +15,9 @@
             android:id="@+id/tbLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
 
-            android:layout_below="@+id/profContent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/switch1"
             android:background="@color/wema">
 
             <android.support.design.widget.TabItem
@@ -48,6 +48,9 @@
             android:id="@+id/profContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentTop="true"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -55,31 +58,47 @@
                 android:id="@+id/imageView"
                 android:layout_width="139dp"
                 android:layout_height="103dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="37dp"
                 app:srcCompat="@drawable/ic_camera_alt_black_24dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="👏" />
+                    android:text="👏"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5" />
+                    android:text="5"
+                    android:textSize="18sp" />
 
 
             </LinearLayout>
 
 
         </LinearLayout>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView"
+            android:text="Notifications" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/profContent"
+            android:text="Kenneth Nturibi" />
 
 
     </RelativeLayout>

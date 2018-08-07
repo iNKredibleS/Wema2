@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/etGroupName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,21 +15,59 @@
         android:layout_marginTop="20dp"/>
 
 
-    <Button
-        android:id="@+id/addUsersBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etGroupName"
-        android:text="Add users"
-        android:layout_centerHorizontal="true"/>
+    <!--<android.support.v7.widget.AppCompatButton-->
+        <!--android:id="@+id/addUsersBtn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/etGroupName"-->
+        <!--android:text="Add users"-->
+        <!--android:layout_centerHorizontal="true"/>-->
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/createGroupBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CreateGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/addUsersBtn"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_check_black_24dp"/>
+
+    <TextView
+        android:id="@+id/tvaddUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose users"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/etGroupName"/>
+
+
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvaddUsers"
+        android:layout_toRightOf="@id/ivSearch"
+        android:layout_marginTop="10dp"
+        />
+
+
+    <ImageView
+        android:id="@+id/ivSearch"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/tvaddUsers"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvUsers"
+        android:layout_below="@id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+
+        />
 
 
 

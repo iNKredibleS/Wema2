@@ -218,8 +218,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
     @Override
     public void toAddUsers(){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeholder, addUsersFragment).commit();
+        nextFragment(addUsersFragment);
 
     }
 

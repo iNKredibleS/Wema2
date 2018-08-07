@@ -13,8 +13,6 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private SecondaryDrawerItem rak;
     private SecondaryDrawerItem group;
 
-    FirebaseAuth mAuth;
 
 
     public static boolean archiveBool = false;
@@ -76,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         setSupportActionBar(toolbar);
 
         new DrawerBuilder().withActivity(this).build();
-
-        mAuth = FirebaseAuth.getInstance();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
       // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
@@ -157,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         nextFragment(placesFragment);
                     }else if (drawerItem == logout){
                         ParseUser.logOut();
-                        mAuth.signOut();
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                     }

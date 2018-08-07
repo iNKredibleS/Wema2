@@ -2,26 +2,15 @@ package com.inkredibles.wema20;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +36,7 @@ public class SignupActivity extends AppCompatActivity {
     //is this good practice?
     LoginActivity loginActivity = new LoginActivity();
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mFirestore;
+
 
 
 
@@ -58,10 +46,6 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);
-
-
-        mAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
 
        signupBackground.setImageBitmap(
                 loginActivity.decodeSampledBitmapFromResource(getResources(), R.drawable.signup_new, 500, 600));

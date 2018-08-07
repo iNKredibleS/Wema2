@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        new DrawerBuilder().withActivity(this).build();
+        //new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
       // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
@@ -102,11 +102,13 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
     // create the drawer and remember the `Drawer` result object
+        //.withToolbar(toolbar)
     result =
         new DrawerBuilder()
             .withActivity(this)
             .withToolbar(toolbar)
             .withAccountHeader(headerResult)
+                .withTranslucentStatusBar(false)
             .addDrawerItems(
                 feed,
                     new DividerDrawerItem(),
@@ -161,8 +163,12 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 })
             .build();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
-            nextFragment(feedFragment);
+       // result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        nextFragment(feedFragment);
     }
 
     private void nextFragment(Fragment fragment){
@@ -315,8 +321,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 //     currentGroupFragment.setArguments(bundle);
       Singleton.getInstance().setRole(currentRole);
       nextFragment(currentGroupFragment);
-
-
   }
 
 

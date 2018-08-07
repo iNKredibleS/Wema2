@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -54,7 +54,6 @@ public class CreateGroupFragment extends Fragment {
     RecyclerView rvUsers;
     @BindView(R.id.etSearch) EditText etSearch;
 
-    private FirebaseFirestore mFirestore;
 
 
     @Override

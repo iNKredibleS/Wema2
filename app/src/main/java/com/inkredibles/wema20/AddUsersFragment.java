@@ -12,12 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -53,7 +47,7 @@ public class AddUsersFragment extends Fragment {
 
     private LinearLayoutManager linearLayoutManager;
 
-    private FirebaseFirestore mFirestore;
+
 
 
     @Override
@@ -74,7 +68,7 @@ public class AddUsersFragment extends Fragment {
         // /rvUsers = (RecyclerView) mainView.findViewById(R.id.rvUsers);
         ButterKnife.bind(this, view);
 
-        mFirestore = FirebaseFirestore.getInstance();
+
 
         currentUser = ParseUser.getCurrentUser();
         currentUsername = currentUser.getUsername();
@@ -97,22 +91,6 @@ public class AddUsersFragment extends Fragment {
         listener.fromAddUserstoCreateGroup(addedUsers);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mFirestore.collection("Users").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                for(DocumentChange doc: documentSnapshots.getDocumentChanges()) {
-                    if(doc.getType() == DocumentChange.Type.ADDED) {
-                        User users = doc.getDocument().toObject(User.class);
-
-                    }
-                }
-            }
-        });
-    }
 
     @OnTextChanged(value = R.id.etSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void textChanged(Editable editable) {

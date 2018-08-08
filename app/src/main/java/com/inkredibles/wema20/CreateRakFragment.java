@@ -152,8 +152,13 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
             createGroupRak(bundle, dateString);
 
         }else{
-            //complete normal flow of creating a rak
-            listener.addRakToServer(createRakTxt.getText().toString(), dateString);
+            if(createRakTxt.getText().toString().isEmpty()) {
+                Toast.makeText(getContext(), "Don't forget to write your Rak", Toast.LENGTH_SHORT).show();
+            } else {
+                //complete normal flow of creating a rak
+                listener.addRakToServer(createRakTxt.getText().toString(), dateString);
+            }
+
         }
 
 

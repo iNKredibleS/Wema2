@@ -2,6 +2,7 @@ package com.inkredibles.wema20;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
@@ -24,10 +23,6 @@ import com.parse.ParseRole;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 /*
 purpose of this fragment is to display the details of the group and allow for user interaction with the group. Still to do
 is display the group's posts and random acts of kindness. The user can create a new post for the group or create
@@ -35,14 +30,12 @@ a new group random act of kindness challenge. Both functions are implemented fro
 transition to their respective create fragments.
  */
 
-public class CurrentGroupFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class CurrentGroupFragment extends Fragment{
 
-    @BindView(R.id.tvGroupName) TextView tvGroupName;
-    @BindView(R.id.rvGroupItem) RecyclerView rvGroupItem;
-    @BindView(R.id.group_spinner) Spinner spinner;
-    @BindView(R.id.tvEmptyMessage) TextView tvEmptyMessage;
 
-    AdapterView.OnItemSelectedListener spinnerListener;
+
+
+    //AdapterView.OnItemSelectedListener spinnerListener;
 
     private onItemSelectedListener listener;
     private ParseRole currentRole;
@@ -51,8 +44,14 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
     private ArrayList<Post> groupPosts;
     private PostsAdapter postsAdapter;
+    private TabLayout groupTabLayout;
 
-
+    private TextView tvGroupName;
+    private RecyclerView rvGroupItem;
+    //@BindView(R.id.group_spinner) Spinner spinner;
+    private TextView tvEmptyMessage;
+    private Button createGroupPostBtn;
+    private Button createGroupRakBtn;
 
 
     //tells the recyclerview in the fragment whether to upload the group raks or posts
@@ -67,11 +66,73 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ButterKnife.bind(this, view);
+
+//        bundleAndSetUp();
+
+
+        rvGroupItem = view.findViewById(R.id.rvGroupItem);
+        tvEmptyMessage = view.findViewById(R.id.tvEmptyMessage);
+
+        tvGroupName = view.findViewById(R.id.tvGroupName);
+        currentRole = Singleton.getInstance().getRole();
+        tvGroupName.setText(currentRole.getName());
+        loadRvGroupItem(true);
+
+        groupTabLayout = view.findViewById(R.id.groupTabLayout);
+        groupTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String nameOfSelectedTab = tab.getText().toString();
+                switch (nameOfSelectedTab){
+                    case "RAKs":
+                        //change the adapter mode in the singleton
+                        loadRvGroupItem(true);
+                        break;
+                    case "Posts":
+                        loadRvGroupItem(false);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        createGroupPostBtn = view.findViewById(R.id.btnCreateGroupPost);
+        createGroupPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.fromCurrentGrouptoCreatePost(currentRole);
+            }
+        });
+
+        createGroupRakBtn = view.findViewById(R.id.btnCreateGroupRak);
+        createGroupRakBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.fromCurrentGrouptoCreateRak(currentRole);
+            }
+        });
+
+
+
+
+//        ButterKnife.bind(this, view);
+
+
+
         isItemRak = true;
 
 
-        bundleAndSetUp();
+
 
 
 
@@ -87,19 +148,22 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
 
 
+
+
+
+
     private void bundleAndSetUp(){
 
-        currentRole = Singleton.getInstance().getRole();
-        tvGroupName.setText(currentRole.getName());
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.groups_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
 
-        spinner.setOnItemSelectedListener(this);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+//                R.array.groups_array, android.R.layout.simple_spinner_item);
+//        // Specify the layout to use when the list of choices appears
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        // Apply the adapter to the spinner
+//        spinner.setAdapter(adapter);
+//
+//        spinner.setOnItemSelectedListener(this);
 
 
 
@@ -197,18 +261,18 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
 
 
 
-    @OnClick(R.id.btnCreateGroupPost)
-    protected void createGroupPost() {
-        listener.fromCurrentGrouptoCreatePost(currentRole);
-
-
-    }
-
-    @OnClick(R.id.btnCreateGroupRak)
-    protected void createGroupRak(){
-        listener.fromCurrentGrouptoCreateRak(currentRole);
-
-    }
+//    @OnClick(R.id.btnCreateGroupPost)
+//    protected void createGroupPost() {
+//        listener.fromCurrentGrouptoCreatePost(currentRole);
+//
+//
+//    }
+//
+//    @OnClick(R.id.btnCreateGroupRak)
+//    protected void createGroupRak(){
+//        listener.fromCurrentGrouptoCreateRak(currentRole);
+//
+//    }
 
     //reset the fragment's arguments
     @Override
@@ -232,23 +296,23 @@ public class CurrentGroupFragment extends Fragment implements AdapterView.OnItem
     }
 
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        if (view != null) {
-            if (parent.getItemAtPosition(pos).equals("Rak")) {
-                loadRvGroupItem(true);
-            } else if (parent.getItemAtPosition(pos).equals("Post")) {
-                loadRvGroupItem(false);
-
-            }
-        } else{
-            loadRvGroupItem(true);
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+//        if (view != null) {
+//            if (parent.getItemAtPosition(pos).equals("Rak")) {
+//                loadRvGroupItem(true);
+//            } else if (parent.getItemAtPosition(pos).equals("Post")) {
+//                loadRvGroupItem(false);
+//
+//            }
+//        } else{
+//            loadRvGroupItem(true);
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//    }
 }

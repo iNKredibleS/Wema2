@@ -30,6 +30,7 @@ import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +56,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
     private String placeName;
     private static View view;
     private static Calendar cal;
+    private Date date;
 
 
     @Override
@@ -145,11 +147,9 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
 
 
 
-
-
         Bundle bundle = this.getArguments();
         if(bundle != null && bundle.getBoolean("isGroup")){
-            createGroupRak(bundle);
+            createGroupRak(bundle, dateString);
 
         }else{
             //complete normal flow of creating a rak
@@ -197,12 +197,21 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
 
 
     //create a new Group Rak and save to Parse
-    private void createGroupRak(Bundle bundle) {
+    private void createGroupRak(Bundle bundle, String dateString) {
         final ParseRole currentRole = bundle.getParcelable("currentRole");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+             date = dateFormat.parse(dateString);
+        }
+        catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
         Rak groupRak = new Rak();
         groupRak.setTitle(createRakTxt.getText().toString());
         groupRak.setUser(ParseUser.getCurrentUser());
         groupRak.setRole(currentRole);
+        if (date != null) groupRak.setScheduleDate(date);
 
         groupRak.saveInBackground(
                 new SaveCallback() {
@@ -225,6 +234,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
     public void onDestroyView() {
         super.onDestroyView();
         if(this.getArguments() != null){this.getArguments().clear(); }
+        date = new Date();
     }
 
     @Override

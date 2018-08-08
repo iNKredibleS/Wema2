@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <TextView
@@ -15,11 +17,32 @@
         android:text="Current Group Name"
         android:textSize="24dp"/>
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/groupTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGroupName"
+        >
+
+        <android.support.design.widget.TabItem
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="RAKs" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Posts" />
+
+
+    </android.support.design.widget.TabLayout>
+
+
     <TextView
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rlGroupSpinner"/>
+        android:layout_below="@id/groupTabLayout"/>
 
 
     <android.support.v7.widget.RecyclerView
@@ -27,7 +50,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/rvGroupItem"
 
-        android:layout_below="@id/rlGroupSpinner">
+        android:layout_below="@id/groupTabLayout">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -50,19 +73,19 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/button_background"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/md_grey_200"
-        android:layout_below="@id/tvGroupName"
-        android:id="@+id/rlGroupSpinner">
-        <Spinner
-            android:id="@+id/group_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            />
-    </FrameLayout>
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@color/md_grey_200"-->
+        <!--android:layout_below="@id/tvGroupName"-->
+        <!--android:id="@+id/rlGroupSpinner">-->
+        <!--<Spinner-->
+            <!--android:id="@+id/group_spinner"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+    <!--</FrameLayout>-->
 
 
 

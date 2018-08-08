@@ -98,5 +98,5 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() { return mGroups.size(); }
-    
+
 }

@@ -3,8 +3,11 @@ package com.inkredibles.wema20.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
+
+import java.util.Date;
 
 /*
     Data schema for the RAK (random act of kindness of the day). The title of the RAK is the suggested daily random act of kindess
@@ -23,6 +26,9 @@ public class Rak extends ParseObject {
     private static final String KEY_CREATOR = "current_user";
     private static final String KEY_ROLE = "role";
     private static final String KEY_CURRENT_BACKGROUND = "current_background";
+    private static  final String KEY_CREATED_AT = "createdAt";
+    private static final String KEY_SCHEDULE_DATE = "scheduleDate";
+
 
 
     public String getTitle() {
@@ -46,6 +52,12 @@ public class Rak extends ParseObject {
 
     }
 
+    public Date getScheduleDate() {return getDate(KEY_SCHEDULE_DATE);}
+
+    public void setScheduleDate(Date date) {
+        put(KEY_SCHEDULE_DATE, date);
+    }
+
     public void setImage(ParseFile file) {
         put(KEY_IMAGE, file);
     }
@@ -63,6 +75,23 @@ public class Rak extends ParseObject {
         put(KEY_CURRENT_BACKGROUND, num);
     }
 
+    public static class Query extends ParseQuery<Rak> {
+        public Query() {
+            super(Rak.class);
+        }
+
+        public Rak.Query getTop() {
+
+            orderByDescending(KEY_CREATED_AT);
+            setLimit(20);
+            return this;
+        }
+
+        public Rak.Query withUser() {
+            include(KEY_CREATOR);
+            return this;
+        }
+    }
 
 
 }

@@ -21,14 +21,16 @@
 
         <TextView
             android:id="@+id/rakTxt"
-            android:layout_width="211dp"
-            android:layout_height="62dp"
+            android:layout_width="207dp"
+            android:layout_height="78dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="112dp"
+            android:layout_marginTop="194dp"
+            android:background="@drawable/transparent_rc"
             android:gravity="center"
             android:textColor="@color/wema"
-            android:textSize="20sp"
+
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <Button
@@ -120,23 +122,13 @@
             android:id="@+id/doneTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/doLaterBtn"
-            android:layout_marginTop="4dp"
-            android:layout_toStartOf="@+id/refreshBtn"
+            android:layout_alignTop="@+id/feedTxt"
+            android:layout_toEndOf="@+id/doLaterTxt"
             android:fontFamily="@font/libre_franklin"
             android:text="@string/done_string"
             android:textColor="@color/wema"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/line"
-            android:layout_width="214dp"
-            android:layout_height="1dp"
-            android:layout_alignStart="@+id/rakTxt"
-            android:background="@color/wema"
-            android:layout_below="@+id/rakTxt"
-            android:text="TextView" />
 
 
     </RelativeLayout>

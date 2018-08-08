@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
 
-    public static boolean archiveBool = false;
     public boolean isGroup = false;
     public boolean isReflection = false;
     public boolean isRak = false;
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //new DrawerBuilder().withActivity(this).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
       // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
@@ -134,16 +132,14 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                         createPostFragment.setArguments(bundle);
                         nextFragment(createPostFragment);
                         isReflection = false;
-
                     }else if (drawerItem == archive){
-                        archiveBool = true;
+                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.rak_tab)); //set raks to be the default
                         nextFragment(archiveFragment);
 
                     }else if (drawerItem == rak){
                         nextFragment(rakFragment);
                     }else if (drawerItem == feed){
-
-                        archiveBool = false;
+                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
                         nextFragment(feedFragment);
                     }else if (drawerItem == group){
                         //launch groups Fragment to see user's groups
@@ -164,10 +160,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
             .build();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
-       // result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //set the adapter mode to feed
+        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
+        nextFragment(feedFragment);
         nextFragment(rakFragment);
     }
 
@@ -182,11 +179,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void closeDrawer(){
         if (result.isDrawerOpen()) result.closeDrawer();
     }
-
-
-    public boolean getArchiveBool(){return archiveBool;}
-
-
 
 
 
@@ -217,12 +209,9 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         bundle.putString("transitionName", sharedTransitionName);
         bundle.putString("titleTransition", titleTransition);
         detailFragment.setArguments(bundle);
-//        Log.d("Main Activity", "feed");
-        //ViewCompat.setTransitionName(parseImageView, "postPicTransition");
         fragmentTransaction.replace(R.id.placeholder, detailFragment)
                 .addToBackStack(detailFragment.getClass().toString())
                 .commit();
-        //nextFragment(detailFragment);
     }
 
 
@@ -230,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     //after new post created go back to feed fragment
     public void toFeed() {
         //Need to begin a new fragment transaction for any fragment operation
-        archiveBool = false;
+        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
         nextFragment(feedFragment);
 
     }
@@ -263,9 +252,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
   }
 
   @Override
-    public void addRakToServer(String rakTitle) {
+    public void addRakToServer(String rakTitle, String dateString) {
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
+      bundle.putString("date", dateString);
 
       rakFragment.setArguments(bundle);
       nextFragment(rakFragment);

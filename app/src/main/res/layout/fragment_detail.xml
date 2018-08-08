@@ -1,4 +1,5 @@
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lLayout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,31 +13,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+
         android:clickable="true"
-        android:padding="5dp"
         android:layout_margin="10dp"
         android:foreground="?android:attr/selectableItemBackground">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.parse.ParseImageView
-                android:id="@+id/ivPostImg"
+                android:id="@+id/ivPostImage"
                 android:layout_width="match_parent"
                 android:layout_height="328dp"
-                android:layout_alignParentStart="true"
 
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="65dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvMessage"
                 android:background="@android:color/white"
                 android:scaleType="centerCrop" />
 
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/tvItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -53,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/ivPostImg"
+                android:layout_below="@+id/ivPostImage"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -62,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/ivPostImg"
+                    android:layout_below="@+id/ivPostImage"
                     android:src="@android:drawable/ic_menu_mylocation" />
 
                 <TextView
@@ -79,33 +80,19 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/tvSpace"
+                android:layout_below="@+id/tvItemTitle"
+                android:layout_marginTop="-7dp"
                 android:text="We are in the post detail page"
                 android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:id="@+id/tvSpace"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/tvTitle"
-                android:background="@color/wema" />
-
-            <TextView
-                android:id="@+id/tvSpace2"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/tvTitle"
-                android:background="@color/wema" />
 
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/ivPostImg"
+                android:layout_below="@+id/ivPostImage"
                 android:text="TextView" />
 
             <LinearLayout
@@ -121,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/ivPostImg"
+                    android:layout_below="@+id/ivPostImage"
                     android:clickable="true"
                     android:text="👏"
                     android:textColor="@android:color/holo_purple"
@@ -150,23 +137,6 @@
                 android:tint="#f9cc06"
                 android:clickable="true"
                 app:srcCompat="@android:drawable/ic_menu_share" />
-
-            <TextView
-                android:id="@+id/tvSpace"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/tvTitle"
-                android:background="@color/wema" />
-
-            <TextView
-                android:id="@+id/ivSpace2"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/tvMessage"
-                android:layout_marginStart="0dp"
-                android:background="@color/wema" />
 
 
         </RelativeLayout>

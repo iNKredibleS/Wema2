@@ -1,8 +1,5 @@
 package com.inkredibles.wema20;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -12,24 +9,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.model.LatLng;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -37,7 +28,9 @@ import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +43,7 @@ as an alternative to the Rak of the day or as a rak for a group to do together.
 TODO implement a time and place aspect
  */
 
-public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
+public class CreateRakFragment extends Fragment implements DateTimeListener{
     @BindView(R.id.createRakTxt) EditText createRakTxt;
     @BindView(R.id.createBtn) Button createBtn;
     @BindView(R.id.createLayout) FrameLayout frameLayout;
@@ -62,6 +55,9 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
     private TimePickerFragment timePickerFragment;
     private String placeName;
     private static View view;
+    private static Calendar cal;
+    private Date date;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +85,8 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+
+        cal = Calendar.getInstance();
 
 
 
@@ -143,24 +141,77 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
 
     @OnClick(R.id.createBtn)
     protected void createRak() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        dateFormat.setTimeZone(cal.getTimeZone());
+        String dateString = dateFormat.format(cal.getTime());
+
+
+
         Bundle bundle = this.getArguments();
         if(bundle != null && bundle.getBoolean("isGroup")){
-            createGroupRak(bundle);
+            createGroupRak(bundle, dateString);
 
         }else{
             //complete normal flow of creating a rak
-            listener.addRakToServer(createRakTxt.getText().toString());
+            listener.addRakToServer(createRakTxt.getText().toString(), dateString);
         }
+
+
+
+
 
     }
 
+    @OnClick(R.id.btnDate)
+    public void showDatePickerDialog() {
+        FragmentManager fm = getFragmentManager();
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.setTargetFragment(CreateRakFragment.this, 300);
+        newFragment.show(fm, "datePicker");
+
+
+
+    }
+
+    @OnClick(R.id.btnTime)
+    public void showTimePickerDialog() {
+        FragmentManager fm = getFragmentManager();
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.setTargetFragment(CreateRakFragment.this, 300);
+        newFragment.show(fm, "timePicker");
+    }
+
+    @Override
+    public void dateSet(Calendar c){
+        cal.set(Calendar.YEAR, c.get(Calendar.YEAR));
+        cal.set(Calendar.MONTH, c.get(Calendar.MONTH));
+        cal.set(Calendar.DATE, c.get(Calendar.DATE));
+    }
+
+    @Override
+    public void timeSet(Calendar c){
+        cal.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+    }
+
+
+
     //create a new Group Rak and save to Parse
-    private void createGroupRak(Bundle bundle) {
+    private void createGroupRak(Bundle bundle, String dateString) {
         final ParseRole currentRole = bundle.getParcelable("currentRole");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+             date = dateFormat.parse(dateString);
+        }
+        catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
         Rak groupRak = new Rak();
         groupRak.setTitle(createRakTxt.getText().toString());
         groupRak.setUser(ParseUser.getCurrentUser());
         groupRak.setRole(currentRole);
+        if (date != null) groupRak.setScheduleDate(date);
 
         groupRak.saveInBackground(
                 new SaveCallback() {
@@ -183,6 +234,7 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
     public void onDestroyView() {
         super.onDestroyView();
         if(this.getArguments() != null){this.getArguments().clear(); }
+        date = new Date();
     }
 
     @Override
@@ -197,10 +249,7 @@ public class CreateRakFragment extends Fragment implements TimePickerDialog.OnTi
     }
 
 
-    @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
-    }
 }
 
 

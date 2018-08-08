@@ -92,17 +92,22 @@ public class ArchiveFragment extends Fragment{
     private  void loadRaks(){
         //get the user's private posts
         currentRaks.clear();
+        raksAdapter = new RakAdapter(currentRaks);
+        rvArchivePosts.setAdapter(raksAdapter);
         final Rak.Query raksQuery = new Rak.Query();
         raksQuery.getTop().withUser();
         raksQuery.findInBackground(new FindCallback<Rak>() {
             @Override
             public void done(List<Rak> objects, ParseException e) {
                 if (e == null){
-                    currentRaks.addAll(objects);
+                    for (Rak rak : objects){
+                        currentRaks.add(rak);
+                        raksAdapter.notifyItemInserted(currentRaks.size()-1);
+                    }
+
                 }
                 //create a posts adapter
-                raksAdapter = new RakAdapter(currentRaks);
-                rvArchivePosts.setAdapter(raksAdapter);
+                //raksAdapter = new RakAdapter(currentRaks);
 
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                 rvArchivePosts.setLayoutManager(mLayoutManager);
@@ -114,18 +119,18 @@ public class ArchiveFragment extends Fragment{
         //get the user's private posts
         final Post.Query postsQuery = new Post.Query();
         postsQuery.getPrivate().withUser();
-
+        //create a posts adapter
+        archiveAdapter = new PostsAdapter(archivedPosts);
+        //attach the adapter to the recyclerview to populate items
+        rvArchivePosts.setAdapter(archiveAdapter);
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null){
-                    for (int i = 0; i < objects.size(); i++){
-                        archivedPosts.add(objects.get(i));
+                    for (Post post: objects){
+                        archivedPosts.add(post);
+                        archiveAdapter.notifyItemInserted(archivedPosts.size()-1);
                     }
-                    //create a posts adapter
-                    archiveAdapter = new PostsAdapter(archivedPosts);
-                    //attach the adapter to the recyclerview to populate items
-                    rvArchivePosts.setAdapter(archiveAdapter);
 
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                     rvArchivePosts.setLayoutManager(mLayoutManager);

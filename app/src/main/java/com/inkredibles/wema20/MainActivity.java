@@ -180,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         if (result.isDrawerOpen()) result.closeDrawer();
     }
 
-
-
     //TODO is there a way to make this code more concise?
     @Override
     public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition) {

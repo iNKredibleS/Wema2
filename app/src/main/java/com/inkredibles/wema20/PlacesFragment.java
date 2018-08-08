@@ -6,6 +6,7 @@
     import android.view.View;
     import android.view.ViewGroup;
 
+    import com.google.android.gms.maps.CameraUpdateFactory;
     import com.google.android.gms.maps.GoogleMap;
     import com.google.android.gms.maps.OnMapReadyCallback;
     import com.google.android.gms.maps.SupportMapFragment;
@@ -42,13 +43,15 @@
                     .findFragmentById(R.id.map); //getChildFragmentManager()  is used for fragments instead of getFragmentManager
             mapFragment.getMapAsync(this);
 
+
         }
 
 
         @Override
         public void onMapReady(GoogleMap googleMap1) {
             final  GoogleMap googleMap = googleMap1;
-            googleMap.getUiSettings().setZoomControlsEnabled(true); //make it zoomable
+            googleMap.getUiSettings().setZoomControlsEnabled(true);// make it zoomable
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng( 37.4530,-122.1817), 12.0f)); //zoom to menlo park
             Post randPost = new Post();
             final Post.Query allPosts = new Post.Query();
             allPosts.getMany().withUser();

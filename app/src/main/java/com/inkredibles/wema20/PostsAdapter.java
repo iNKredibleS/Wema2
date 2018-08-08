@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
-import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 
@@ -25,7 +24,6 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     private List<Post>mPosts;
-    private List<Rak>mRaks;
     private Context context;
     private ViewHolderListener  viewHolderListener;
     private  LinearLayout linearLayout;
@@ -115,7 +113,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }else{
             viewHolder.ivPostImageView.getLayoutParams().height = 0;
         }
-        if (adapterMode.equals(context.getResources().getString(R.string.reflection_tab))) linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        if (adapterMode.equals(context.getResources().getString(R.string.reflection_tab))){
+            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            linearLayout.setLayoutParams(params);
+        }
         // viewHolder.ivPostImageView.setParseFile(post.getImage());
         //if(Singleton.getInstance().getAdapterMode().equals(context.getResources().getString(R.string.feed_mode))) viewHolder.tvUsername.setText(post.getUser().getUsername()); //we do not need this in the archive
     }

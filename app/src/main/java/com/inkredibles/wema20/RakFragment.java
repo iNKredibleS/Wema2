@@ -166,6 +166,7 @@ public class RakFragment extends Fragment {
                     decodeSampledBitmapFromResource(getResources(), newRak.getBackground(), 500, 600));
 
 
+
         //loads the normal rak
         } else {
             query.findInBackground(new FindCallback<Rak>() {

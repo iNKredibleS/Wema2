@@ -205,7 +205,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setHint("Enter Location");
+        autocompleteFragment.setHint("");
         if (autocompleteFragment != null) {
             autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {

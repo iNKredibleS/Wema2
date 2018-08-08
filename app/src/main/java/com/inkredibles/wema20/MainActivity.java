@@ -252,9 +252,10 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
   }
 
   @Override
-    public void addRakToServer(String rakTitle) {
+    public void addRakToServer(String rakTitle, String dateString) {
       Bundle bundle = new Bundle();
       bundle.putString("new_rak_title", rakTitle);
+      bundle.putString("date", dateString);
 
       rakFragment.setArguments(bundle);
       nextFragment(rakFragment);

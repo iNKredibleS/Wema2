@@ -14,36 +14,31 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -72,6 +67,7 @@ public class RakFragment extends Fragment {
     String text;
     boolean created = false;
     String reg_url;
+    private Date date;
 
     File filesDir;
     Bundle bundle;
@@ -145,14 +141,27 @@ public class RakFragment extends Fragment {
         bundle = this.getArguments();
         if (bundle != null && bundle.size() != 0) {
             String title = bundle.getString("new_rak_title");
-            String date = bundle.getString("date");
+            String dateString = bundle.getString("date");
             String location = bundle.getString("location");
             User user = (User) ParseUser.getCurrentUser();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                date = dateFormat.parse(dateString);
+                if (date != null){
+                    Log.i("createrak", "date");
+                }
+
+            }
+            catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
             //create new Rak
             Rak newRak = new Rak();
             newRak.put("title", title);
             newRak.setUser(user);
+            newRak.setScheduleDate(date);
             newRak.setBackground(R.drawable.wemabck5);
             newRak.saveInBackground();
 

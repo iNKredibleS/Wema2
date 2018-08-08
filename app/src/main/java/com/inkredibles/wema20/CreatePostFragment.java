@@ -68,6 +68,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
 //    @BindView(R.id.switch_give_rec) Switch switch_give_rec;
 //    @BindView(R.id.switch_pub_pri) Switch switch_pub_pri;
     @BindView(R.id.pictureHolder) ImageView pictureHolder;
+    @BindView(R.id.pictureTaken) ImageView pictureTaken;
     //@BindView(R.id.tv_give_rec) TextView tvGiveRec;
     //@BindView(R.id.tv_pub_pri) TextView tvPubPri;
 
@@ -204,6 +205,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     /*Sets up the location autocomplete*/
     private void setupAutoComplete(){
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setHint("Enter Location");
         if (autocompleteFragment != null) {
             autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -382,7 +384,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         currentRole = null;
         file = null;
         parseFile = null;
-        pictureHolder.setImageResource(android.R.color.transparent);
+        //pictureHolder.setImageResource(android.R.color.transparent);
+        pictureTaken.setImageResource(android.R.color.transparent);
     }
 
 
@@ -392,11 +395,13 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            pictureHolder.setImageBitmap(imageBitmap);
+            //pictureHolder.setImageBitmap(imageBitmap);
+            pictureTaken.setImageBitmap(imageBitmap);
             file = persistImage(imageBitmap, "pic1");
         }else if(requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK){
             Uri imageUri = data.getData();
-            pictureHolder.setImageURI(imageUri);
+            //pictureHolder.setImageURI(imageUri);
+            pictureTaken.setImageURI(imageUri);
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
                 file = persistImage(imageBitmap, "pic2");

@@ -9,15 +9,15 @@
     tools:context=".CreatePostFragment"
     >
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="546dp"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
-    android:layout_marginTop="30dp"
-    android:background="#FFFDF6">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="546dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corners_layout">
 
-    <!--<Switch-->
+        <!--<Switch-->
         <!--android:id="@+id/switch_give_rec"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -25,7 +25,7 @@
         <!--android:layout_alignStart="@+id/Title"-->
         <!--android:layout_marginBottom="177dp" />-->
 
-    <!--<Text=========================View-->
+        <!--<Text=========================View-->
         <!--android:id="@+id/tv_give_rec"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -33,128 +33,118 @@
         <!--android:layout_toEndOf="@+id/switch_give_rec"-->
         <!--android:text="Text" />-->
 
-    <EditText
-        android:id="@+id/Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:ems="15"
-        android:hint="Title *"
-        android:inputType="textMultiLine"/>
+        <EditText
+            android:id="@+id/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="96dp"
+            android:ems="15"
+            android:fontFamily="@font/libre_franklin"
+            android:hint="Title *"
+            android:inputType="textMultiLine" />
 
-    <EditText
-        android:id="@+id/et_message"
-        android:hint="Write your reflection here *"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:ems="15"
-        android:inputType="textMultiLine"
-        android:minLines="8"
-        android:gravity="top"
-        />
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="wrap_content"
+            android:layout_height="113dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="143dp"
+            android:ems="15"
+            android:fontFamily="@font/libre_franklin"
+            android:gravity="bottom"
+            android:hint="Write your reflection here *"
+            android:inputType="textMultiLine"
+            android:minLines="8" />
 
-    <Button
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_background"
-        android:id="@+id/reflectionTagBtn"
-        android:text="Tags"
-        android:layout_below="@id/et_message"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"/>
+        <Button
+            android:id="@+id/reflectionTagBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignEnd="@+id/btn_post"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="204dp"
+            android:background="@drawable/button_background"
+            android:text="Tags" />
 
-    <ImageButton
-        android:id="@+id/privacyBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/et_message"
-        android:layout_toLeftOf="@id/reflectionTagBtn"
-        android:src="@android:drawable/ic_lock_idle_lock"
-        android:background="@drawable/button_background"
-        android:layout_marginRight="10dp"/>
+        <ImageButton
+            android:id="@+id/privacyBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_background"
+            android:src="@android:drawable/ic_lock_idle_lock" />
 
 
-    <ImageButton
-        android:id="@+id/btn_camera"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/et_message"
-        android:layout_toLeftOf="@id/btn_gallery"
-        android:layout_marginLeft="10dp"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:background="@drawable/button_background"
-        android:outlineSpotShadowColor="@color/md_grey_50"/>
+        <ImageButton
+            android:id="@+id/btn_camera"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignStart="@+id/btn_post"
+            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:background="@drawable/button_background"
+            android:outlineSpotShadowColor="@color/md_grey_50"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
-    <ImageButton
-        android:id="@+id/btn_gallery"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/et_message"
-        android:layout_toLeftOf="@id/privacyBtn"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        android:background="@drawable/button_background"/>
+        <ImageButton
+            android:id="@+id/btn_gallery"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignStart="@+id/Title"
+            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:background="@drawable/button_background"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
 
-    <ImageView
-        android:id="@+id/pictureHolder"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/et_message"
-        android:layout_toLeftOf="@id/btn_camera"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        />
+        <ImageView
+            android:id="@+id/pictureHolder"
+            android:layout_width="51dp"
+            android:layout_height="12dp"
+            android:layout_alignParentStart="true" />
 
 
-    <Button
-        android:id="@+id/btn_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="103dp"
-        android:text="Post"
-        android:background="@drawable/button_background"
-        />
+        <Button
+            android:id="@+id/btn_post"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="17dp"
+            android:background="@drawable/button_background"
+            android:text="Post" />
 
 
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:tag="ourfrag"
-        android:layout_width="345dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView2"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@android:drawable/ic_menu_mylocation"
-        />
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="135dp"
+            android:tag="ourfrag"
+            app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="149dp"
+            android:layout_height="93dp"
+            android:layout_above="@+id/Title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-96dp"
+            app:srcCompat="@drawable/cloud_color" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_camera"
-        android:ems="10"
-        android:layout_marginTop="10dp"
-        android:text="Location(Optional)"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-
-        />
+        <ImageView
+            android:id="@+id/pictureTaken"
+            android:layout_width="55dp"
+            android:layout_height="42dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/reflectionTagBtn" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -1,6 +1,9 @@
 package com.inkredibles.wema20;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,7 +33,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         mGroups = groups;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView groupImage;
         public TextView groupName;
@@ -42,6 +45,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             groupImage = (ImageView) itemView.findViewById(R.id.imageViewGroupIcon);
             groupName = (TextView) itemView.findViewById(R.id.groupName);
 
+
             itemView.setOnClickListener(this);
 
         }
@@ -52,7 +56,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 ParseRole currentRole = mGroups.get(position);
-                if(currentRole != null){
+                if (currentRole != null) {
                     if (context instanceof onItemSelectedListener) {
                         listener = (onItemSelectedListener) context;
                         listener.toCurrentGroup(currentRole);
@@ -60,7 +64,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                         throw new ClassCastException(context.toString()
                                 + " must implement OnItemSelectedListener");
                     }
-                }else {
+                } else {
                     Log.i("Group Adapter", "new role is null for some reason");
                 }
 
@@ -68,6 +72,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         }
     }
+
 
     @Override
     public GroupAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -86,10 +91,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.groupName.setText(role.getName());
 
         //possibly upload a group picture if we have one
+
+
+
     }
 
     @Override
     public int getItemCount() { return mGroups.size(); }
-
 
 }

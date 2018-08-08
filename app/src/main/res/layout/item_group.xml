@@ -15,10 +15,10 @@
         android:id="@+id/groupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32dp"
-        android:text="Group Name"
         android:layout_toRightOf="@id/imageViewGroupIcon"
-        />
+        android:fontFamily="@font/libre_franklin_medium"
+        android:text="Group Name"
+        android:textSize="20dp" />
 
 
 

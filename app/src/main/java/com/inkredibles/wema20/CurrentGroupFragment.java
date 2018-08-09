@@ -22,6 +22,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseRole;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /*
 purpose of this fragment is to display the details of the group and allow for user interaction with the group. Still to do
@@ -33,6 +34,9 @@ transition to their respective create fragments.
 public class CurrentGroupFragment extends Fragment{
 
 
+    private static final String  RAK_TAB = "rak";
+    private static final String  REFLECTIONS_TAB = "reflections";
+    private static final String  SCHEDULED_TAB = "scheduled";
 
 
     //AdapterView.OnItemSelectedListener spinnerListener;
@@ -50,12 +54,16 @@ public class CurrentGroupFragment extends Fragment{
     private RecyclerView rvGroupItem;
     //@BindView(R.id.group_spinner) Spinner spinner;
     private TextView tvEmptyMessage;
+//    private FloatingActionButton createGroupPostBtn;
+//    private FloatingActionButton createGroupRakBtn;
     private Button createGroupPostBtn;
     private Button createGroupRakBtn;
 
 
     //tells the recyclerview in the fragment whether to upload the group raks or posts
     private static boolean isItemRak;
+
+    private Date currentDate;
 
 
 
@@ -78,6 +86,8 @@ public class CurrentGroupFragment extends Fragment{
         tvGroupName.setText(currentRole.getName());
         loadRvGroupItem(true);
 
+        Singleton.getInstance().setAdapterMode(SCHEDULED_TAB);
+
         groupTabLayout = view.findViewById(R.id.groupTabLayout);
         groupTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -86,11 +96,16 @@ public class CurrentGroupFragment extends Fragment{
                 switch (nameOfSelectedTab){
                     case "RAKs":
                         //change the adapter mode in the singleton
+                        Singleton.getInstance().setAdapterMode(RAK_TAB);
                         loadRvGroupItem(true);
                         break;
                     case "Posts":
+                        Singleton.getInstance().setAdapterMode(REFLECTIONS_TAB);
                         loadRvGroupItem(false);
                         break;
+                    case "Scheduled":
+                        Singleton.getInstance().setAdapterMode(SCHEDULED_TAB);
+                        loadRvGroupItem(true); //TODO use singleton
                 }
 
             }
@@ -123,7 +138,7 @@ public class CurrentGroupFragment extends Fragment{
         });
 
 
-
+        currentDate = new Date();
 
 //        ButterKnife.bind(this, view);
 
@@ -181,6 +196,8 @@ public class CurrentGroupFragment extends Fragment{
             //set adapter
             rvGroupItem.setAdapter(rakAdapter);
 
+
+
             //loadGroupRaks through a query
             loadGroupRaks();
 
@@ -189,7 +206,6 @@ public class CurrentGroupFragment extends Fragment{
         }
         //set the data, adapter, and recycler view with posts
         else{
-            Singleton.getInstance().setAdapterMode("feed");
             groupPosts = new ArrayList<>();
             postsAdapter = new PostsAdapter(groupPosts);
             rvGroupItem.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -213,6 +229,8 @@ public class CurrentGroupFragment extends Fragment{
     }
 
     private void loadGroupRaks(){
+        groupRaks.clear();
+
         ParseQuery<Rak> query = ParseQuery.getQuery(Rak.class);
         query.whereEqualTo("role", currentRole);
         query.orderByDescending("createdAt");
@@ -220,17 +238,27 @@ public class CurrentGroupFragment extends Fragment{
         query.findInBackground(new FindCallback<Rak>() {
             @Override
             public void done(List<Rak> objects, ParseException e) {
-                if (e == null){
+                if (e == null && Singleton.getInstance().getAdapterMode().equals(RAK_TAB)){
                     if(objects.size() == 0) {
                         tvEmptyMessage.setText(R.string.empty_message_rak);
                     } else {
                         tvEmptyMessage.setText("");
                     }
-
-
                     rakAdapter.addAll(objects);
                     Log.i("current group fragment", "successful finding group raks");
-                }else{
+                }else if (e == null && Singleton.getInstance().getAdapterMode().equals(SCHEDULED_TAB)){
+                    //COMPARE AND ADD TO RAK ADAPTER
+                    for(int i = 0; i < objects.size(); i++){
+                        if (objects.get(i).getScheduleDate() != null){
+                            Date scheduleDate = objects.get(i).getScheduleDate();
+                            if(scheduleDate.compareTo(currentDate) > 0){
+                                groupRaks.add(objects.get(i));
+                            }
+                        }
+                    }
+                    if(groupRaks.size() == 0){ tvEmptyMessage.setText(R.string.empty_schedule_raks);}
+                    rakAdapter.notifyDataSetChanged();
+                } else{
                     e.printStackTrace();
                 }
             }

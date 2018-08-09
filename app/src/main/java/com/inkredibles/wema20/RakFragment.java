@@ -117,6 +117,8 @@ public class RakFragment extends Fragment {
 
     }
 
+
+
     private void createNotification(int nId, int iconRes, String title, String body) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 getContext()).setSmallIcon(iconRes)

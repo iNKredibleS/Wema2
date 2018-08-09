@@ -25,7 +25,7 @@
             android:layout_centerInParent="true"
 
             android:ems="10"
-            android:gravity="bottom"
+            android:gravity="bottom|center"
             android:inputType="textMultiLine" />
 
         <Button

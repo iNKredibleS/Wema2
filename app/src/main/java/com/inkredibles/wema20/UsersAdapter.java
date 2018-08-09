@@ -3,7 +3,6 @@ package com.inkredibles.wema20;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +24,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     private Context context;
     protected List<ParseUser> mAddedUsers;
 
-    MainActivity main = new MainActivity();
-
     public UsersAdapter(List<ParseUser> allUsers, List<ParseUser> addedUsers) {
         mUsers = allUsers;
         mAddedUsers = addedUsers;
     }
 
 
-    public class ViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
         public ImageView ivUserProfile;
@@ -51,37 +48,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             ParseUser user = mUsers.get(getAdapterPosition());
-
-            if (isSelected(user)){
-
-//               selectedItems.get(getAdapterPosition(), false)) {
-//               selectedItems.delete(getAdapterPosition());
+            if (isSelected(user)) {
                 view.setSelected(false);
                 removeUser(user);
-                for(int i = 0; i < mAddedUsers.size(); i++){
-                    Log.i("adaper added users", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
-                }
-            }
-            else{
-                //selectedItems.put(getAdapterPosition(), true);
+            } else {
                 view.setSelected(true);
                 mAddedUsers.add(user);
-                for(int i = 0; i < mAddedUsers.size(); i++){
-                    Log.i("adapter users added", "users[" + i + "]" + "=" + mAddedUsers.get(i).getUsername());
-                }
             }
 
         }
 
-        public void removeUser(ParseUser user){
-            for(int i = 0; i < mAddedUsers.size(); i++){
-                if(mAddedUsers.get(i).getUsername().equals(user.getUsername())) mAddedUsers.remove(i);
+        public void removeUser(ParseUser user) {
+            for (int i = 0; i < mAddedUsers.size(); i++) {
+                if (mAddedUsers.get(i).getUsername().equals(user.getUsername()))
+                    mAddedUsers.remove(i);
             }
 
         }
-
-
-
     }
 
     @Override
@@ -90,6 +73,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
         View userView = inflater.inflate(R.layout.item_user, parent, false);
         ViewHolder viewHolder = new ViewHolder(userView);
+
         return viewHolder;
     }
 
@@ -100,23 +84,25 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         holder.itemView.setSelected(isSelected(user));
     }
 
-    public boolean isSelected(ParseUser user){
-        for(int i = 0; i < mAddedUsers.size(); i++){
-            if(mAddedUsers.get(i).getUsername().equals(user.getUsername())) return true;
+    public boolean isSelected(ParseUser user) {
+        for (int i = 0; i < mAddedUsers.size(); i++) {
+            if (mAddedUsers.get(i).getUsername().equals(user.getUsername())) return true;
         }
-        return false;
 
+        return false;
     }
 
     @Override
-    public int getItemCount() { return mUsers.size(); }
+    public int getItemCount() {
+        return mUsers.size();
+    }
 
-    public List<ParseUser> getAddedUsers() { return mAddedUsers; }
+    public List<ParseUser> getAddedUsers() {
+        return mAddedUsers;
+    }
 
-    public void clear(){
+    public void clear() {
         mUsers.clear();
         notifyDataSetChanged();
     }
-
-
 }

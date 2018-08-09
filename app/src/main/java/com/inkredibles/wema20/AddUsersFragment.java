@@ -24,51 +24,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-/*
-Add users fragment allows the user to choose which users he or she would like to be in their group.
-The user can choose from a list of all users and when a user is chosen their view in the recyclerview
-is highlighted in background.
- */
+    /*
+    Add users fragment allows the user to choose which users he or she would like to be in their group.
+    The user can choose from a list of all users and when a user is chosen their view in the recyclerview
+    is highlighted in background.
+     */
 
 public class AddUsersFragment extends Fragment {
 
-    @BindView(R.id.rvUsers) RecyclerView rvUsers;
-    @BindView(R.id.etSearch) EditText etSearch;
+    @BindView(R.id.rvUsers)
+    RecyclerView rvUsers;
+    @BindView(R.id.etSearch)
+    EditText etSearch;
 
-
-
-    //private RecyclerView rvUsers;
     private ArrayList<ParseUser> allUsers;
     private List<ParseUser> addedUsers;
     private UsersAdapter adapter;
     private onItemSelectedListener listener;
     private ParseUser currentUser;
     private String currentUsername;
-
     private LinearLayoutManager linearLayoutManager;
-
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_add_users, parent, false);
-
-
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        //View mainView = getView();
-        //get the recyclerview
-        //Button usersAddedBtn = (Button) mainView.findViewById(R.id.doneAddedUsersBtn);
-        // /rvUsers = (RecyclerView) mainView.findViewById(R.id.rvUsers);
         ButterKnife.bind(this, view);
-
-
 
         currentUser = ParseUser.getCurrentUser();
         currentUsername = currentUser.getUsername();
@@ -81,16 +66,13 @@ public class AddUsersFragment extends Fragment {
         rvUsers.setAdapter(adapter);
 
         loadUsers();
-
-
     }
 
     @OnClick(R.id.doneAddedUsersBtn)
-    protected void doneAddingUsers(){
+    protected void doneAddingUsers() {
         addedUsers = adapter.getAddedUsers();
         listener.fromAddUserstoCreateGroup(addedUsers);
     }
-
 
     @OnTextChanged(value = R.id.etSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void textChanged(Editable editable) {
@@ -110,9 +92,7 @@ public class AddUsersFragment extends Fragment {
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
                     }
-                  adapter.notifyDataSetChanged();
-
-
+                    adapter.notifyDataSetChanged();
                 } else {
                     e.printStackTrace();
 
@@ -122,9 +102,7 @@ public class AddUsersFragment extends Fragment {
         });
     }
 
-
-
-    private void loadUsers(){
+    private void loadUsers() {
         //get all users and load them into arrayList allUsers
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereNotEqualTo("username", currentUsername);
@@ -136,9 +114,6 @@ public class AddUsersFragment extends Fragment {
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
                     }
-                    //adapter.notifyDataSetChanged();
-
-
                 } else {
                     e.printStackTrace();
 
@@ -147,9 +122,6 @@ public class AddUsersFragment extends Fragment {
             }
         });
     }
-
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -161,8 +133,5 @@ public class AddUsersFragment extends Fragment {
                     + " must implement OnItemSelectedListener");
         }
     }
-
-
-
 
 }

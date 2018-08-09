@@ -39,18 +39,18 @@ import butterknife.OnClick;
 /*
 This fragment allows the user to create their own random act of kindness either for themselves
 as an alternative to the Rak of the day or as a rak for a group to do together.
-
-TODO implement a time and place aspect
  */
 
-public class CreateRakFragment extends Fragment implements DateTimeListener{
-    @BindView(R.id.createRakTxt) EditText createRakTxt;
-    @BindView(R.id.createBtn) Button createBtn;
-    @BindView(R.id.createLayout) FrameLayout frameLayout;
+public class CreateRakFragment extends Fragment implements DateTimeListener {
+    @BindView(R.id.createRakTxt)
+    EditText createRakTxt;
+    @BindView(R.id.createBtn)
+    Button createBtn;
+    @BindView(R.id.createLayout)
+    FrameLayout frameLayout;
 
     private ParseGeoPoint geoPoint;
     private onItemSelectedListener listener;
-
     private PlaceAutocompleteFragment autocompleteFragment;
     private TimePickerFragment timePickerFragment;
     private String placeName;
@@ -63,7 +63,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (autocompleteFragment != null)autocompleteFragment.setText("");
+        if (autocompleteFragment != null) autocompleteFragment.setText("");
         // Defines the xml file for the fragment
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
@@ -87,9 +87,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
         ButterKnife.bind(this, view);
 
         cal = Calendar.getInstance();
-
-
-
+        cal.add(Calendar.DATE, 1);
     }
 
     //function to load a properly sized background image:
@@ -101,7 +99,6 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-
             final int halfHeight = height / 3;
             final int halfWidth = width / 2;
 
@@ -144,35 +141,31 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         dateFormat.setTimeZone(cal.getTimeZone());
         String dateString = dateFormat.format(cal.getTime());
-
-
-
         Bundle bundle = this.getArguments();
-        if(bundle != null && bundle.getBoolean("isGroup")){
+        if (bundle != null && bundle.getBoolean("isGroup")) {
             createGroupRak(bundle, dateString);
 
-        }else{
-            //complete normal flow of creating a rak
-            listener.addRakToServer(createRakTxt.getText().toString(), dateString);
+        } else {
+            if (createRakTxt.getText().toString().isEmpty()) {
+                Toast.makeText(getContext(), "Don't forget to write your Rak", Toast.LENGTH_SHORT).show();
+            } else {
+                //complete normal flow of creating a rak
+                listener.addRakToServer(createRakTxt.getText().toString(), dateString);
+            }
+
         }
-
-
-
-
-
     }
 
+    //onclick handler for date
     @OnClick(R.id.btnDate)
     public void showDatePickerDialog() {
         FragmentManager fm = getFragmentManager();
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.setTargetFragment(CreateRakFragment.this, 300);
         newFragment.show(fm, "datePicker");
-
-
-
     }
 
+    //onclick handler for time
     @OnClick(R.id.btnTime)
     public void showTimePickerDialog() {
         FragmentManager fm = getFragmentManager();
@@ -182,18 +175,17 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
     }
 
     @Override
-    public void dateSet(Calendar c){
+    public void dateSet(Calendar c) {
         cal.set(Calendar.YEAR, c.get(Calendar.YEAR));
         cal.set(Calendar.MONTH, c.get(Calendar.MONTH));
         cal.set(Calendar.DATE, c.get(Calendar.DATE));
     }
 
     @Override
-    public void timeSet(Calendar c){
+    public void timeSet(Calendar c) {
         cal.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
     }
-
 
 
     //create a new Group Rak and save to Parse
@@ -201,9 +193,8 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
         final ParseRole currentRole = bundle.getParcelable("currentRole");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
-             date = dateFormat.parse(dateString);
-        }
-        catch (java.text.ParseException e) {
+            date = dateFormat.parse(dateString);
+        } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
@@ -233,7 +224,9 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(this.getArguments() != null){this.getArguments().clear(); }
+        if (this.getArguments() != null) {
+            this.getArguments().clear();
+        }
         date = new Date();
     }
 
@@ -247,8 +240,6 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
                     + " must implement OnItemSelectedListener");
         }
     }
-
-
 
 }
 

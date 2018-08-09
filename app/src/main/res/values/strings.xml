@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">Wema</string>
     <string name="api_key">8fd7cdaf46d1c5240e4920966317fa93fa0b5809c5718155b846cdfe15c20c69</string>
-    <string name ="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
+    <string name="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
     <string name="google_maps_api_key">AIzaSyCEYBGoqPCyj0QSqI3KjNsqmYeCTbEnI0Q</string>
     <string name="facebook_app_id">471933783315123</string>
     <string-array name="groups_array">
         <item>Rak</item>
         <item>Post</item>
     </string-array>
-    <string name="empty_message_posts">There are no group reflections, add a new one!</string>
-    <string name="empty_message_rak">There are no group random acts of kindness, create a new one!</string>
+    <string name="empty_message_posts">There are no group reflections, create a new group post!</string>
+    <string name="empty_schedule_raks">There are no scheduled group Random Acts of Kindness, create a new RAK!</string>
+    <string name="empty_message_rak">There are no group Random Acts of Kindness, create a new RAK!</string>
     <string name="dialog_type_question">Did you give or receive this kindness?</string>
     <string name="dialog_privacy_text">Set the privacy for this post</string>
     <string name="reflection_tab">reflections</string>
@@ -21,4 +22,11 @@
     <string name="done_string">Complete</string>
     <string name="new_rak">Feeling Inspired? Create your own Rak</string>
     <string name="create_rak_title">Create your own random act of kindness here</string>
+    <string name="home_description">Welcome to Wema! Wema means kindness in Swahili. Our app is a random act of kindness (rak) generator that
+        enables individuals and groups to complete raks everyday in order to boost overall life-satisfaction and happiness</string>
+    <string name="home_continue">Click here to start your journey through Wema</string>
+    <string name="first_rak">Reach out to someone you\'ve lost touch with in your life</string>
+    <string name="scheduled">Scheduled:   </string>
+
+>>>>>>> samsui
 </resources>

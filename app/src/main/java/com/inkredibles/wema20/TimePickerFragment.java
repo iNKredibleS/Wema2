@@ -9,9 +9,9 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
-    Calendar c;
-    DateTimeListener listener;
+public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    private Calendar c;
+    private DateTimeListener listener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -19,7 +19,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-
         // Create a new instance of TimePickerDialog and return it
         return new TimePickerDialog(getActivity(), this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
@@ -28,11 +27,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         c.clear();
-
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
-
-
         sendBackResult();
     }
 

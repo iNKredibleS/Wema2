@@ -30,15 +30,12 @@ import butterknife.OnClick;
  */
 
 public class GroupsFragment extends Fragment {
-
-    @BindView(R.id.rvGroups) RecyclerView rvGroups;
+    @BindView(R.id.rvGroups)
+    RecyclerView rvGroups;
 
     private ArrayList<ParseRole> usersGroups;
     private GroupAdapter groupAdapter;
     private onItemSelectedListener listener;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -47,43 +44,31 @@ public class GroupsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //attach the xml views to the java
         ButterKnife.bind(this, view);
         usersGroups = new ArrayList<>();
         groupAdapter = new GroupAdapter(usersGroups);
-        //set layout manager and adapter to recycler view
         rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
         rvGroups.setAdapter(groupAdapter);
 
-
         loadGroups();
-
     }
-
 
     //searches for groups the user belongs to and adds them to adapter
     protected void loadGroups() {
         ParseUser currentUser = ParseUser.getCurrentUser();
-
         ParseQuery<ParseRole> query = ParseRole.getQuery();
         query.whereEqualTo("users", currentUser);
-
         query.findInBackground(new FindCallback<ParseRole>() {
             public void done(List<ParseRole> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
                         usersGroups.add(objects.get(i));
                         groupAdapter.notifyItemInserted(usersGroups.size() - 1);
-
                     }
                     groupAdapter.notifyDataSetChanged();
-
-
                 } else {
                     e.printStackTrace();
-
                 }
-
             }
         });
     }
@@ -91,9 +76,8 @@ public class GroupsFragment extends Fragment {
 
     //Create a new group
     @OnClick(R.id.CreateNewGroupBtn)
-    public void launchCreateGroupFrag(){
+    public void launchCreateGroupFrag() {
         listener.fromGroupstoCreateGroup();
-
     }
 
     @Override
@@ -106,7 +90,4 @@ public class GroupsFragment extends Fragment {
                     + " must implement OnItemSelectedListener");
         }
     }
-
-
-
 }

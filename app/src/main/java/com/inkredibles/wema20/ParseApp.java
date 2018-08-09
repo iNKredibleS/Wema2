@@ -3,7 +3,6 @@ package com.inkredibles.wema20;
 
 import android.app.Application;
 
-import com.inkredibles.wema20.models.NewFile;
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
@@ -29,7 +28,6 @@ public class ParseApp extends Application {
         ParseObject.registerSubclass(Rak.class);
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(User.class);
-//        ParseObject.registerSubclass(Group.class);
 
         //set up parse...clientKey is masterkey
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
@@ -41,8 +39,6 @@ public class ParseApp extends Application {
 
         //intialize the parse
         Parse.initialize(configuration);
-
-        //PushService.setDefaultPushCallback(this, MainActivity.class);
 
     }
 }

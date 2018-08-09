@@ -25,41 +25,35 @@ import butterknife.OnClick;
  */
 
 public class LoginActivity extends AppCompatActivity {
-
-    //various fields for logging in
-
-    @BindView(R.id.etUsername) EditText usernameInput;
-    @BindView(R.id.etPassword) EditText passwordInput;
-    @BindView(R.id.btnLogIn) Button btnLogIn;
-    @BindView(R.id.btnSignUp) Button btnSignUp;
-    @BindView(R.id.login_background) ImageView loginBackground;
-
-
-
+    @BindView(R.id.etUsername)
+    EditText usernameInput;
+    @BindView(R.id.etPassword)
+    EditText passwordInput;
+    @BindView(R.id.btnLogIn)
+    Button btnLogIn;
+    @BindView(R.id.btnSignUp)
+    Button btnSignUp;
+    @BindView(R.id.login_background)
+    ImageView loginBackground;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         ButterKnife.bind(this);
-
         loginBackground.setImageBitmap(
                 decodeSampledBitmapFromResource(getResources(), R.drawable.wema_background_latern, 500, 600));
-
-        //persisted user code so the user doesn't have to log in
         // each time they open the app
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null){
+        if (currentUser != null) {
             final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
-
     }
 
+    //onclick handler for the login
     @OnClick(R.id.btnLogIn)
     public void login() {
         final String username = usernameInput.getText().toString();
@@ -86,12 +80,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    //onclik handler for the sign up
     @OnClick(R.id.btnSignUp)
     public void launchSignUp() {
         startActivity(new Intent(LoginActivity.this, SignupActivity.class));
     }
-
-
 
     //function to load a properly sized background image:
     public static int calculateInSampleSize(
@@ -105,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
 
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
-
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) >= reqHeight
@@ -113,22 +105,18 @@ public class LoginActivity extends AppCompatActivity {
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
 
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
-
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(res, resId, options);
-
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);

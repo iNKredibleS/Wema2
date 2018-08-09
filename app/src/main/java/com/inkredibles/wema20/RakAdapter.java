@@ -12,6 +12,9 @@ import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
@@ -19,7 +22,7 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
     private List<Rak> mRaks;
     private Context context;
 
-    public RakAdapter(List<Rak> groupRaks){
+    public RakAdapter(List<Rak> groupRaks) {
         mRaks = groupRaks;
     }
 
@@ -33,17 +36,20 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
         return viewHolder;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         //fields that I want in my view holder
         public TextView tvGroupRakCreator;
         public TextView tvGroupRak;
-
+        public TextView rakTime;
+        public TextView tvScheduled;
 
         //constructor for the viewholder find views by id's
-        public ViewHolder(View itemView){
+        public ViewHolder(View itemView) {
             super(itemView);
             tvGroupRakCreator = itemView.findViewById(R.id.tvGroupRakCreator);
             tvGroupRak = itemView.findViewById(R.id.tvGroupRak);
+            rakTime = itemView.findViewById(R.id.rakTime);
+            tvScheduled = itemView.findViewById(R.id.tvScheduled);
 
         }
 
@@ -60,7 +66,16 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
             e.printStackTrace();
         }
 
+        DateFormat dateFormat = new SimpleDateFormat("MMM d, h:mm a");
+        String strDate = dateFormat.format(rak.getScheduleDate());
+        holder.rakTime.setText(strDate);
 
+        Date date = new Date();
+        if (rak.getScheduleDate().compareTo(date) > 0) {
+            holder.tvScheduled.setText(R.string.scheduled);
+        } else {
+            holder.tvScheduled.setText("Completed: ");
+        }
     }
 
     @Override
@@ -68,11 +83,12 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
         return mRaks.size();
     }
 
-    public void addAll(List<Rak> raks){
+    public void addAll(List<Rak> raks) {
         mRaks.addAll(raks);
         notifyDataSetChanged();
     }
-    public void clear(){
+
+    public void clear() {
         mRaks.clear();
         notifyDataSetChanged();
     }

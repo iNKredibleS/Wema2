@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="4dp"
+    android:layout_margin="10dp"
 
     card_view:cardBackgroundColor="#ffffff"
     card_view:cardCornerRadius="4dp">
@@ -12,14 +12,27 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_light_background">
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspired by: "
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/tvGroupRakCreator"
+            />
 
         <TextView
             android:id="@+id/tvGroupRakCreator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:text="user"
+            android:fontFamily="@font/libre_franklin"/>
 
         <TextView
             android:id="@+id/tvGroupRak"
@@ -27,7 +40,33 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvGroupRakCreator"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/libre_franklin"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:hint="rak"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvScheduled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvGroupRak"
+            android:text="Scheduled: " />
+
+        <TextView
+            android:id="@+id/rakTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvGroupRak"
+            android:text="August 26th"
+            android:layout_toRightOf="@id/tvScheduled"/>
+
+
+
+
 
         <!--<TextView-->
         <!--android:id="@+id/tvTime"-->

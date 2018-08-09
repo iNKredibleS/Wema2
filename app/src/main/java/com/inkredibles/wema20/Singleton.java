@@ -15,20 +15,22 @@ class Singleton {
     private Singleton() {
     }
 
+    //returns the current role
     public ParseRole getRole() {
         return role;
     }
 
+    //sets the current role
     public void setRole(ParseRole role) {
         this.role = role;
     }
 
+    //sets the adapter mode
     public void setAdapterMode(String mode){
         this.mode = mode;
     }
+    //returns the adapter mode
     public String getAdapterMode(){
         return  mode;
     }
-
-
 }

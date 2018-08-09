@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,18 +36,14 @@ public class FeedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_feed, parent, false);
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-      //  Log.d("FeedFragment", "Inside onViewCreated");
         View mainView = getView();
-        //get the recyclerview
         rvPosts = (RecyclerView) mainView.findViewById(R.id.rvPosts);
-        //initialize posts
         posts = new ArrayList<>();
         //create a posts adapter
         adapter = new PostsAdapter(posts);
@@ -58,7 +53,6 @@ public class FeedFragment extends Fragment {
         mLayoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
         rvPosts.setLayoutManager(mLayoutManager);
         loadPosts();
-        //this is called by the viewholder
         adapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
             @Override
             public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition, CardView cardView, String cardTransition) {
@@ -66,7 +60,6 @@ public class FeedFragment extends Fragment {
                 if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition, cardView,cardTransition);
             }
         });
-        //get the swipe container
         swipeContainer = (SwipeRefreshLayout) mainView.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -86,20 +79,15 @@ public class FeedFragment extends Fragment {
                             }
                         }
                     });
-
-
                 }
             }
         });
     }
 
-
     //This method loads posts from the server, attaches the adapter to the recyclerview and sets the layout manager.
     private void loadPosts(){
-        //get the top posts
         final Post.Query postsQuery = new Post.Query();
         postsQuery.getTop().withUser();
-
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
@@ -108,12 +96,9 @@ public class FeedFragment extends Fragment {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(posts.size()-1);
                     }
-                   // adapter.notifyDataSetChanged();
                     scrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
                         @Override
                         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-                            //loadNextDataFromApi(totalItemsCount);
                             final Post.Query postsQuery = new Post.Query();
                             postsQuery.getMore(totalItemsCount);
                             postsQuery.withUser();
@@ -121,7 +106,6 @@ public class FeedFragment extends Fragment {
                                 @Override
                                 public void done(List<Post> objects, ParseException e) {
                                     if (e == null){
-
                                         for (int i = 0; i < objects.size(); i++){
                                             posts.add(objects.get(i));
                                             adapter.notifyItemInserted(posts.size()-1);
@@ -131,10 +115,7 @@ public class FeedFragment extends Fragment {
                             });
                         }
                     };
-                    // Adds the scroll listener to RecyclerView
                     rvPosts.addOnScrollListener(scrollListener);
-                    Log.d("Feed", "Done!! !");
-
                 }else{
                     e.printStackTrace();
                 }

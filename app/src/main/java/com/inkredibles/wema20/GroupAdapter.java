@@ -1,9 +1,6 @@
 package com.inkredibles.wema20;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +25,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private ArrayList<ParseRole> mGroups;
     private Context context;
     private onItemSelectedListener listener;
-
     public GroupAdapter(ArrayList <ParseRole> groups){
         mGroups = groups;
     }
@@ -37,17 +33,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         public ImageView groupImage;
         public TextView groupName;
-
-
         public ViewHolder(View itemView) {
             super(itemView);
 
             groupImage = (ImageView) itemView.findViewById(R.id.imageViewGroupIcon);
             groupName = (TextView) itemView.findViewById(R.id.groupName);
-
-
             itemView.setOnClickListener(this);
-
         }
 
         //obtain the current group/role and launch CurrentGroupFragment
@@ -65,7 +56,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                                 + " must implement OnItemSelectedListener");
                     }
                 } else {
-                    Log.i("Group Adapter", "new role is null for some reason");
+                    Log.i("Error", "New role is null");
                 }
 
             }
@@ -81,19 +72,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         View userView = inflater.inflate(R.layout.item_group, parent, false);
         GroupAdapter.ViewHolder viewHolder = new GroupAdapter.ViewHolder(userView);
         return viewHolder;
-
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder holder, int position) {
         ParseRole role = mGroups.get(position);
         holder.groupName.setText(role.getName());
-
-        //possibly upload a group picture if we have one
-
-
-
     }
 
     @Override

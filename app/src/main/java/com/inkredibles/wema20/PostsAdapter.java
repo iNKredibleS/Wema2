@@ -76,21 +76,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         String adapterMode = Singleton.getInstance().getAdapterMode();
 
         if(adapterMode.equals(context.getResources().getString(R.string.feed_mode))){ //for the normal feed
-            // Inflate the custom layout
             View postView = inflater.inflate(R.layout.item_post, parent, false);
-            // Return a new holder instance
             ViewHolder viewHolder = new ViewHolder(postView);
             return viewHolder;
         }else if (adapterMode.equals(context.getResources().getString(R.string.reflection_tab))){
             View postView = inflater.inflate(R.layout.item_detail, parent, false);
-            // Return a new holder instance
             ViewHolder viewHolder = new ViewHolder(postView);
             return viewHolder;
         }
-        else  { //rak
-            // Inflate the custom layout
+        else  {
             View contactView = inflater.inflate(R.layout.item_archive, parent, false);
-            // Return a new holder instance
             ViewHolder viewHolder = new ViewHolder(contactView);
             return viewHolder;
 
@@ -133,7 +128,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public interface ViewHolderListener{
         public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition, CardView cardView, String cardTransition);
     }
-    //
+    // sets the viewholderlistener
     public void setViewHolderListener(ViewHolderListener viewHolderListener){
         this.viewHolderListener = viewHolderListener;
     }

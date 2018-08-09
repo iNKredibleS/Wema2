@@ -56,17 +56,20 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 /*This Fragment handles the functionality to create posts. A reflection is composed of the title, body, location and an image. A user can
  *  also set if the reflection is for an act of kindness given or received. In addition, they can set it to be private or public. If it
-  *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
-  *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
-  *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
-  *  go back to feed fragment*/
+ *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
+ *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
+ *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
+ *  go back to feed fragment*/
 public class CreatePostFragment extends Fragment implements DialogueListener {
 
-    @BindView(R.id.Title) EditText et_title;
-    @BindView(R.id.et_message) EditText et_message;
-    @BindView(R.id.pictureHolder) ImageView pictureHolder;
-    @BindView(R.id.pictureTaken) ImageView pictureTaken;
-
+    @BindView(R.id.Title)
+    EditText et_title;
+    @BindView(R.id.et_message)
+    EditText et_message;
+    @BindView(R.id.pictureHolder)
+    ImageView pictureHolder;
+    @BindView(R.id.pictureTaken)
+    ImageView pictureTaken;
 
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -85,7 +88,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private PlaceAutocompleteFragment autocompleteFragment;
     private CreatePostFragment createPostFragment;
     private Boolean isGroup;
-    ParseQuery<Rak> query;
+    private ParseQuery<Rak> query;
 
 
     // Storage Permissions
@@ -101,7 +104,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (autocompleteFragment != null)autocompleteFragment.setText("");
+        if (autocompleteFragment != null) autocompleteFragment.setText("");
         // Defines the xml file for the fragment
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
@@ -116,7 +119,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         }
         return view;
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -133,19 +135,19 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         super.onResume();
 
         Boolean isRak = false;
-        if (bundle != null)  bundle.getBoolean("isRak");
-         if (isRak) {
-             if (rak != null) {
-                 rak = bundle.getParcelable("RAK");
-                 // et_title.setText(rak.getTitle());
-                 User user = (User) ParseUser.getCurrentUser();
-                 et_title.setText(user.getRak().getTitle());
-                 //set the cursor position to end of input title
-                 int position = et_title.length();
-                 Editable etext = et_title.getText();
-                 Selection.setSelection(etext, position);
-             }
-         }
+        if (bundle != null) bundle.getBoolean("isRak");
+        if (isRak) {
+            if (rak != null) {
+                rak = bundle.getParcelable("RAK");
+                // et_title.setText(rak.getTitle());
+                User user = (User) ParseUser.getCurrentUser();
+                et_title.setText(user.getRak().getTitle());
+                //set the cursor position to end of input title
+                int position = et_title.length();
+                Editable etext = et_title.getText();
+                Selection.setSelection(etext, position);
+            }
+        }
 
     }
 
@@ -159,7 +161,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         isGroup = false;
         Boolean isReflection = false;
         Boolean isRak = false;
-        if (bundle != null){
+        if (bundle != null) {
             isGroup = bundle.getBoolean("isGroup");
             isReflection = bundle.getBoolean("isReflection");
             isRak = bundle.getBoolean("isRak");
@@ -167,14 +169,11 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (isGroup) {
             currentRole = Singleton.getInstance().getRole();
             privacy = "Private";
-        }  else if (isReflection) {
-            //TODO is there anything we need to set up if isReflection is true?
         } else if (isRak) {
             rak = bundle.getParcelable("RAK");
-            if (rak != null){
-               // et_title.setText(rak.getTitle());
+            if (rak != null) {
+                // et_title.setText(rak.getTitle());
                 User user = (User) ParseUser.getCurrentUser();
-
                 try {
                     et_title.setText(rak.fetchIfNeeded().getString("title"));
                 } catch (ParseException e) {
@@ -191,11 +190,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         }
     }
 
-
-
-
     /*Sets up the location autocomplete*/
-    private void setupAutoComplete(){
+    private void setupAutoComplete() {
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("");
         if (autocompleteFragment != null) {
@@ -207,6 +203,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
                     placeName = place.getName().toString();
                 }
+
                 @Override
                 public void onError(Status status) {
                     Log.i("CreatePost: ", "An error occurred: " + status);
@@ -216,27 +213,24 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         }
     }
 
-
     //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)
-    protected void gallery(){
+    protected void gallery() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent , REQUEST_GALLERY_IMAGE);
+        startActivityForResult(intent, REQUEST_GALLERY_IMAGE);
     }
 
     //launch activity to take a picture for the post
     @OnClick(R.id.btn_camera)
     protected void camera() {
-        if(isStoragePermissionGranted()) {
+        if (isStoragePermissionGranted()) {
             dispatchTakePictureIntent();
         }
     }
 
     @OnClick(R.id.reflectionTagBtn)
     protected void showTagDialog() {
-        //FragmentManager fm = getFragmentManager();
-
         FragmentManager fm = getFragmentManager();
         TagsDialog tagsDialog = TagsDialog.newInstance(type);
         // SETS the target fragment for use later when sending results
@@ -245,7 +239,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     }
 
     @OnClick(R.id.privacyBtn)
-    protected void showPrivacyDialog(){
+    protected void showPrivacyDialog() {
         FragmentManager fm = getFragmentManager();
         PrivacyDialog privacyDialog = PrivacyDialog.newInstance(privacy);
         // SETS the target fragment for use later when sending results
@@ -255,39 +249,40 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
 
     @Override
     public void onFinishTagDialog(String mType) {
-        if(mType != null){ type = mType; }
+        if (mType != null) {
+            type = mType;
+        }
     }
 
     @Override
-    public void onFinishPrivacyDialog(String mPrivacy){
-        if(mPrivacy != null) privacy = mPrivacy;
+    public void onFinishPrivacyDialog(String mPrivacy) {
+        if (mPrivacy != null) privacy = mPrivacy;
     }
-
 
 
     //on post button clicked
     @OnClick(R.id.btn_post)
-    protected void postButtonClicked(){
+    protected void postButtonClicked() {
         final String title = et_title.getText().toString();
         final String message = et_message.getText().toString();
         final User user = (User) ParseUser.getCurrentUser();
         final String finalPrivacy = privacy;
         final String finalType = type;
         final ParseRole role = currentRole;
-        if(file != null) {
+        if (file != null) {
             parseFile = new ParseFile(file);
             parseFile.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
                     // If successful add file to user and signUpInBackground
-                    if(null == e) {
+                    if (null == e) {
                         createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
-                    } else{
+                    } else {
                         e.printStackTrace();
                     }
                 }
             });
 
-        } else{
+        } else {
             createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
         }
     }
@@ -297,23 +292,23 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     //set the title, message, user, image, privacy, give, receive, location
     private void createPost(String title, String message, ParseUser user, ParseFile parseFile, String privacy, String type, ParseRole role) {
         if (title.trim().equals("")) {
-            Toast.makeText(getContext(),"Title is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Title is required", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (message.trim().equals("")){
-            Toast.makeText(getContext(),"A reflection is required", Toast.LENGTH_SHORT).show();
+        if (message.trim().equals("")) {
+            Toast.makeText(getContext(), "A reflection is required", Toast.LENGTH_SHORT).show();
             return;
         }
         final Post newPost = new Post();
         newPost.setTitle(title);
         newPost.setMessage(message);
         newPost.setUser(user);
-        if(parseFile != null) newPost.setImage(parseFile);
+        if (parseFile != null) newPost.setImage(parseFile);
         newPost.setPrivacy(privacy);
         newPost.setType(type);
-        if(geoPoint != null) newPost.setLocation(geoPoint);
-        if(placeName != null) newPost.setPlaceName(placeName);
-        if(role != null) newPost.setRole(role);
+        if (geoPoint != null) newPost.setLocation(geoPoint);
+        if (placeName != null) newPost.setPlaceName(placeName);
+        if (role != null) newPost.setRole(role);
         ParseACL parseACL = new ParseACL(ParseUser.getCurrentUser());
         parseACL.setPublicReadAccess(true);
 
@@ -326,9 +321,9 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                             Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
                             resetCreatePost();
-                            if(isGroup){
+                            if (isGroup) {
                                 listener.toCurrentGroup(Singleton.getInstance().getRole());
-                            }else{
+                            } else {
                                 listener.toFeed();
                             }
                         } else {
@@ -358,7 +353,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             pictureTaken.setImageBitmap(imageBitmap);
             file = persistImage(imageBitmap, "pic1");
-        }else if(requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
             pictureTaken.setImageURI(imageUri);
             try {
@@ -367,13 +362,12 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             Log.d("Create post", "Error");
-
         }
     }
 
-    private static File  persistImage(Bitmap bitmap, String name) {
+    private static File persistImage(Bitmap bitmap, String name) {
         File imageFile = new File(filesDir, name + ".jpg");
         OutputStream os;
         try {
@@ -385,23 +379,22 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
             Log.d("Create Post Fragment", "Error writing bitmap", e);
         }
         return imageFile;
-
     }
 
 
     /*Requests permission to read external storage*/
-    public  boolean isStoragePermissionGranted() {
+    public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v("Create Post Fragment","Permission is granted");
+                Log.v("Create Post Fragment", "Permission is granted");
                 return true;
             } else {
-                Log.v("Create Post Fragment","Permission is revoked");
+                Log.v("Create Post Fragment", "Permission is revoked");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         } else {
-            Log.v("Create Post Fragment","Permission is granted");
+            Log.v("Create Post Fragment", "Permission is granted");
             return true;
         }
     }
@@ -425,7 +418,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     + " must implement OnItemSelectedListener");
         }
     }
-
 
 }
 

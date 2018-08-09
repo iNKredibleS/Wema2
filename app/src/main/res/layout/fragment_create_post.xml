@@ -61,40 +61,43 @@
 
         <Button
             android:id="@+id/reflectionTagBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignEnd="@+id/btn_post"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="204dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="172dp"
+            android:layout_marginEnd="106dp"
             android:background="@drawable/button_background"
             android:text="Tags" />
 
         <ImageButton
             android:id="@+id/privacyBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:layout_below="@+id/reflectionTagBtn"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="-204dp"
             android:background="@drawable/button_background"
             android:src="@android:drawable/ic_lock_idle_lock" />
 
 
         <ImageButton
             android:id="@+id/btn_camera"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignStart="@+id/btn_post"
-            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:layout_width="32dp"
+            android:layout_height="23dp"
+            android:layout_alignBottom="@+id/btn_gallery"
+            android:layout_alignStart="@+id/imageView3"
             android:background="@drawable/button_background"
             android:outlineSpotShadowColor="@color/md_grey_50"
             app:srcCompat="@android:drawable/ic_menu_camera" />
 
         <ImageButton
             android:id="@+id/btn_gallery"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignStart="@+id/Title"
-            android:layout_alignTop="@+id/reflectionTagBtn"
+            android:layout_width="37dp"
+            android:layout_height="26dp"
+            android:layout_alignEnd="@+id/pictureHolder"
+            android:layout_below="@+id/reflectionTagBtn"
+            android:layout_marginTop="-204dp"
             android:background="@drawable/button_background"
             app:srcCompat="@android:drawable/ic_menu_gallery" />
 
@@ -119,9 +122,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="51dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/btn_camera"
-            android:layout_marginBottom="142dp"
+            android:layout_below="@+id/pictureTaken"
+            android:layout_toStartOf="@+id/btn_post"
             android:foreground="@drawable/ic_location_on_black_24dp">
 
             <fragment
@@ -141,9 +143,8 @@
             android:id="@+id/imageView3"
             android:layout_width="149dp"
             android:layout_height="93dp"
-            android:layout_above="@+id/Title"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="-96dp"
             app:srcCompat="@drawable/cloud_color" />
 
         <ImageView
@@ -152,6 +153,52 @@
             android:layout_height="42dp"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/reflectionTagBtn" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="220dp">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/ic_camera_ic"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                android:scaleType="fitXY" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/imageButton"
+                android:background="@drawable/ic_gallery" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
+
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/imageButton2"
+                android:background="@drawable/ic_lock_ic" />
+
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@+id/imageButton3"
+                android:background="@drawable/ic_tags" />
+        </RelativeLayout>
 
 
     </RelativeLayout>

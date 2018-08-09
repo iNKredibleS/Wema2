@@ -28,32 +28,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-/*
-Create Group Fragment allows users to create a new group and then save that group to parse. The user
-can input a group name and add parse users by searching through a list of current Wema users.
+    /*
+    Create Group Fragment allows users to create a new group and then save that group to parse. The user
+    can input a group name and add parse users by searching through a list of current Wema users.
 
- */
+     */
 
 
 public class CreateGroupFragment extends Fragment {
 
-
-
-    //private RecyclerView rvUsers;
     private ArrayList<ParseUser> allUsers;
     private List<ParseUser> addedUsers;
     private UsersAdapter adapter;
     private onItemSelectedListener listener;
     private ParseUser currentUser;
     private String currentUsername;
-
     private LinearLayoutManager linearLayoutManager;
 
-    @BindView(R.id.etGroupName) EditText etGroupName;
+    @BindView(R.id.etGroupName)
+    EditText etGroupName;
     @BindView(R.id.rvUsers)
     RecyclerView rvUsers;
-    @BindView(R.id.etSearch) EditText etSearch;
-
+    @BindView(R.id.etSearch)
+    EditText etSearch;
 
 
     @Override
@@ -61,7 +58,6 @@ public class CreateGroupFragment extends Fragment {
         // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_create_group, parent, false);
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -91,12 +87,9 @@ public class CreateGroupFragment extends Fragment {
     }
 
 
-
     @OnTextChanged(value = R.id.etSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void textChanged(Editable editable) {
         String userQuery = editable.toString();
-
-        //adapterUpdate();
         adapter.clear();
         allUsers.clear();
 
@@ -113,20 +106,16 @@ public class CreateGroupFragment extends Fragment {
 
                     }
                     adapter.notifyDataSetChanged();
-
-
                 } else {
                     e.printStackTrace();
 
                 }
-
             }
         });
     }
 
 
-
-    private void loadUsers(){
+    private void loadUsers() {
         //get all users and load them into arrayList allUsers
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereNotEqualTo("username", currentUsername);
@@ -138,25 +127,16 @@ public class CreateGroupFragment extends Fragment {
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
                     }
-                    //adapter.notifyDataSetChanged();
-
-
                 } else {
                     e.printStackTrace();
-
                 }
-
             }
         });
     }
 
 
-
-
-
     @OnClick(R.id.createGroupBtn)
-    protected void createGroup(){
-
+    protected void createGroup() {
         String roleName = etGroupName.getText().toString();
         //the line below is not necessary also figure out what the ACL does
         ParseACL roleAcl = new ParseACL();
@@ -166,32 +146,25 @@ public class CreateGroupFragment extends Fragment {
         //currentRole maybe should be called new Role... maybe it shouldn't be currentRole or newRole
         //this could all be resolved if it were just called roll
         final ParseRole currentRole = new ParseRole(roleName, roleAcl);
-        for(int i = 0; i < addedUsers.size(); i++){
+        for (int i = 0; i < addedUsers.size(); i++) {
             currentRole.getUsers().add(addedUsers.get(i));
         }
-
-
-
         currentRole.saveInBackground(
-        new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    listener.fromCreateGrouptoCurrentGroup(currentRole);
-                    Log.d("CreateGroup", "create group success");
-                    Singleton.getInstance().setRole(currentRole);
-                    etGroupName.setText("");
+                new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            listener.fromCreateGrouptoCurrentGroup(currentRole);
+                            Log.d("CreateGroup", "create group success");
+                            Singleton.getInstance().setRole(currentRole);
+                            etGroupName.setText("");
 
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
-
-
 
 
     @Override

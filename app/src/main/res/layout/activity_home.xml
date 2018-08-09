@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wemapeach"
+    tools:context=".HomeActivity"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="590dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corners_layout">
+
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="139dp"
+            android:layout_height="97dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            app:srcCompat="@drawable/wema_circle" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="264dp"
+            android:layout_height="264dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/libre_franklin_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/home_description"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/continueBtn"
+            android:layout_width="220dp"
+            android:layout_height="37dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="45dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/button_background"
+            android:text="@string/home_continue"
+            android:textAllCaps="false" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="47dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="132dp"
+            app:srcCompat="@drawable/home_heart" />
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

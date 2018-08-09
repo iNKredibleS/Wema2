@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,7 +26,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseQuery;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 
@@ -71,9 +76,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //if you want to update the items at a later time it is recommended to keep it in a variable
-      // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
+        // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
@@ -99,73 +103,115 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 .build();
 
 
-    // create the drawer and remember the `Drawer` result object
+        // create the drawer and remember the `Drawer` result object
         //.withToolbar(toolbar)
-    result =
-        new DrawerBuilder()
-            .withActivity(this)
-            .withToolbar(toolbar)
-            .withAccountHeader(headerResult)
-                .withTranslucentStatusBar(false)
-            .addDrawerItems(
-                feed,
-                    new DividerDrawerItem(),
-                rak,
-                    new DividerDrawerItem(),
-                reflection,
-                    new DividerDrawerItem(),
-                archive,
-                    new DividerDrawerItem(),
-                group,
-                    new DividerDrawerItem(),
-                places,
-                    new DividerDrawerItem(),
-                logout)
-            .withOnDrawerItemClickListener(
-                new Drawer.OnDrawerItemClickListener() {
-                  @Override
-                  public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                    if (drawerItem == reflection) {
-                        isReflection = true;
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("isReflection", isReflection);
-                        createPostFragment.setArguments(bundle);
-                        nextFragment(createPostFragment);
-                        isReflection = false;
-                    }else if (drawerItem == archive){
-                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.rak_tab)); //set raks to be the default
-                        nextFragment(archiveFragment);
+        result =
+                new DrawerBuilder()
+                        .withActivity(this)
+                        .withToolbar(toolbar)
+                        .withAccountHeader(headerResult)
+                        .withTranslucentStatusBar(false)
+                        .addDrawerItems(
+                                feed,
+                                new DividerDrawerItem(),
+                                rak,
+                                new DividerDrawerItem(),
+                                reflection,
+                                new DividerDrawerItem(),
+                                archive,
+                                new DividerDrawerItem(),
+                                group,
+                                new DividerDrawerItem(),
+                                places,
+                                new DividerDrawerItem(),
+                                logout)
+                        .withOnDrawerItemClickListener(
+                                new Drawer.OnDrawerItemClickListener() {
+                                    @Override
+                                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                                        if (drawerItem == reflection) {
+                                            isReflection = true;
+                                            Bundle bundle = new Bundle();
+                                            bundle.putBoolean("isReflection", isReflection);
+                                            createPostFragment.setArguments(bundle);
+                                            nextFragment(createPostFragment);
+                                            isReflection = false;
+                                        }else if (drawerItem == archive){
+                                            Singleton.getInstance().setAdapterMode(getResources().getString(R.string.rak_tab)); //set raks to be the default
+                                            nextFragment(archiveFragment);
 
-                    }else if (drawerItem == rak){
-                        nextFragment(rakFragment);
-                    }else if (drawerItem == feed){
-                        Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
-                        nextFragment(feedFragment);
-                    }else if (drawerItem == group){
-                        //launch groups Fragment to see user's groups
-                        nextFragment(groupsFragment);
-                    }
-                    else if (drawerItem == places){
-                        //nextFragment();
-                        nextFragment(placesFragment);
-                    }else if (drawerItem == logout){
-                        ParseUser.logOut();
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
-                    }
+                                        }else if (drawerItem == rak){
+                                            nextFragment(rakFragment);
+                                        }else if (drawerItem == feed){
+                                            Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
+                                            nextFragment(feedFragment);
+                                        }else if (drawerItem == group){
+                                            //launch groups Fragment to see user's groups
+                                            nextFragment(groupsFragment);
+                                        }
+                                        else if (drawerItem == places){
+                                            //nextFragment();
+                                            nextFragment(placesFragment);
+                                        }else if (drawerItem == logout){
+                                            ParseUser.logOut();
+                                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                        }
 
-                    return true;
-                  }
-                })
-            .build();
+                                        return true;
+                                    }
+                                })
+                        .build();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
         //set the adapter mode to feed
         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
-        nextFragment(feedFragment);
+
+        String rakNotification = getIntent().getStringExtra("rakFragment");
+        String groupNotification = getIntent().getStringExtra("groupFragment");
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
+
+        if(rakNotification != null) {
+
+            if(rakNotification.equals("rakFragment")) {
+                //RakFragment rakFragment = new RakFragment();
+
+
+                nextFragment(rakFragment);
+
+            }
+
+        } else if(groupNotification != null) {
+
+            if(groupNotification.equals("WtDPPCDLba")) {
+//              groupFragment  CurrentGroupFragment cgp = new CurrentGroupFragment();
+//                fragmentTransaction.replace(android.R.id.content, cgp);
+
+
+                ParseQuery<ParseRole> query = ParseQuery.getQuery(ParseRole.class);
+                query.getInBackground("WtDPPCDLba", new GetCallback<ParseRole>() {
+                    public void done(ParseRole object, ParseException e) {
+                        if (e == null) {
+                            toCurrentGroup(object);
+                            Log.d("Success", "Finding  role successful");
+                        } else {
+                            // something went wrong
+                            Log.d("Failed", "Finding  role failed");
+                        }
+                    }
+                });
+
+            }
+        }
+
         nextFragment(rakFragment);
+
+
+
     }
 
     private void nextFragment(Fragment fragment){

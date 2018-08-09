@@ -39,6 +39,7 @@
             android:layout_height="61dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
             android:background="@drawable/lighter_bck"
             android:fontFamily="@font/libre_franklin_bold"
             android:shadowColor="#50FFFFFF"

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Wema</string>
     <string name="api_key">8fd7cdaf46d1c5240e4920966317fa93fa0b5809c5718155b846cdfe15c20c69</string>
-    <string name ="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
+    <string name="redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
     <string name="google_maps_api_key">AIzaSyCEYBGoqPCyj0QSqI3KjNsqmYeCTbEnI0Q</string>
     <string name="facebook_app_id">471933783315123</string>
     <string-array name="groups_array">
@@ -21,4 +21,8 @@
     <string name="done_string">Complete</string>
     <string name="new_rak">Feeling Inspired? Create your own Rak</string>
     <string name="create_rak_title">Create your own random act of kindness here</string>
+    <string name="home_description">Welcome to Wema! Wema means kindness in Swahili. Our app is a random act of kindness (rak) generator that
+        enables individuals and groups to complete raks everyday in order to boost overall life-satisfaction and happiness</string>
+    <string name="home_continue">Click here to start your journey through Wema</string>
+    <string name="first_rak">Reach out to someone you\'ve lost touch with in your life</string>
 </resources>

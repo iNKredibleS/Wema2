@@ -122,9 +122,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="51dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/btn_camera"
-            android:layout_marginBottom="142dp"
+            android:layout_below="@+id/pictureTaken"
+            android:layout_toStartOf="@+id/btn_post"
             android:foreground="@drawable/ic_location_on_black_24dp">
 
             <fragment

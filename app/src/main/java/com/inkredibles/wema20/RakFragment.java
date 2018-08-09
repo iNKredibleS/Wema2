@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -30,9 +31,12 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.io.File;
@@ -65,8 +69,7 @@ public class RakFragment extends Fragment {
     ArrayList<User> userList;
     private static Rak rak;
     String text;
-    boolean created = false;
-    String reg_url;
+
     private Date date;
 
     File filesDir;
@@ -77,15 +80,12 @@ public class RakFragment extends Fragment {
     static BitmapDrawable background;
 
     private onItemSelectedListener listener;
-    Bitmap myBitmap;
-
-    ParseFile rakFile;
 
     static int currentBck;
 
     User user;
 
-    int completed;
+
 
     private PlaceAutocompleteFragment autocompleteFragment;
 
@@ -176,8 +176,9 @@ public class RakFragment extends Fragment {
 
 
 
-        //loads the normal rak
         } else {
+            query = ParseQuery.getQuery(Rak.class);
+
             query.findInBackground(new FindCallback<Rak>() {
                 @Override
                 public void done(List<Rak> objects, ParseException e) {
@@ -186,59 +187,41 @@ public class RakFragment extends Fragment {
                         //initialize array list
                         rakList.addAll(objects);
 
-                        if (rak == null) {
-                            rak = RAKGenerator(rakList, rakList.size(), false);
-                            rak.setBackground(R.drawable.wemabck0);
-                            rak.saveInBackground();
-                            Log.d("RakGenerator", "Generating random RAK successful");
-
-                        }
-                        //add RAK field to current user
-                        final User user = (User) ParseUser.getCurrentUser();
-
-
-                        if (user.get("current_rak") == null) {
-                            user.put("current_rak", rak);
-                            user.saveInBackground();
-                            Log.d("RakToUser", "Adding rak to user successful");
-                        }
-                        currentBck = R.drawable.wemabck0;
-
                     } else {
                         Log.d("FindFailed", "Retrieving RAK unsuccessful");
                     }
-
                 }
             });
 
-        }
 
-        User user = (User) ParseUser.getCurrentUser();
+            User user = (User) ParseUser.getCurrentUser();
 
-        Rak rak = null;
-        try {
-            rak = (Rak) user.fetchIfNeeded().get("current_rak");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            Rak rak = null;
+            try {
+                rak = (Rak) user.fetchIfNeeded().get("current_rak");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        String title = null;
-        try {
-            title = rak.fetchIfNeeded().getString("title");
-            rakTxt.setText(title);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            String title = null;
+            try {
+                title = rak.fetchIfNeeded().getString("title");
+                rakTxt.setText(title);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        Integer background = null;
-        try {
-            background = rak.fetchIfNeeded().getInt("current_background");
-            rackBck.setImageBitmap(
-                           decodeSampledBitmapFromResource(getResources(), background
-                                   , 500, 600));
+            Integer background = null;
+            try {
+                background = rak.fetchIfNeeded().getInt("current_background");
+                rackBck.setImageBitmap(
+                        decodeSampledBitmapFromResource(getResources(), background
+                                , 500, 600));
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
 
         if(this.getArguments() != null){this.getArguments().clear(); }
@@ -314,15 +297,6 @@ public class RakFragment extends Fragment {
 
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
-
-//        try {
-//            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-
-
-//        }
-
         User user = (User) ParseUser.getCurrentUser();
         Rak rak = RAKGenerator(rakList, rakList.size(), true);
         user.setRak(rak);
@@ -348,12 +322,52 @@ public class RakFragment extends Fragment {
         rackBck.setImageBitmap(
                 decodeSampledBitmapFromResource(getResources(), rak.getBackground(), 500, 600));
 
-        //createNotification(CHANNEL_ID, R.drawable.ic_launcher_background, "Rak", "Complete your RAK before the day is over!");
 
     }
 
     @OnClick(R.id.feedBtn)
     protected void goToFeed() {
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
+        Intent ii = new Intent (getActivity(), MainActivity.class);
+        ii.putExtra("groupFragment", "WtDPPCDLba");
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(ii);
+
+
+        //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText("Click here to see the new Rak");
+        bigText.setBigContentTitle("A new Rak has been added to Power Rangers group");
+        bigText.setSummaryText("RAK");
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Reminder to complete Rak of the Day");
+        mBuilder.setContentText("Swipe here to complete your Rak and write your reflection! ");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setAutoCancel(false);
+        mBuilder.setOngoing(true);
+        mBuilder.setStyle(bigText);
+
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_001",
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+
         listener.toFeed();
     }
 
@@ -361,20 +375,26 @@ public class RakFragment extends Fragment {
     protected void goToFeedDoLater() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
-        Intent ii = new Intent(getContext().getApplicationContext(), RakFragment.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
+        Intent ii = new Intent (getActivity(), MainActivity.class);
+        ii.putExtra("rakFragment", "rakFragment");
 
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("Click here to complete your Rak and write your reflection! ");
-        bigText.setBigContentTitle("Reminder to complete Rak of the Day");
-        bigText.setSummaryText("RAK");
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(ii);
+
+
+        //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_IMMUTABLE);
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Your Title");
-        mBuilder.setContentText("Your text");
+        mBuilder.setContentTitle("Reminder to complete Rak of the day");
+        mBuilder.setContentText("Click here to complete your Rak and write your reflection!");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setStyle(bigText);
+        mBuilder.setAutoCancel(false);
+        mBuilder.setOngoing(true);
+//        mBuilder.setStyle(bigText);
+        mBuilder.setTicker("Reminder to complete Rak of the day");
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -395,6 +415,45 @@ public class RakFragment extends Fragment {
     protected void goToPost()  {
         User user = (User) ParseUser.getCurrentUser();
 
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
+        Intent ii = new Intent (getActivity(), MainActivity.class);
+        ii.putExtra("groupFragment", "WtDPPCDLba");
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(ii);
+
+
+        //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText("Click here to see their current Raks and posts");
+        bigText.setBigContentTitle("You've been added to the Power Rangers group");
+        bigText.setSummaryText("RAK");
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Reminder to complete Rak of the Day");
+        mBuilder.setContentText("Swipe here to complete your Rak and write your reflection! ");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+        mBuilder.setAutoCancel(false);
+        mBuilder.setOngoing(true);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_001",
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+
         listener.fromRAKtoCreatePost(user.getRak());
 
 
@@ -404,6 +463,8 @@ public class RakFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
     }
 
     @OnClick(R.id.newRakBtn)

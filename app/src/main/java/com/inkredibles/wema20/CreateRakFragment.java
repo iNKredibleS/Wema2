@@ -87,6 +87,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener{
         ButterKnife.bind(this, view);
 
         cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 1);
 
 
 

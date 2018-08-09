@@ -65,12 +65,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
 
     @BindView(R.id.Title) EditText et_title;
     @BindView(R.id.et_message) EditText et_message;
-//    @BindView(R.id.switch_give_rec) Switch switch_give_rec;
-//    @BindView(R.id.switch_pub_pri) Switch switch_pub_pri;
     @BindView(R.id.pictureHolder) ImageView pictureHolder;
     @BindView(R.id.pictureTaken) ImageView pictureTaken;
-    //@BindView(R.id.tv_give_rec) TextView tvGiveRec;
-    //@BindView(R.id.tv_pub_pri) TextView tvPubPri;
 
 
 
@@ -188,13 +184,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         } else if (isReflection) {
             //any Reflection specific posts
         }
-        //TODO change this to a radio button or spinner
-        //setting up switches
-//        switch_pub_pri.setChecked(true);
-//        switch_give_rec.setChecked(true);
-//        tvGiveRec.setText("Given");
-//        tvPubPri.setText("Public");
-
 
 
     }
@@ -225,30 +214,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     }
 
 
-
-    //when button changes the type, change the textview that displays type and the type field in
-    //posts model
-//    @OnCheckedChanged(R.id.switch_give_rec)
-//    void giveRec(CompoundButton compoundButton, boolean checked){
-//        if(checked) {
-//            tvGiveRec.setText("Given");
-//            type = "give";
-//        } else {
-//            tvGiveRec.setText("Received");
-//            type = "receive";
-//        }
-//    }
-
-//    @OnCheckedChanged(R.id.switch_pub_pri)
-//    void pubPri(CompoundButton compoundButton, boolean checked){
-//        if(checked) {
-//            tvPubPri.setText("Public");
-//            privacy = "public";
-//        } else {
-//            tvPubPri.setText("Just for me");
-//            privacy = "private";
-//        }
-//    }
 
     //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)

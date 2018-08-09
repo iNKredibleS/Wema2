@@ -21,15 +21,14 @@
 
         <TextView
             android:id="@+id/rakTxt"
-            android:layout_width="207dp"
-            android:layout_height="78dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="194dp"
             android:background="@drawable/transparent_rc"
             android:gravity="center"
             android:textColor="@color/wema"
-
             android:textSize="22sp"
             android:textStyle="bold" />
 

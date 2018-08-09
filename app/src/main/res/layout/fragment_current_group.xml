@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFDAB9"
+        android:padding="@dimen/outer_layout_padding">
 
 
     <TextView
@@ -12,27 +21,40 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Current Group Name"
-        android:textSize="24dp"/>
+        android:textSize="24dp"
+        android:fontFamily="@font/libre_franklin"
+        android:textColor="@color/black"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/groupTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvGroupName"
+        android:background="@color/md_white_1000"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         >
 
         <android.support.design.widget.TabItem
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="RAKs" />
-
+            android:text="Scheduled" />
         <android.support.design.widget.TabItem
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="Posts" />
+        <android.support.design.widget.TabItem
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="RAKs" />
+
+
 
 
     </android.support.design.widget.TabLayout>
@@ -42,36 +64,74 @@
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupTabLayout"/>
+        android:layout_below="@id/groupTabLayout"
+        android:textColor="@color/md_black_1000"
+        android:layout_marginRight="10dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/lighter_bck"
+        android:padding="10dp"/>
 
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rvGroupItem"
-
-        android:layout_below="@id/groupTabLayout">
+        android:background="@drawable/wema_peach"
+        android:layout_below="@id/groupTabLayout"
+        android:layout_above="@id/btnCreateGroupPost">
 
     </android.support.v7.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/btnCreateGroupPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rvGroupItem"
-        android:text="Create Group Post"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_background"/>
+    <!--<FrameLayout-->
+        <!--android:id="@+id/flForCreateGroupPost"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right">-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:id="@+id/btnCreateGroupPost"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@android:color/transparent" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:elevation="16dp"-->
+            <!--android:text="Create Group Post"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--/>-->
+    <!--</FrameLayout>-->
+
+
 
     <Button
         android:id="@+id/btnCreateGroupRak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rvGroupItem"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_toRightOf="@id/btnCreateGroupPost"
         android:text="Create Group Rak"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_background"/>
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:background="@drawable/text_button"/>
+
+
+    <Button
+        android:id="@+id/btnCreateGroupPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Create Group Post"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:background="@drawable/text_button"/>
 
     <!--<FrameLayout-->
         <!--android:layout_width="match_parent"-->
@@ -88,5 +148,7 @@
     <!--</FrameLayout>-->
 
 
+    </RelativeLayout>
 
-</RelativeLayout>
+
+</FrameLayout>

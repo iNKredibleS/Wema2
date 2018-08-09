@@ -12,6 +12,9 @@ import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
@@ -37,6 +40,8 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
         //fields that I want in my view holder
         public TextView tvGroupRakCreator;
         public TextView tvGroupRak;
+        public TextView rakTime;
+        public TextView tvScheduled;
 
 
         //constructor for the viewholder find views by id's
@@ -44,6 +49,8 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
             super(itemView);
             tvGroupRakCreator = itemView.findViewById(R.id.tvGroupRakCreator);
             tvGroupRak = itemView.findViewById(R.id.tvGroupRak);
+            rakTime = itemView.findViewById(R.id.rakTime);
+            tvScheduled = itemView.findViewById(R.id.tvScheduled);
 
         }
 
@@ -59,6 +66,18 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("MMM d, h:mm a");
+        String strDate = dateFormat.format(rak.getScheduleDate());
+        holder.rakTime.setText(strDate);
+
+        Date date = new Date();
+        if (rak.getScheduleDate().compareTo(date) > 0){
+            holder.tvScheduled.setText(R.string.scheduled);
+        }else{
+            holder.tvScheduled.setText("Completed: ");
+        }
+
 
 
     }

@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -36,6 +38,7 @@ public class ArchiveFragment extends Fragment{
     private PostsAdapter archiveAdapter;
     private RakAdapter raksAdapter;
     private TabLayout tabLayout;
+    private Date currentDate;
 
     //MainActivity mainActivity = new MainActivity();
 
@@ -47,8 +50,12 @@ public class ArchiveFragment extends Fragment{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        currentDate = new Date();
         archivedPosts = new ArrayList<>();
         currentRaks = new ArrayList<>();
+
+        //TODO DECIDE WHICH TAB TO OPEN TO RIGHT NOW I THINK THE TAB THAT SHOULD BE SELECTED IS RAK
+        Singleton.getInstance().setAdapterMode(RAK_TAB);
 
         rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
         tabLayout = view.findViewById(R.id.tbLayout);
@@ -96,23 +103,49 @@ public class ArchiveFragment extends Fragment{
         rvArchivePosts.setAdapter(raksAdapter);
         final Rak.Query raksQuery = new Rak.Query();
         raksQuery.getTop().withUser();
+
         raksQuery.findInBackground(new FindCallback<Rak>() {
             @Override
             public void done(List<Rak> objects, ParseException e) {
-                if (e == null){
-                    for (Rak rak : objects){
-                        currentRaks.add(rak);
-                        raksAdapter.notifyItemInserted(currentRaks.size()-1);
-                    }
-
-                }
-                //create a posts adapter
+                if (e == null && Singleton.getInstance().getAdapterMode().equals(RAK_TAB)){
+                    raksAdapter.addAll(objects);
+                    //create a posts adapter
                 //raksAdapter = new RakAdapter(currentRaks);
-
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                 rvArchivePosts.setLayoutManager(mLayoutManager);
+                    Log.i("current group fragment", "successful finding group raks");
+                }else if (e == null && Singleton.getInstance().getAdapterMode().equals(SCHEDULED_TAB)){
+                    for(int i = 0; i < objects.size(); i++){
+                        if (objects.get(i).getScheduleDate() != null){
+                            Date scheduleDate = objects.get(i).getScheduleDate();
+                            if(scheduleDate.compareTo(currentDate) > 0){
+                                currentRaks.add(objects.get(i));
+                            }
+                        }
+                    }
+                    raksAdapter.notifyDataSetChanged();
+                } else{
+                    e.printStackTrace();
+                }
             }
         });
+//        raksQuery.findInBackground(new FindCallback<Rak>() {
+//            @Override
+//            public void done(List<Rak> objects, ParseException e) {
+//                if (e == null){
+//                    for (Rak rak : objects){
+//                        currentRaks.add(rak);
+//                        raksAdapter.notifyItemInserted(currentRaks.size()-1);
+//                    }
+//
+//                }
+//                //create a posts adapter
+//                //raksAdapter = new RakAdapter(currentRaks);
+//
+//                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+//                rvArchivePosts.setLayoutManager(mLayoutManager);
+//            }
+//        });
     }
 
     private void loadArchives(){

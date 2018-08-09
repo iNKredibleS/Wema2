@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -60,9 +61,9 @@ public class FeedFragment extends Fragment {
         //this is called by the viewholder
         adapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
             @Override
-            public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition) {
+            public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition, CardView cardView, String cardTransition) {
                //now move this post from the feed fragment to the main activity
-                if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition);
+                if (itemSelectedListener != null) itemSelectedListener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition, cardView,cardTransition);
             }
         });
         //get the swipe container
@@ -95,7 +96,6 @@ public class FeedFragment extends Fragment {
 
     //This method loads posts from the server, attaches the adapter to the recyclerview and sets the layout manager.
     private void loadPosts(){
-        //Log.d("Feed", "Starting");
         //get the top posts
         final Post.Query postsQuery = new Post.Query();
         postsQuery.getTop().withUser();
@@ -157,8 +157,6 @@ public class FeedFragment extends Fragment {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(objects.size()-1);
                     }
-                   // adapter.notifyItemRangeInserted(initPosition, counter);
-//                    adapter.notifyDataSetChanged();
                 }
             }
         });

@@ -48,48 +48,39 @@ import butterknife.OnClick;
 
 
 public class RakFragment extends Fragment {
-
-
     @BindView(R.id.rakTxt) TextView rakTxt;
     @BindView(R.id.refreshBtn) ImageButton refreshBtn;
     @BindView(R.id.feedBtn) ImageButton feedBtn;
     @BindView(R.id.doLaterBtn) ImageButton doLaterBtn;
     @BindView(R.id.doneBtn) ImageButton doneBtn;
     @BindView(R.id.rakLayout) RelativeLayout rlayout;
-    //@BindView(R.id.notifyBtn) Button notifyBtn;
     @BindView(R.id.rak_bck) ImageView rackBck;
 
+
+    private static BitmapDrawable background;
+    private static int currentBck;
+    private static final String CURRENT_RAK = "current_rak";
+    private static  final String TITLE = "title";
+
     private  Random rand;
-    Button newRakBtn;
-    ArrayList<Rak> rakList;
-    ArrayList<User> userList;
+    private Button newRakBtn;
+    private ArrayList<Rak> rakList;
+    private ArrayList<User> userList;
     private static Rak rak;
-    String text;
+    private String text;
     boolean created = false;
-    String reg_url;
+    private String reg_url;
     private Date date;
-
-    File filesDir;
-    Bundle bundle;
-
-    ParseQuery<Rak> query;
-
-    static BitmapDrawable background;
-
+    private File filesDir;
+    private Bundle bundle;
+    private  ParseQuery<Rak> query;
     private onItemSelectedListener listener;
-    Bitmap myBitmap;
-
-    ParseFile rakFile;
-
-    static int currentBck;
-
-    User user;
-
-    int completed;
-
+    private Bitmap myBitmap;
+    private ParseFile rakFile;
+    private User user;
+    private int completed;
     private PlaceAutocompleteFragment autocompleteFragment;
-
-    NotificationCompat.Builder notification;
+    private  NotificationCompat.Builder notification;
     private static final int CHANNEL_ID = 100;
 
     @Override
@@ -104,17 +95,11 @@ public class RakFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         ButterKnife.bind(this, view);
 
         filesDir = getContext().getFilesDir();
-
         query = ParseQuery.getQuery(Rak.class);
-        //query.setLimit(10);
-
         rakList = new ArrayList<Rak>();
-
-
     }
 
     private void createNotification(int nId, int iconRes, String title, String body) {
@@ -159,7 +144,7 @@ public class RakFragment extends Fragment {
 
             //create new Rak
             Rak newRak = new Rak();
-            newRak.put("title", title);
+            newRak.put(TITLE, title);
             newRak.setUser(user);
             newRak.setScheduleDate(date);
             newRak.setBackground(R.drawable.wemabck6);
@@ -174,10 +159,7 @@ public class RakFragment extends Fragment {
             rackBck.setImageBitmap(
                     decodeSampledBitmapFromResource(getResources(), newRak.getBackground(), 500, 600));
 
-
-
-        //loads the normal rak
-        } else {
+        } else {   //loads the normal rak
             query.findInBackground(new FindCallback<Rak>() {
                 @Override
                 public void done(List<Rak> objects, ParseException e) {
@@ -195,10 +177,9 @@ public class RakFragment extends Fragment {
                         }
                         //add RAK field to current user
                         final User user = (User) ParseUser.getCurrentUser();
+                        if (user.get(CURRENT_RAK) == null) {
+                            user.put(CURRENT_RAK, rak);
 
-
-                        if (user.get("current_rak") == null) {
-                            user.put("current_rak", rak);
                             user.saveInBackground();
                             Log.d("RakToUser", "Adding rak to user successful");
                         }
@@ -214,17 +195,16 @@ public class RakFragment extends Fragment {
         }
 
         User user = (User) ParseUser.getCurrentUser();
-
         Rak rak = null;
         try {
-            rak = (Rak) user.fetchIfNeeded().get("current_rak");
+            rak = (Rak) user.fetchIfNeeded().get(CURRENT_RAK);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         String title = null;
         try {
-            title = rak.fetchIfNeeded().getString("title");
+            title = rak.fetchIfNeeded().getString(TITLE);
             rakTxt.setText(title);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -249,16 +229,13 @@ public class RakFragment extends Fragment {
 
     @Override
     public void onResume() {
-            super.onResume();
-
+        super.onResume();
         query = ParseQuery.getQuery(Rak.class);
-
         query.findInBackground(new FindCallback<Rak>() {
             @Override
             public void done(List<Rak> objects, ParseException e) {
                 if (e == null) {
                     Log.d("FindSuccessful", "Finding RAK Successful");
-                    //initialize array list
                     rakList.addAll(objects);
 
                 } else {
@@ -270,8 +247,7 @@ public class RakFragment extends Fragment {
     }
 
     //function to load a properly sized background image:
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -281,7 +257,6 @@ public class RakFragment extends Fragment {
 
             final int halfHeight = height / 3;
             final int halfWidth = width / 2;
-
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) >= reqHeight
@@ -312,51 +287,36 @@ public class RakFragment extends Fragment {
 
 
 
+    //onclick handler for the refresh button
     @OnClick(R.id.refreshBtn)
     protected void createButtonClick(){
-
-//        try {
-//            rakTxt.setText( user.getRak().fetchIfNeeded().getString("title"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-
-
-//        }
-
         User user = (User) ParseUser.getCurrentUser();
         Rak rak = RAKGenerator(rakList, rakList.size(), true);
         user.setRak(rak);
         user.saveInBackground();
 
         rakTxt.setText(rak.getTitle());
-
         int[] randomBckg = { R.drawable.wemabck0, R.drawable.wemabck2, R.drawable.wemabck10, R.drawable.wemabck4,
                  R.drawable.wemabck6};
-
         int randomNum = rand.nextInt(4) + 1;
-
         while(randomNum == currentBck ) {
             randomNum = rand.nextInt(4) + 1;
         }
-
         int newBckg = randomBckg[randomNum];
-
-
         rak.setBackground(newBckg);
         rak.saveInBackground();
-
         rackBck.setImageBitmap(
                 decodeSampledBitmapFromResource(getResources(), rak.getBackground(), 500, 600));
 
-        //createNotification(CHANNEL_ID, R.drawable.ic_launcher_background, "Rak", "Complete your RAK before the day is over!");
-
     }
 
+    //onclick handler for the feed button
     @OnClick(R.id.feedBtn)
     protected void goToFeed() {
         listener.toFeed();
     }
 
+    //on click handler for the later button
     @OnClick(R.id.doLaterBtn)
     protected void goToFeedDoLater() {
         NotificationCompat.Builder mBuilder =
@@ -391,6 +351,7 @@ public class RakFragment extends Fragment {
         listener.toFeed();
     }
 
+    //onclick handler for the done button
     @OnClick(R.id.doneBtn)
     protected void goToPost()  {
         User user = (User) ParseUser.getCurrentUser();
@@ -414,10 +375,8 @@ public class RakFragment extends Fragment {
 
     //This method returns a random RAK
     private  Rak RAKGenerator(ArrayList<Rak> list,  int size, boolean refresh) {
-
         String title = "";
-        //get random rak from list
-        int randomNum = rand.nextInt(list.size()) + 1;
+        int randomNum = rand.nextInt(list.size()) + 1; //get random rak from list
         int current = randomNum;
 
         //change random number so RAK won't refresh to the same/current RAK
@@ -426,15 +385,13 @@ public class RakFragment extends Fragment {
                 randomNum = rand.nextInt(size) + 1;
             }
         }
-
         //get title
         Rak rak = rakList.get(randomNum - 1);
-
-
         return rak;
     }
 
 
+    //This method initializes the onItemSelectedListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -449,7 +406,6 @@ public class RakFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if(this.getArguments() != null){this.getArguments().clear(); }
     }
 }

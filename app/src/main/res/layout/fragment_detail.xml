@@ -1,10 +1,12 @@
+<!--"#FFDAB9"-->
+
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lLayout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@color/wema"
+    android:background="@drawable/wema_peach"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,15 +14,15 @@
         android:id="@+id/cvCardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-
         android:clickable="true"
         android:layout_margin="10dp"
+        card_view:cardCornerRadius="10dp"
         android:foreground="?android:attr/selectableItemBackground">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
+            android:background="@color/md_white_1000"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,7 +31,6 @@
                 android:id="@+id/ivPostImage"
                 android:layout_width="match_parent"
                 android:layout_height="328dp"
-
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvMessage"
                 android:background="@android:color/white"

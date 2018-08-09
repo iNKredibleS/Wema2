@@ -80,6 +80,8 @@
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivPostImage.setTransitionName(bundle.getString("transitionName"));
                 tvtTitle.setTransitionName(bundle.getString("titleTransition"));
+                cardView.setTransitionName(bundle.getString("cardTransition"));
+
             }
             post = bundle.getParcelable("post");
             allPosts = bundle.getParcelableArrayList("all_posts");

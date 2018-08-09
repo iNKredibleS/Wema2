@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:background="@color/wema"
+    android:background="@drawable/wema_peach"
   >
 
 
@@ -19,6 +19,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPosts"
+            android:background="@drawable/wema_peach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

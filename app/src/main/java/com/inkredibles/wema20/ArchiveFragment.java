@@ -106,9 +106,6 @@ public class ArchiveFragment extends Fragment{
                     }
 
                 }
-                //create a posts adapter
-                //raksAdapter = new RakAdapter(currentRaks);
-
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                 rvArchivePosts.setLayoutManager(mLayoutManager);
             }
@@ -144,7 +141,5 @@ public class ArchiveFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //mainActivity.setArchiveBool(false);
-
     }
 }

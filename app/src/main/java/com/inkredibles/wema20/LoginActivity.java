@@ -58,10 +58,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-
-        //ParseInstallation.getCurrentInstallation().saveInBackground();
-
-
     }
 
     @OnClick(R.id.btnLogIn)

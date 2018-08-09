@@ -191,12 +191,6 @@ public class CreateGroupFragment extends Fragment {
 
     }
 
-//    @OnClick(R.id.addUsersBtn)
-//    protected void addUsersLaunch(){
-//        listener.toAddUsers();
-//    }
-
-
 
 
 

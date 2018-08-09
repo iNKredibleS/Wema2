@@ -59,18 +59,13 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
   *  is private, only they can see it in their archive. The create Post Fragment is also used for creating a post
   *  after a successful rak completed and for group posts. The set up is slightly different for each case which is why the
   *  booleans isGroup, isRak, and isReflection are checked on viewCreated and OnResume. On successful post created the fragment will
-<<<<<<< HEAD
   *  go back to feed fragment*/
 public class CreatePostFragment extends Fragment implements DialogueListener {
 
     @BindView(R.id.Title) EditText et_title;
     @BindView(R.id.et_message) EditText et_message;
-//    @BindView(R.id.switch_give_rec) Switch switch_give_rec;
-//    @BindView(R.id.switch_pub_pri) Switch switch_pub_pri;
     @BindView(R.id.pictureHolder) ImageView pictureHolder;
     @BindView(R.id.pictureTaken) ImageView pictureTaken;
-    //@BindView(R.id.tv_give_rec) TextView tvGiveRec;
-    //@BindView(R.id.tv_pub_pri) TextView tvPubPri;
 
 
 
@@ -117,6 +112,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
             view = inflater.inflate(R.layout.fragment_create_post, container, false);
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
+            Log.d("INfaltion Error", e.toString());
         }
         return view;
     }
@@ -135,7 +131,9 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     @Override
     public void onResume() {
         super.onResume();
-        Boolean isRak = bundle.getBoolean("isRak");
+
+        Boolean isRak = false;
+        if (bundle != null)  bundle.getBoolean("isRak");
          if (isRak) {
              if (rak != null) {
                  rak = bundle.getParcelable("RAK");
@@ -158,9 +156,14 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         privacy = "Public";
         filesDir = getContext().getFilesDir();
         bundle = this.getArguments();
-        isGroup = bundle.getBoolean("isGroup");
-        Boolean isReflection = bundle.getBoolean("isReflection");
-        Boolean isRak = bundle.getBoolean("isRak");
+        isGroup = false;
+        Boolean isReflection = false;
+        Boolean isRak = false;
+        if (bundle != null){
+            isGroup = bundle.getBoolean("isGroup");
+            isReflection = bundle.getBoolean("isReflection");
+            isRak = bundle.getBoolean("isRak");
+        }
         if (isGroup) {
             currentRole = Singleton.getInstance().getRole();
             privacy = "Private";
@@ -185,18 +188,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                 Selection.setSelection(etext, position);
             }
 
-        } else if (isReflection) {
-            //any Reflection specific posts
         }
-        //TODO change this to a radio button or spinner
-        //setting up switches
-//        switch_pub_pri.setChecked(true);
-//        switch_give_rec.setChecked(true);
-//        tvGiveRec.setText("Given");
-//        tvPubPri.setText("Public");
-
-
-
     }
 
 
@@ -225,31 +217,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     }
 
 
-
-    //when button changes the type, change the textview that displays type and the type field in
-    //posts model
-//    @OnCheckedChanged(R.id.switch_give_rec)
-//    void giveRec(CompoundButton compoundButton, boolean checked){
-//        if(checked) {
-//            tvGiveRec.setText("Given");
-//            type = "give";
-//        } else {
-//            tvGiveRec.setText("Received");
-//            type = "receive";
-//        }
-//    }
-
-//    @OnCheckedChanged(R.id.switch_pub_pri)
-//    void pubPri(CompoundButton compoundButton, boolean checked){
-//        if(checked) {
-//            tvPubPri.setText("Public");
-//            privacy = "public";
-//        } else {
-//            tvPubPri.setText("Just for me");
-//            privacy = "private";
-//        }
-//    }
-
     //launch activity to choose a photo from gallery
     @OnClick(R.id.btn_gallery)
     protected void gallery(){
@@ -275,8 +242,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         // SETS the target fragment for use later when sending results
         tagsDialog.setTargetFragment(CreatePostFragment.this, 300);
         tagsDialog.show(fm, "fragment_tag");
-
-
     }
 
     @OnClick(R.id.privacyBtn)
@@ -286,7 +251,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         // SETS the target fragment for use later when sending results
         privacyDialog.setTargetFragment(CreatePostFragment.this, 300);
         privacyDialog.show(fm, "fragment_tag");
-
     }
 
     @Override
@@ -367,8 +331,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                             }else{
                                 listener.toFeed();
                             }
-
-
                         } else {
                             e.printStackTrace();
                         }
@@ -384,7 +346,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         currentRole = null;
         file = null;
         parseFile = null;
-        //pictureHolder.setImageResource(android.R.color.transparent);
         pictureTaken.setImageResource(android.R.color.transparent);
     }
 
@@ -395,12 +356,10 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //pictureHolder.setImageBitmap(imageBitmap);
             pictureTaken.setImageBitmap(imageBitmap);
             file = persistImage(imageBitmap, "pic1");
         }else if(requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK){
             Uri imageUri = data.getData();
-            //pictureHolder.setImageURI(imageUri);
             pictureTaken.setImageURI(imageUri);
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
@@ -428,9 +387,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         return imageFile;
 
     }
-
-
-
 
 
     /*Requests permission to read external storage*/

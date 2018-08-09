@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,11 +33,6 @@ transition to their respective create fragments.
 
 public class CurrentGroupFragment extends Fragment{
 
-
-
-
-    //AdapterView.OnItemSelectedListener spinnerListener;
-
     private onItemSelectedListener listener;
     private ParseRole currentRole;
     private ArrayList<Rak> groupRaks;
@@ -58,7 +54,6 @@ public class CurrentGroupFragment extends Fragment{
     private static boolean isItemRak;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_current_group, parent, false);
@@ -66,10 +61,6 @@ public class CurrentGroupFragment extends Fragment{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
-//        bundleAndSetUp();
-
-
         rvGroupItem = view.findViewById(R.id.rvGroupItem);
         tvEmptyMessage = view.findViewById(R.id.tvEmptyMessage);
 
@@ -122,19 +113,7 @@ public class CurrentGroupFragment extends Fragment{
             }
         });
 
-
-
-
-//        ButterKnife.bind(this, view);
-
-
-
         isItemRak = true;
-
-
-
-
-
 
     }
 
@@ -147,25 +126,7 @@ public class CurrentGroupFragment extends Fragment{
 
 
 
-
-
-
-
-
     private void bundleAndSetUp(){
-
-
-
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-//                R.array.groups_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner.setAdapter(adapter);
-//
-//        spinner.setOnItemSelectedListener(this);
-
-
 
     }
 
@@ -199,10 +160,10 @@ public class CurrentGroupFragment extends Fragment{
             //implement on click listener to view details of group post
             postsAdapter.setViewHolderListener(new PostsAdapter.ViewHolderListener() {
                 @Override
-                public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition) {
+                public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition, CardView cardView, String cardTransition) {
                     //now move this post from the feed fragment to the main activity
                     if (listener != null) {
-                        listener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition);
+                        listener.fromFeedtoDetail(post, parseImageView, transitionName,position, posts, title,  titleTransition, cardView, cardTransition);
                     }
                 }
             });
@@ -260,20 +221,6 @@ public class CurrentGroupFragment extends Fragment{
     }
 
 
-
-//    @OnClick(R.id.btnCreateGroupPost)
-//    protected void createGroupPost() {
-//        listener.fromCurrentGrouptoCreatePost(currentRole);
-//
-//
-//    }
-//
-//    @OnClick(R.id.btnCreateGroupRak)
-//    protected void createGroupRak(){
-//        listener.fromCurrentGrouptoCreateRak(currentRole);
-//
-//    }
-
     //reset the fragment's arguments
     @Override
     public void onDestroyView() {
@@ -295,24 +242,4 @@ public class CurrentGroupFragment extends Fragment{
         }
     }
 
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//        if (view != null) {
-//            if (parent.getItemAtPosition(pos).equals("Rak")) {
-//                loadRvGroupItem(true);
-//            } else if (parent.getItemAtPosition(pos).equals("Post")) {
-//                loadRvGroupItem(false);
-//
-//            }
-//        } else{
-//            loadRvGroupItem(true);
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
 }

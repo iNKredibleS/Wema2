@@ -95,8 +95,6 @@ public class AddUsersFragment extends Fragment {
     @OnTextChanged(value = R.id.etSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void textChanged(Editable editable) {
         String userQuery = editable.toString();
-
-        //adapterUpdate();
         adapter.clear();
         allUsers.clear();
 

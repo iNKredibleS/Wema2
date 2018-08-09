@@ -1,6 +1,7 @@
 package com.inkredibles.wema20;
 
 
+import android.support.v7.widget.CardView;
 import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public interface onItemSelectedListener {
 
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition);
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post> posts, TextView title, String titleTransition, CardView cardView, String cardTransition);
 
     //Transitions from any fragment to the feed fragment
     void toFeed();

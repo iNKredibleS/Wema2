@@ -1,6 +1,7 @@
 package com.inkredibles.wema20;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +28,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private Context context;
     private ViewHolderListener  viewHolderListener;
     private  LinearLayout linearLayout;
-    MainActivity main = new MainActivity();
 
+    MainActivity main = new MainActivity();
 
     // Pass in the contact array into the constructor
     public PostsAdapter(List<Post> posts) {
         mPosts =  posts;
     }
 
-
     public class ViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ParseImageView ivPostImageView;
         public TextView tvItemTitle;
         public TextView tvUsername;
+        public CardView cardView;
 
         public  ViewHolder(View itemView){
             super(itemView);
@@ -48,6 +49,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPostImageView = (ParseImageView) itemView.findViewById(R.id.ivPostImage);
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.lLayout);
+            cardView = (CardView) itemView.findViewById(R.id.cvCardview);
             itemView.setOnClickListener(this);
         }
 
@@ -57,13 +59,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION){
                 Post selectedPost = mPosts.get(position);
-                //for parcels to be defined, remember to add the parcel dependencies in the build.gradle file
-                //intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(selectedPost));
-                // context.startActivity(intent);
-                //ivPostImageView.
                 ArrayList<Post> arrayList = new ArrayList<>();
                 arrayList.addAll(mPosts);
-                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position, position,  arrayList, tvItemTitle, "titleTransition"+position);
+                if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position, position,  arrayList, tvItemTitle, "titleTransition"+position, cardView, "cardTransition"+position);
 
             }
 
@@ -84,7 +82,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ViewHolder viewHolder = new ViewHolder(postView);
             return viewHolder;
         }else if (adapterMode.equals(context.getResources().getString(R.string.reflection_tab))){
-            View postView = inflater.inflate(R.layout.fragment_detail, parent, false);
+            View postView = inflater.inflate(R.layout.item_detail, parent, false);
             // Return a new holder instance
             ViewHolder viewHolder = new ViewHolder(postView);
             return viewHolder;
@@ -113,14 +111,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }else{
             viewHolder.ivPostImageView.getLayoutParams().height = 0;
         }
-
-        if (adapterMode.equals(context.getResources().getString(R.string.reflection_tab))){
-            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            linearLayout.setLayoutParams(params);
-        }
-        // viewHolder.ivPostImageView.setParseFile(post.getImage());
-        //if(Singleton.getInstance().getAdapterMode().equals(context.getResources().getString(R.string.feed_mode))) viewHolder.tvUsername.setText(post.getUser().getUsername()); //we do not need this in the archive
     }
 
     // Returns the total count of items in the list
@@ -141,7 +131,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface ViewHolderListener{
-        public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition);
+        public void onViewHolderClicked(Post post, ParseImageView parseImageView, String transitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition, CardView cardView, String cardTransition);
     }
     //
     public void setViewHolderListener(ViewHolderListener viewHolderListener){

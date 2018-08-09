@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-      // final PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
         final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
@@ -161,10 +163,8 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-
         //set the adapter mode to feed
         Singleton.getInstance().setAdapterMode(getResources().getString(R.string.feed_mode));
-        nextFragment(feedFragment);
         nextFragment(rakFragment);
     }
 
@@ -182,12 +182,13 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
     //TODO is there a way to make this code more concise?
     @Override
-    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition) {
+    public void fromFeedtoDetail(Post post, ParseImageView parseImageView, String sharedTransitionName, int position, ArrayList<Post>posts, TextView title, String titleTransition, CardView cardView, String cardTransition) {
         Context context = feedFragment.getContext();
         Fragment detailFragment = new DetailFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ViewCompat.setTransitionName(parseImageView, sharedTransitionName);
         ViewCompat.setTransitionName(title, titleTransition);
+        ViewCompat.setTransitionName(cardView, cardTransition);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             feedFragment.setSharedElementReturnTransition(TransitionInflater.from( context).inflateTransition(R.transition.default_transition));
             feedFragment.setExitTransition(TransitionInflater.from( context).inflateTransition(android.R.transition.no_transition));
@@ -197,15 +198,16 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
             fragmentTransaction.addSharedElement(parseImageView,sharedTransitionName);
             fragmentTransaction.addSharedElement(title,titleTransition);
+            fragmentTransaction.addSharedElement(cardView, cardTransition);
         }
-        //fragmentTransaction.replace(R.id.fragment_pla, newFragment, tag);
-        //fragmentTransaction.addToBackStack(tag);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
         bundle.putParcelableArrayList("all_posts", posts);
         bundle.putInt("position", position);
         bundle.putString("transitionName", sharedTransitionName);
         bundle.putString("titleTransition", titleTransition);
+        bundle.putString("cardTransition", cardTransition);
         detailFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.placeholder, detailFragment)
                 .addToBackStack(detailFragment.getClass().toString())
@@ -233,8 +235,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         createPostFragment.setArguments(bundle);
         nextFragment(createPostFragment);
         isRak = false;
-        //result.setSelection(rak);
-
     }
 
     @Override
@@ -303,9 +303,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
 
   @Override
     public void toCurrentGroup(ParseRole currentRole) {
-//     Bundle bundle = new Bundle();
-//     bundle.putParcelable("currentRole", currentRole);
-//     currentGroupFragment.setArguments(bundle);
       Singleton.getInstance().setRole(currentRole);
       nextFragment(currentGroupFragment);
   }
@@ -316,9 +313,27 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         nextFragment(createGroupFragment);
   }
 
-
-
-
-
-
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+      getMenuInflater().inflate(R.menu.menu_main, menu);
+      return true;
+  }
+    //Handling Action Bar button click
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            //Back button
+            case android.R.id.home:
+                //If this activity started from other activity
+                finish();
+                return true;
+            case R.id.composeRak:
+                //compose RAK clicked
+                nextFragment(createPostFragment);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

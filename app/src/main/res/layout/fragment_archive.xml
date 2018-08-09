@@ -25,12 +25,14 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tbLayout"
+            style="@style/Widget.Design.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/switch1"
-            android:background="@color/md_white_1000"
+            android:background="@color/wema"
             android:outlineSpotShadowColor="@color/black"
             app:tabIndicatorColor="@android:color/darker_gray">
+
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reflections" />
+
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,7 +95,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -117,7 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="10"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -141,7 +146,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="10"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 

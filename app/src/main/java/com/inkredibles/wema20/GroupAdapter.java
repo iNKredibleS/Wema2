@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.parse.ParseRole;
 
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder holder, int position) {
         ParseRole role = mGroups.get(position);
         holder.groupName.setText(role.getName());
+
     }
 
     @Override

@@ -9,15 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
+import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
     /*
         The archive fragment allows viewers to look back on all of their posts about kindness. Using a recycler view
@@ -26,6 +32,14 @@ import java.util.List;
      */
 
 public class ArchiveFragment extends Fragment {
+    @BindView(R.id.textView)
+    TextView tvUsername;
+    @BindView(R.id.tvTotalNumClaps)
+    TextView tvNumClaps;
+    @BindView(R.id.tvNumGroups)
+    TextView tvNumGroups;
+
+
     private static final String RAK_TAB = "rak";
     private static final String REFLECTIONS_TAB = "reflections";
     private static final String SCHEDULED_TAB = "scheduled";
@@ -39,20 +53,25 @@ public class ArchiveFragment extends Fragment {
     private TabLayout tabLayout;
     private Date currentDate;
 
-    //MainActivity mainActivity = new MainActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_archive, parent, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+
+        User user = (User) ParseUser.getCurrentUser();
+        tvUsername.setText(user.getUsername());
+        tvNumClaps.setText(Integer.toString(user.getNumClaps()));
+        tvNumGroups.setText(Integer.toString(user.getNumGroups()));
+
         currentDate = new Date();
         archivedPosts = new ArrayList<>();
         currentRaks = new ArrayList<>();
-        Singleton.getInstance().setAdapterMode(RAK_TAB);
+        Singleton.getInstance().setAdapterMode(SCHEDULED_TAB);
         rvArchivePosts = (RecyclerView) view.findViewById(R.id.ArchiveRecyclerView);
         tabLayout = view.findViewById(R.id.tbLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -61,7 +80,6 @@ public class ArchiveFragment extends Fragment {
                 String nameOfSelectedTab = tab.getText().toString();
                 switch (nameOfSelectedTab) {
                     case "RAKs":
-                        //change the adapter mode in the singleton
                         Singleton.getInstance().setAdapterMode(RAK_TAB);
                         loadRaks();
                         break;
@@ -72,7 +90,6 @@ public class ArchiveFragment extends Fragment {
                     case "Scheduled":
                         Singleton.getInstance().setAdapterMode(SCHEDULED_TAB);
                         loadRaks();
-                        //loadScheduled();
                         break;
                 }
 
@@ -120,8 +137,9 @@ public class ArchiveFragment extends Fragment {
                         }
                     }
                     raksAdapter.notifyDataSetChanged();
-                } else {
-                    e.printStackTrace();
+                } else if (e != null){
+                    Log.e("Error", e.toString());
+
                 }
             }
         });

@@ -36,14 +36,15 @@
         <EditText
             android:id="@+id/Title"
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="96dp"
             android:ems="15"
             android:fontFamily="@font/libre_franklin"
             android:hint="Title *"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:minHeight="38dp" />
 
         <EditText
             android:id="@+id/et_message"
@@ -107,6 +108,14 @@
             android:layout_height="12dp"
             android:layout_alignParentStart="true" />
 
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/btn_post"
+            android:layout_toEndOf="@+id/btn_post"
+            android:visibility="invisible" />
+
 
         <Button
             android:id="@+id/btn_post"
@@ -122,15 +131,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="51dp"
-            android:layout_below="@+id/pictureTaken"
-            android:layout_toStartOf="@+id/btn_post"
+            android:layout_above="@+id/pbLoading"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="115dp"
             android:foreground="@drawable/ic_location_on_black_24dp">
 
             <fragment
                 android:id="@+id/place_autocomplete_fragment"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
                 android:layout_width="31dp"
-                android:layout_height="42dp"
+                android:layout_height="38dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="135dp"

@@ -19,8 +19,10 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -269,6 +271,10 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         final String finalPrivacy = privacy;
         final String finalType = type;
         final ParseRole role = currentRole;
+        final Button postButton = (Button) getView().findViewById(R.id.btn_post);
+        final ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.VISIBLE);
+        postButton.setVisibility(Button.INVISIBLE);
         if (file != null) {
             parseFile = new ParseFile(file);
             parseFile.saveInBackground(new SaveCallback() {
@@ -279,12 +285,16 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     } else {
                         e.printStackTrace();
                     }
+                    // run a background job and once complete
+                    pb.setVisibility(ProgressBar.INVISIBLE);
+                    postButton.setVisibility(Button.VISIBLE);
                 }
             });
 
         } else {
             createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
         }
+
     }
 
 

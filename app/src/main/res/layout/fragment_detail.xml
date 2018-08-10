@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/ivPostImage"
+                android:layout_below="@+id/tvUsername"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -138,6 +138,15 @@
                 android:tint="#f9cc06"
                 android:clickable="true"
                 app:srcCompat="@android:drawable/ic_menu_share" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/ivPostImage"
+                android:layout_below="@+id/ivPostImage"
+                android:padding="5dp"
+                android:text="username" />
 
 
         </RelativeLayout>

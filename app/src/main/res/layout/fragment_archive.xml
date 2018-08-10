@@ -92,6 +92,7 @@
                     android:textSize="24sp" />
 
                 <TextView
+                    android:id="@+id/tvTotalNumClaps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5"
@@ -116,7 +117,7 @@
                     app:srcCompat="@drawable/ic_group_yellow" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tvNumGroups"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

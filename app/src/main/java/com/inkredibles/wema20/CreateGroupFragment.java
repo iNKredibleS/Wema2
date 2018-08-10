@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-
+import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -148,6 +148,9 @@ public class CreateGroupFragment extends Fragment {
         final ParseRole currentRole = new ParseRole(roleName, roleAcl);
         for (int i = 0; i < addedUsers.size(); i++) {
             currentRole.getUsers().add(addedUsers.get(i));
+            User user = (User) addedUsers.get(i);
+            user.addGroup();
+            user.saveInBackground();
         }
         currentRole.saveInBackground(
                 new SaveCallback() {

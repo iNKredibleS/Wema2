@@ -1,11 +1,22 @@
 package com.inkredibles.wema20;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +24,9 @@ import com.inkredibles.wema20.models.Post;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +55,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public TextView tvItemTitle;
         public TextView tvUsername;
         public CardView cardView;
+        public TextView tvMessage;
+        public TextView tvNumClaps;
+        public TextView tvLocation;
+        public TextView tvDate;
+        public ImageView ivShare;
 
         public  ViewHolder(View itemView){
             super(itemView);
@@ -50,6 +69,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.lLayout);
             cardView = (CardView) itemView.findViewById(R.id.cvCardview);
+            tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
+            tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+            tvNumClaps = (TextView) itemView.findViewById(R.id.tvNumClaps);
+            tvLocation = (TextView) itemView.findViewById(R.id.tvLocation);
+            ivShare = (ImageView) itemView.findViewById(R.id.ivShare);
             itemView.setOnClickListener(this);
         }
 
@@ -64,8 +88,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 if (viewHolderListener != null)  viewHolderListener.onViewHolderClicked(selectedPost, ivPostImageView, "transition"+position, position,  arrayList, tvItemTitle, "titleTransition"+position, cardView, "cardTransition"+position);
 
             }
-
-
         }
     }
 
@@ -94,10 +116,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(PostsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final PostsAdapter.ViewHolder viewHolder, int position) {
         String adapterMode = Singleton.getInstance().getAdapterMode();
         // Get the post at the current position
-        Post post = mPosts.get(position);
+        final Post post = mPosts.get(position);
         viewHolder.tvItemTitle.setText(post.getTitle());
         ParseFile file = post.getImage();
         if (file != null) {
@@ -106,6 +128,76 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }else{
             viewHolder.ivPostImageView.getLayoutParams().height = 0;
         }
+        if(adapterMode.equals(context.getResources().getString(R.string.reflection_tab))){
+            viewHolder.tvMessage.setText(post.getMessage());
+            viewHolder.tvNumClaps.setText(Integer.toString(post.getNumClaps()));
+            viewHolder.tvLocation.setText(post.getPlaceName());
+            viewHolder.tvDate.setText(post.getRelativeTimeAgo());
+            viewHolder.ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickShare(post, viewHolder.ivPostImageView);
+                }
+            });
+        }
+    }
+
+    public void onClickShare(Post post, ParseImageView ivShare) {
+        String message = post.getMessage() + " \n " + "\n" + " A reflection created on Wema with ❤️.";
+        Intent shareIntent = new Intent();
+        ParseFile image = post.getImage();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, post.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TITLE, post.getTitle());
+        shareIntent.setType("image/*");
+        if (image != null) {
+            String url = post.getImage().getUrl();
+            Bitmap bp = getBitmapFromView(ivShare);
+            Uri bmpUri = getBitmapFromDrawable(bp);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+        }
+        //copy the message to a clipboard
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Reflection", message);
+        clipboard.setPrimaryClip(clip);
+
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(shareIntent, "Share Reflection..."));
+    }
+    //this method given a view returns a bitmap
+    public static Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas); //has background drawable, then draw it on the canvas
+        else
+            canvas.drawColor(Color.WHITE);    //does not have background drawable, then draw white background on the canvas
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+
+    //Given a Bitmap, this method returns the URI which we can then use to send to the share intent
+    public Uri getBitmapFromDrawable(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+
+            // wrap File object into a content provider. NOTE: authority here should match authority in manifest declaration
+            bmpUri = FileProvider.getUriForFile(context, "com.inkredibles.wema20", file);  // use this version for API >= 24
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
     }
 
     // Returns the total count of items in the list

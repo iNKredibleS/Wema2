@@ -16,7 +16,6 @@ import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.inkredibles.wema20.models.Post;
+import com.inkredibles.wema20.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
@@ -61,6 +61,9 @@ public class DetailFragment extends Fragment {
     ParseImageView ivLocation;
     @BindView(R.id.ivShare)
     ImageView ivShare;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+
 
     private Post post;
     private ArrayList<Post> allPosts;
@@ -69,7 +72,6 @@ public class DetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_detail, parent, false);
     }
 
@@ -79,7 +81,6 @@ public class DetailFragment extends Fragment {
         ButterKnife.bind(this, view);
         Bundle bundle = this.getArguments();
         if (bundle == null) {
-            Log.d("DetailFragment", "Detail is null");
             return;
         }
 
@@ -92,26 +93,7 @@ public class DetailFragment extends Fragment {
         post = bundle.getParcelable("post");
         allPosts = bundle.getParcelableArrayList("all_posts");
         currPosition = bundle.getInt("position");
-
-        tvtTitle.setText(post.getTitle());
-        String location = post.getPlaceName();
-        if (location != null && location != "") {
-            tvLocation.setText(location);
-        } else {
-            tvLocation.setText("No Location");
-        }
-        tvMessage.setText(post.getMessage());
-        tvDate.setText(post.getRelativeTimeAgo());
-        tvNumClaps.setText(Integer.toString(post.getNumClaps()));
-        ParseFile file = post.getImage();
-        if (file != null) {
-            ivPostImage.setParseFile(post.getImage());
-            ivPostImage.loadInBackground();
-        } else {
-            ivPostImage.getLayoutParams().height = 0;
-        }
-        int color = getResources().getColor(R.color.md_blue_200);
-        ivLocation.setColorFilter(color);
+        setUpCard(); //sets up the card
         cardView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeDown() {
@@ -142,10 +124,33 @@ public class DetailFragment extends Fragment {
         }
         if (currPosition < 0 || currPosition >= allPosts.size()) return;
         post = allPosts.get(currPosition);
-        tvMessage.setText(post.getMessage());
+        setUpCard();
+    }
+
+    private  void setUpCard(){
         tvtTitle.setText(post.getTitle());
-        ivPostImage.setParseFile(post.getImage());
-        ivPostImage.loadInBackground();
+        String location = post.getPlaceName();
+        if (location != null && location != "") {
+            tvLocation.setText(location);
+        } else {
+            tvLocation.setText("No Location");
+        }
+        tvMessage.setText(post.getMessage());
+        tvDate.setText(post.getRelativeTimeAgo());
+        tvNumClaps.setText(Integer.toString(post.getNumClaps()));
+        tvUsername.setText(post.getUser().getUsername());
+        ParseFile file = post.getImage();
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int pixels = (int) (328 * scale + 0.5f);
+        if (file != null) {
+            ivPostImage.getLayoutParams().height = pixels;
+            ivPostImage.setParseFile(post.getImage());
+            ivPostImage.loadInBackground();
+        } else {
+            ivPostImage.getLayoutParams().height = 0;
+        }
+        int color = getResources().getColor(R.color.md_blue_200);
+        ivLocation.setColorFilter(color);
     }
 
     @Override
@@ -172,6 +177,9 @@ public class DetailFragment extends Fragment {
 
             }
         });
+        User postCreatorUser = (User)post.getUser();
+        postCreatorUser.addClap();
+        postCreatorUser.saveInBackground();
     }
 
     //click handler for the share button.
@@ -226,7 +234,6 @@ public class DetailFragment extends Fragment {
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
-
             // wrap File object into a content provider. NOTE: authority here should match authority in manifest declaration
             bmpUri = FileProvider.getUriForFile(getContext(), "com.inkredibles.wema20", file);  // use this version for API >= 24
 

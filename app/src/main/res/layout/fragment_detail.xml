@@ -34,6 +34,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvMessage"
                 android:background="@android:color/white"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginRight="10dp"
                 android:scaleType="centerCrop" />
 
 
@@ -44,10 +47,12 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="7dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="Title"
+                android:gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:fontFamily="@font/libre_franklin"
+                android:textSize="16dp"
                 android:textStyle="bold" />
 
 
@@ -56,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/ivPostImage"
+                android:layout_below="@+id/tvUsername"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -82,11 +87,13 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvItemTitle"
-                android:layout_marginTop="-7dp"
                 android:lineSpacingExtra="3sp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/libre_franklin"
                 android:text="We are in the post detail page"
                 android:textColor="@android:color/background_dark"
                 android:textSize="15sp" />
@@ -95,7 +102,7 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignEnd="@id/ivPostImage"
                 android:layout_below="@+id/ivPostImage"
                 android:fontFamily="@font/libre_franklin"
                 android:text="TextView" />
@@ -142,6 +149,14 @@
                 android:background="@drawable/detail_share"
                 android:clickable="true"
                 android:tint="#000000" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/ivPostImage"
+                android:layout_below="@+id/ivPostImage"
+                android:text="username" />
 
 
         </RelativeLayout>

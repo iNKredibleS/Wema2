@@ -14,21 +14,14 @@
         android:background="#FFDAB9"
         android:padding="@dimen/outer_layout_padding">
 
-        <!--<TextView-->
-        <!--android:id="@+id/tbLayout"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_below="@+id/switch1"-->
-        <!--android:text="ngwnblnswnbklnwrklbnkler bkl eerbnlker" />-->
-
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tbLayout"
             style="@style/Widget.Design.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/switch1"
+            android:layout_below="@+id/textView12"
+            android:layout_marginTop="10dp"
             android:background="@color/wema"
             android:outlineSpotShadowColor="@color/black"
             app:tabIndicatorColor="@android:color/darker_gray">
@@ -72,10 +65,10 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
-                android:layout_height="75dp"
+                android:layout_height="85dp"
                 android:layout_margin="@dimen/layout_margin"
                 android:foreground="@drawable/rounded_corners_fg"
-                app:srcCompat="@drawable/prof" />
+                app:srcCompat="@drawable/profile_pic" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -92,6 +85,7 @@
                     android:textSize="24sp" />
 
                 <TextView
+                    android:id="@+id/tvTotalNumClaps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5"
@@ -116,7 +110,7 @@
                     app:srcCompat="@drawable/ic_group_yellow" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tvNumGroups"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -153,23 +147,16 @@
 
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView12"
-            android:text="Notifications" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/profContent"
             android:text="Jane Doe"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="@font/libre_franklin"/>
 
         <TextView
             android:id="@+id/textView12"
@@ -177,6 +164,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/libre_franklin"
+            android:layout_marginTop="3dp"
             android:text="Be the reason someone believes in the goodness of people." />
 
 

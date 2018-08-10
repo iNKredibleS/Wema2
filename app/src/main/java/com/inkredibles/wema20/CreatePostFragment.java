@@ -19,8 +19,10 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -88,6 +90,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private PlaceAutocompleteFragment autocompleteFragment;
     private CreatePostFragment createPostFragment;
     private Boolean isGroup;
+    private Boolean isRak;
     private ParseQuery<Rak> query;
 
 
@@ -134,20 +137,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     public void onResume() {
         super.onResume();
 
-        Boolean isRak = false;
-        if (bundle != null) bundle.getBoolean("isRak");
-        if (isRak) {
-            if (rak != null) {
-                rak = bundle.getParcelable("RAK");
-                // et_title.setText(rak.getTitle());
-                User user = (User) ParseUser.getCurrentUser();
-                et_title.setText(user.getRak().getTitle());
-                //set the cursor position to end of input title
-                int position = et_title.length();
-                Editable etext = et_title.getText();
-                Selection.setSelection(etext, position);
-            }
-        }
+        setUpView();
 
     }
 
@@ -160,7 +150,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         bundle = this.getArguments();
         isGroup = false;
         Boolean isReflection = false;
-        Boolean isRak = false;
+        isRak = false;
         if (bundle != null) {
             isGroup = bundle.getBoolean("isGroup");
             isReflection = bundle.getBoolean("isReflection");
@@ -187,6 +177,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                 Selection.setSelection(etext, position);
             }
 
+        }else if (isReflection){
+            et_title.setText("");
         }
     }
 
@@ -194,6 +186,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private void setupAutoComplete() {
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("");
+        (getView().findViewById(R.id.place_autocomplete_search_button)).setVisibility(View.GONE);
         if (autocompleteFragment != null) {
             autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -269,6 +262,10 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         final String finalPrivacy = privacy;
         final String finalType = type;
         final ParseRole role = currentRole;
+        final Button postButton = (Button) getView().findViewById(R.id.btn_post);
+        final ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.VISIBLE);
+        postButton.setVisibility(Button.INVISIBLE);
         if (file != null) {
             parseFile = new ParseFile(file);
             parseFile.saveInBackground(new SaveCallback() {
@@ -279,12 +276,16 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     } else {
                         e.printStackTrace();
                     }
+                    // run a background job and once complete
+                    pb.setVisibility(ProgressBar.INVISIBLE);
+                    postButton.setVisibility(Button.VISIBLE);
                 }
             });
 
         } else {
             createPost(title, message, user, parseFile, finalPrivacy, finalType, role);
         }
+
     }
 
 
@@ -342,6 +343,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         file = null;
         parseFile = null;
         pictureTaken.setImageResource(android.R.color.transparent);
+        isRak = false;
     }
 
 
@@ -405,6 +407,18 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        resetCreatePost();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetCreatePost();
     }
 
     // Initializes the listener

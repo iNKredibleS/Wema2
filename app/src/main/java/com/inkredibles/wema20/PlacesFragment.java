@@ -21,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
+import java.util.HashMap;
 import java.util.List;
 
 /*The PlacesFragment handles the logic of displaying the map and sets the markers on the map*/
@@ -29,7 +30,6 @@ public class PlacesFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_places, parent, false);
     }
 
@@ -57,15 +57,17 @@ public class PlacesFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 ParseUser user = ParseUser.getCurrentUser();
+                HashMap <LatLng, String> mapOfGeos= new HashMap<>();
                 for (Post post : objects) {
-                    String title = post.getTitle();
                     ParseGeoPoint geoPoint = post.getLocation();
                     String message = post.getMessage();
+                    String title = post.getTitle();
+                    StringBuilder buildMessage = new StringBuilder();
                     if (title != null && geoPoint != null) {
+                        LatLng listingPosition = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+                        mapOfGeos.put(listingPosition, buildMessage.toString());
                         BitmapDescriptor defaultMarker; //set red if a post was made by the current user or green otherwise
                         defaultMarker = post.getUser().getUsername().equals(user.getUsername()) ? BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) : BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                        // listingPosition is a LatLng point
-                        LatLng listingPosition = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
                         // Create the marker on the fragment
                         Marker mapMarker = googleMap.addMarker(new MarkerOptions()
                                 .position(listingPosition)

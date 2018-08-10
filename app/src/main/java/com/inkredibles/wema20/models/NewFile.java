@@ -2,7 +2,6 @@ package com.inkredibles.wema20.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 
 import java.io.File;
 
@@ -12,6 +11,5 @@ public class NewFile extends ParseFile {
     public NewFile(File file) {
         super(file);
     }
-
 
 }

@@ -61,14 +61,13 @@
 
         <Button
             android:id="@+id/reflectionTagBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="23dp"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/imageView3"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="172dp"
-            android:layout_marginEnd="106dp"
-            android:background="@drawable/button_background"
-            android:text="Tags" />
+            android:layout_marginBottom="119dp"
+            android:layout_marginEnd="-13dp"
+            android:background="@drawable/ic_tags" />
 
         <ImageButton
             android:id="@+id/privacyBtn"
@@ -192,7 +191,6 @@
                 android:background="@drawable/ic_lock_ic" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
                 android:layout_width="36dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"

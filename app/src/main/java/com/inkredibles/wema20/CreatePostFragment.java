@@ -88,6 +88,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private PlaceAutocompleteFragment autocompleteFragment;
     private CreatePostFragment createPostFragment;
     private Boolean isGroup;
+    private Boolean isRak;
     private ParseQuery<Rak> query;
 
 
@@ -134,20 +135,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     public void onResume() {
         super.onResume();
 
-        Boolean isRak = false;
-        if (bundle != null) bundle.getBoolean("isRak");
-        if (isRak) {
-            if (rak != null) {
-                rak = bundle.getParcelable("RAK");
-                // et_title.setText(rak.getTitle());
-                User user = (User) ParseUser.getCurrentUser();
-                et_title.setText(user.getRak().getTitle());
-                //set the cursor position to end of input title
-                int position = et_title.length();
-                Editable etext = et_title.getText();
-                Selection.setSelection(etext, position);
-            }
-        }
+        setUpView();
 
     }
 
@@ -160,7 +148,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         bundle = this.getArguments();
         isGroup = false;
         Boolean isReflection = false;
-        Boolean isRak = false;
+        isRak = false;
         if (bundle != null) {
             isGroup = bundle.getBoolean("isGroup");
             isReflection = bundle.getBoolean("isReflection");
@@ -187,6 +175,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                 Selection.setSelection(etext, position);
             }
 
+        }else if (isReflection){
+            et_title.setText("");
         }
     }
 
@@ -343,6 +333,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         file = null;
         parseFile = null;
         pictureTaken.setImageResource(android.R.color.transparent);
+        isRak = false;
     }
 
 
@@ -406,6 +397,18 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        resetCreatePost();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetCreatePost();
     }
 
     // Initializes the listener

@@ -16,7 +16,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/rounded_corners_layout">
+        android:background="@drawable/rounded_corners_layout"
+        >
 
         <EditText
             android:id="@+id/createRakTxt"
@@ -40,7 +41,8 @@
             android:layout_marginBottom="45dp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/libre_franklin_bold"
-            android:text="CREATE" />
+            android:text="CREATE"
+            />
 
         <TextView
             android:id="@+id/title"
@@ -53,7 +55,8 @@
             android:gravity="center"
             android:text="@string/create_rak_title"
             android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -62,7 +65,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp"
-            android:src="@drawable/lightbulb" />
+            android:src="@drawable/lightbulb"
+            />
 
         <Button
             android:id="@+id/btnDate"
@@ -73,7 +77,8 @@
             android:layout_marginTop="6dp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/libre_franklin_bold"
-            android:text="date" />
+            android:text="date"
+            />
 
         <Button
             android:id="@+id/btnTime"
@@ -84,7 +89,8 @@
             android:layout_marginTop="6dp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/libre_franklin_bold"
-            android:text="time" />
+            android:text="time"
+            />
 
 
     </RelativeLayout>

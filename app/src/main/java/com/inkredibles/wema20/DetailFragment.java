@@ -54,7 +54,7 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.tvDate)
     TextView tvDate;
     @BindView(R.id.tvClap)
-    TextView tvClap;
+    ImageView tvClap;
     @BindView(R.id.tvNumClaps)
     TextView tvNumClaps;
     @BindView(R.id.ivLocation)

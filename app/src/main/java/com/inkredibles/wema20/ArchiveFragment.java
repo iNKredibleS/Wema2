@@ -114,6 +114,8 @@ public class ArchiveFragment extends Fragment {
         currentRaks.clear();
         raksAdapter = new RakAdapter(currentRaks);
         rvArchivePosts.setAdapter(raksAdapter);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        rvArchivePosts.setLayoutManager(mLayoutManager);
         final Rak.Query raksQuery = new Rak.Query();
         raksQuery.getTop().withUser();
 
@@ -125,8 +127,6 @@ public class ArchiveFragment extends Fragment {
                         currentRaks.add(rak);
                         raksAdapter.notifyItemInserted(currentRaks.size() - 1);
                     }
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                    rvArchivePosts.setLayoutManager(mLayoutManager);
                 } else if (e == null && Singleton.getInstance().getAdapterMode().equals(SCHEDULED_TAB)) {
                     for (int i = 0; i < objects.size(); i++) {
                         if (objects.get(i).getScheduleDate() != null) {

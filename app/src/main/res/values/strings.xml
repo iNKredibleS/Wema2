@@ -19,14 +19,14 @@
     <string name="feed_mode">feed</string>
     <string name="feed_string">Feed</string>
     <string name="do_later_string">Do Later</string>
-    <string name="done_string">Complete</string>
+    <string name="done_string">Reflect</string>
     <string name="new_rak">Feeling Inspired? Create your own Rak</string>
     <string name="create_rak_title">Create your own random act of kindness here</string>
     <string name="home_description">Welcome to Wema! Wema means kindness in Swahili. Our app is a random act of kindness (rak) generator that
         enables individuals and groups to complete raks everyday in order to boost overall life-satisfaction and happiness</string>
     <string name="home_continue">Click here to start your journey through Wema</string>
     <string name="first_rak">Reach out to someone you\'ve lost touch with in your life</string>
-    <string name="scheduled">Scheduled:   </string>
+    <string name="scheduled">Scheduled:\ </string>
 
 >>>>>>> samsui
 </resources>

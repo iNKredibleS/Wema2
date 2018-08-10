@@ -84,7 +84,7 @@ public class CurrentGroupFragment extends Fragment {
                         Singleton.getInstance().setAdapterMode(RAK_TAB);
                         loadRvGroupItem(true);
                         break;
-                    case "Posts":
+                    case "Reflections":
                         Singleton.getInstance().setAdapterMode(REFLECTIONS_TAB);
                         loadRvGroupItem(false);
                         break;

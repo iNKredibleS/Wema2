@@ -90,8 +90,10 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private PlaceAutocompleteFragment autocompleteFragment;
     private CreatePostFragment createPostFragment;
     private Boolean isGroup;
+    private Boolean isRak;
     private ParseQuery<Rak> query;
-
+    private Button postButton;
+    private ProgressBar pb;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -136,20 +138,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     public void onResume() {
         super.onResume();
 
-        Boolean isRak = false;
-        if (bundle != null) bundle.getBoolean("isRak");
-        if (isRak) {
-            if (rak != null) {
-                rak = bundle.getParcelable("RAK");
-                // et_title.setText(rak.getTitle());
-                User user = (User) ParseUser.getCurrentUser();
-                et_title.setText(user.getRak().getTitle());
-                //set the cursor position to end of input title
-                int position = et_title.length();
-                Editable etext = et_title.getText();
-                Selection.setSelection(etext, position);
-            }
-        }
+        setUpView();
 
     }
 
@@ -162,7 +151,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         bundle = this.getArguments();
         isGroup = false;
         Boolean isReflection = false;
-        Boolean isRak = false;
+        isRak = false;
         if (bundle != null) {
             isGroup = bundle.getBoolean("isGroup");
             isReflection = bundle.getBoolean("isReflection");
@@ -189,6 +178,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                 Selection.setSelection(etext, position);
             }
 
+        }else if (isReflection){
+            et_title.setText("");
         }
     }
 
@@ -272,8 +263,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         final String finalPrivacy = privacy;
         final String finalType = type;
         final ParseRole role = currentRole;
-        final Button postButton = (Button) getView().findViewById(R.id.btn_post);
-        final ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
+        postButton = (Button) getView().findViewById(R.id.btn_post);
+        pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
         pb.setVisibility(ProgressBar.VISIBLE);
         postButton.setVisibility(Button.INVISIBLE);
         if (file != null) {
@@ -353,6 +344,9 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         file = null;
         parseFile = null;
         pictureTaken.setImageResource(android.R.color.transparent);
+        isRak = false;
+        pb.setVisibility(ProgressBar.INVISIBLE);
+        postButton.setVisibility(Button.VISIBLE);
     }
 
 
@@ -416,6 +410,18 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        resetCreatePost();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetCreatePost();
     }
 
     // Initializes the listener

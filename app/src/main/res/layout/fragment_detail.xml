@@ -43,10 +43,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="7dp"
                 android:layout_marginTop="12dp"
                 android:text="Title"
-                android:layout_marginBottom="7dp"
                 android:textColor="@android:color/black"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
 
@@ -85,8 +86,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvItemTitle"
                 android:layout_marginTop="-7dp"
+                android:lineSpacingExtra="3sp"
                 android:text="We are in the post detail page"
-                android:textColor="@android:color/background_dark" />
+                android:textColor="@android:color/background_dark"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -94,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/ivPostImage"
+                android:fontFamily="@font/libre_franklin"
                 android:text="TextView" />
 
             <LinearLayout
@@ -104,16 +108,17 @@
                 android:layout_below="@+id/rlLayout"
                 android:gravity="center">
 
-                <TextView
+                <ImageView
                     android:id="@+id/tvClap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="37dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/ivPostImage"
+                    android:background="@drawable/detail_clap"
                     android:clickable="true"
-                    android:text="👏"
                     android:textColor="@android:color/holo_purple"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:tint="#000000" />
 
                 <TextView
                     android:id="@+id/tvNumClaps"
@@ -130,14 +135,13 @@
 
             <ImageView
                 android:id="@+id/ivShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="37dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/rlLayout"
-                android:background="@android:color/transparent"
-                android:tint="#f9cc06"
+                android:background="@drawable/detail_share"
                 android:clickable="true"
-                app:srcCompat="@android:drawable/ic_menu_share" />
+                android:tint="#000000" />
 
 
         </RelativeLayout>

@@ -66,7 +66,7 @@ public class RakAdapter extends RecyclerView.Adapter<RakAdapter.ViewHolder> {
             e.printStackTrace();
         }
 
-        DateFormat dateFormat = new SimpleDateFormat("MMM d, h:mm a");
+        DateFormat dateFormat = new SimpleDateFormat("MMM d, h:mm");
         String strDate = dateFormat.format(rak.getScheduleDate());
         holder.rakTime.setText(strDate);
 

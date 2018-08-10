@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header_bk)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(user.getUsername()).withEmail(user.getEmail()).withIcon(getResources().getDrawable(R.drawable.prof))
+                        new ProfileDrawerItem().withName(user.getUsername()).withEmail(user.getEmail()).withIcon(getResources().getDrawable(R.drawable.profile_pic))
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override

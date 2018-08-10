@@ -3,7 +3,6 @@ package com.inkredibles.wema20;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -62,7 +61,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(SignupActivity.this, "new user created", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(SignupActivity.this, HomeActivity.class));
 
                 } else {

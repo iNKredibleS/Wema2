@@ -17,30 +17,16 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/rounded_corners_layout">
 
-        <!--<Switch-->
-        <!--android:id="@+id/switch_give_rec"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignStart="@+id/Title"-->
-        <!--android:layout_marginBottom="177dp" />-->
-
-        <!--<Text=========================View-->
-        <!--android:id="@+id/tv_give_rec"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBottom="@+id/switch_give_rec"-->
-        <!--android:layout_toEndOf="@+id/switch_give_rec"-->
-        <!--android:text="Text" />-->
 
         <EditText
             android:id="@+id/Title"
-            android:layout_width="wrap_content"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="96dp"
-            android:ems="15"
+            android:layout_marginTop="110dp"
+            android:ems="14"
+            android:gravity="center"
             android:fontFamily="@font/libre_franklin"
             android:hint="Title *"
             android:inputType="textMultiLine"
@@ -48,59 +34,20 @@
 
         <EditText
             android:id="@+id/et_message"
-            android:layout_width="wrap_content"
-            android:layout_height="113dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="143dp"
-            android:ems="15"
+            android:layout_marginTop="12dp"
+            android:textSize="18dp"
+            android:minLines="9"
+            android:maxHeight="100dp"
+            android:gravity="top|left"
             android:fontFamily="@font/libre_franklin"
-            android:gravity="bottom"
             android:hint="Write your reflection here *"
             android:inputType="textMultiLine"
-            android:minLines="8" />
+            />
 
-        <Button
-            android:id="@+id/reflectionTagBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="23dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="172dp"
-            android:layout_marginEnd="106dp"
-            android:background="@drawable/button_background"
-            android:text="Tags" />
-
-        <ImageButton
-            android:id="@+id/privacyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_below="@+id/reflectionTagBtn"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="-204dp"
-            android:background="@drawable/button_background"
-            android:src="@android:drawable/ic_lock_idle_lock" />
-
-
-        <ImageButton
-            android:id="@+id/btn_camera"
-            android:layout_width="32dp"
-            android:layout_height="23dp"
-            android:layout_alignBottom="@+id/btn_gallery"
-            android:layout_alignStart="@+id/imageView3"
-            android:background="@drawable/button_background"
-            android:outlineSpotShadowColor="@color/md_grey_50"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
-
-        <ImageButton
-            android:id="@+id/btn_gallery"
-            android:layout_width="37dp"
-            android:layout_height="26dp"
-            android:layout_alignEnd="@+id/pictureHolder"
-            android:layout_below="@+id/reflectionTagBtn"
-            android:layout_marginTop="-204dp"
-            android:background="@drawable/button_background"
-            app:srcCompat="@android:drawable/ic_menu_gallery" />
 
         <ImageView
             android:id="@+id/pictureHolder"
@@ -127,28 +74,7 @@
             android:background="@drawable/button_background"
             android:text="Post" />
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="51dp"
-            android:layout_above="@+id/pbLoading"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="115dp"
-            android:foreground="@drawable/ic_location_on_black_24dp">
-
-            <fragment
-                android:id="@+id/place_autocomplete_fragment"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="31dp"
-                android:layout_height="38dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="135dp"
-                android:tag="ourfrag"
-                app:srcCompat="@drawable/ic_location_on_black_24dp" />
-        </LinearLayout>
-
-
+        
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="149dp"
@@ -159,55 +85,82 @@
 
         <ImageView
             android:id="@+id/pictureTaken"
-            android:layout_width="55dp"
-            android:layout_height="42dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/reflectionTagBtn" />
+            android:layout_width="66dp"
+            android:layout_height="50dp"
+            android:layout_alignStart="@+id/Title"
+            android:layout_below="@+id/et_message" />
+
+
 
         <RelativeLayout
+            android:id="@+id/ivLinear"
             android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="220dp">
+            android:layout_height="37dp"
+            android:layout_alignEnd="@+id/Title"
+            android:layout_below="@id/et_message">
 
             <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="38dp"
-                android:layout_height="match_parent"
+                android:id="@+id/btn_camera"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/ic_camera_ic"
-                android:minHeight="50dp"
                 android:minWidth="100dp"
                 android:scaleType="fitXY" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="38dp"
-                android:layout_height="match_parent"
+                android:id="@+id/btn_gallery"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/imageButton"
+                android:layout_toEndOf="@+id/btn_camera"
                 android:background="@drawable/ic_gallery" />
 
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="38dp"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:id="@+id/ivLocation"
+                android:layout_width="30dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_toEndOf="@id/btn_gallery"
+                android:layout_toLeftOf="@id/privacyBtn"
+                android:foreground="@drawable/ic_location">
 
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:tag="ourfrag" />
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/privacyBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="92dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/imageButton2"
                 android:background="@drawable/ic_lock_ic" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="36dp"
-                android:layout_height="match_parent"
+                android:id="@+id/reflectionTagBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="2dp"
-                android:layout_toEndOf="@+id/imageButton3"
+                android:layout_toRightOf="@id/privacyBtn"
                 android:background="@drawable/ic_tags" />
+
+
+
         </RelativeLayout>
 
 

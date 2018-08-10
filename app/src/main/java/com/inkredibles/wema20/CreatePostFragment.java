@@ -196,6 +196,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private void setupAutoComplete() {
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("");
+        (getView().findViewById(R.id.place_autocomplete_search_button)).setVisibility(View.GONE);
         if (autocompleteFragment != null) {
             autocompleteFragment.onResume();
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {

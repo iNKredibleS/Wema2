@@ -7,9 +7,11 @@
 
     <ImageView
         android:id="@+id/imageViewGroupIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@drawable/groups_icon" />
+        android:layout_width="58dp"
+        android:layout_height="38dp"
+        app:srcCompat="@drawable/group_icon"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <TextView
         android:id="@+id/groupName"
@@ -18,7 +20,7 @@
         android:layout_toRightOf="@id/imageViewGroupIcon"
         android:fontFamily="@font/libre_franklin_medium"
         android:text="Group Name"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
 
 

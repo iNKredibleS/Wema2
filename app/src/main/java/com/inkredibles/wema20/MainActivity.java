@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     private void setupNavDrawer(AccountHeader headerResult) {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         final SecondaryDrawerItem reflection = new SecondaryDrawerItem().withIdentifier(2).withName("Reflection");
-        final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(3).withName("Archive");
+        final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(3).withName("Places");
         feed = new SecondaryDrawerItem().withIdentifier(4).withName("Feed");
         rak = new SecondaryDrawerItem().withIdentifier(5).withName("RAK");
         group = new SecondaryDrawerItem().withIdentifier(6).withName("Groups");
-        final SecondaryDrawerItem places = new SecondaryDrawerItem().withIdentifier(7).withName("Places");
-        final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withName("Log Out");
+        final SecondaryDrawerItem archive = new SecondaryDrawerItem().withIdentifier(7).withName("Profile");
+        final SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(8).withName("Log Out");
         result =
                 new DrawerBuilder()
                         .withActivity(this)
@@ -149,11 +149,11 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                                 new DividerDrawerItem(),
                                 reflection,
                                 new DividerDrawerItem(),
-                                archive,
+                                places,
                                 new DividerDrawerItem(),
                                 group,
                                 new DividerDrawerItem(),
-                                places,
+                                archive,
                                 new DividerDrawerItem(),
                                 logout)
                         .withOnDrawerItemClickListener(
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
                                     }
                                 })
                         .build();
-
+        result.setSelection(rak); //sets rak to be the selected element
     }
 
     //This method launches the fragment that is passed to it.

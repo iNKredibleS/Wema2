@@ -113,14 +113,9 @@ public class Post extends ParseObject {
         return  getInt(KEY_CLAP);
     }
 
-    //TODO Figure out how to get ROLE
-    //public ParseRole getRole() {return get(KEY_ROLE); }
-
     public void setRole (ParseRole parseRole) {
         put(KEY_ROLE, parseRole);
     }
-
-
 
     public static class Query extends ParseQuery<Post> {
         public Query() {

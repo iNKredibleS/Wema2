@@ -119,26 +119,6 @@
             android:text="Post" />
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="51dp"
-            android:layout_below="@+id/pictureTaken"
-            android:layout_toStartOf="@+id/btn_post"
-            android:foreground="@drawable/ic_location_on_black_24dp">
-
-            <fragment
-                android:id="@+id/place_autocomplete_fragment"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="31dp"
-                android:layout_height="42dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="135dp"
-                android:tag="ourfrag"
-                app:srcCompat="@drawable/ic_location_on_black_24dp" />
-        </LinearLayout>
-
-
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="149dp"
@@ -154,12 +134,33 @@
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/reflectionTagBtn" />
 
+        <LinearLayout
+            android:id="@+id/ivLocation"
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:layout_below="@+id/reflectionTagBtn"
+            android:layout_marginTop="-172dp"
+            android:foreground="@drawable/ic_location">
+
+            <fragment
+                android:id="@+id/place_autocomplete_fragment"
+                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="135dp"
+                android:tag="ourfrag" />
+        </LinearLayout>
+
+
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
+            android:id="@+id/ivLinear"
+            android:layout_width="218dp"
+            android:layout_height="65dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="220dp">
+            android:layout_marginBottom="196dp">
 
             <ImageButton
                 android:id="@+id/imageButton"
@@ -198,6 +199,9 @@
                 android:layout_marginStart="2dp"
                 android:layout_toEndOf="@+id/imageButton3"
                 android:background="@drawable/ic_tags" />
+
+
+
         </RelativeLayout>
 
 

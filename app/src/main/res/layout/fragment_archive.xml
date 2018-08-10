@@ -77,10 +77,11 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="👏"
+                <ImageView
+                    android:background="@drawable/detail_clap2"
+                    android:layout_width="35dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
                     android:textColor="#FFDF00"
                     android:textSize="24sp" />
 
@@ -107,7 +108,7 @@
                     android:layout_width="35dp"
                     android:layout_height="28dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_group_yellow" />
+                    android:background="@drawable/archive_group" />
 
                 <TextView
                     android:id="@+id/tvNumGroups"
@@ -131,8 +132,8 @@
                     android:layout_width="35dp"
                     android:layout_height="28dp"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_star_black_24dp" />
+                    android:background="@drawable/archive_star"
+                   />
 
                 <TextView
                     android:id="@+id/textView10"

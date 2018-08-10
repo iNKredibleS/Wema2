@@ -290,17 +290,10 @@ public class RakFragment extends Fragment {
         user.saveInBackground();
 
         rakTxt.setText(rak.getTitle());
-        int[] randomBckg = {R.drawable.wemabck0, R.drawable.wemabck2, R.drawable.wemabck10, R.drawable.wemabck4,
-                R.drawable.wemabck6};
-        int randomNum = rand.nextInt(4) + 1;
-        while (randomNum == currentBck) {
-            randomNum = rand.nextInt(4) + 1;
-        }
-        int newBckg = randomBckg[randomNum];
-        rak.setBackground(newBckg);
+        rak.setBackground(R.drawable.wemabck2);
         rak.saveInBackground();
         rackBck.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), rak.getBackground(), 500, 600));
+                decodeSampledBitmapFromResource(getResources(), R.drawable.wemabck2, 500, 600));
     }
 
     //onclick handler for the feed button

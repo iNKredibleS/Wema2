@@ -74,7 +74,7 @@
             android:background="@drawable/button_background"
             android:text="Post" />
 
-        
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="149dp"

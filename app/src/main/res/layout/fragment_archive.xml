@@ -24,7 +24,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/wema"
             android:outlineSpotShadowColor="@color/black"
-            app:tabIndicatorColor="@android:color/darker_gray">
+            app:tabIndicatorColor="@color/black">
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ArchiveRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tbLayout"
             android:background="@drawable/wema_peach"

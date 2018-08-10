@@ -92,7 +92,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
     private Boolean isGroup;
     private Boolean isRak;
     private ParseQuery<Rak> query;
-
+    private Button postButton;
+    private ProgressBar pb;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -262,8 +263,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         final String finalPrivacy = privacy;
         final String finalType = type;
         final ParseRole role = currentRole;
-        final Button postButton = (Button) getView().findViewById(R.id.btn_post);
-        final ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
+        postButton = (Button) getView().findViewById(R.id.btn_post);
+        pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
         pb.setVisibility(ProgressBar.VISIBLE);
         postButton.setVisibility(Button.INVISIBLE);
         if (file != null) {
@@ -344,6 +345,8 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
         parseFile = null;
         pictureTaken.setImageResource(android.R.color.transparent);
         isRak = false;
+        pb.setVisibility(ProgressBar.INVISIBLE);
+        postButton.setVisibility(Button.VISIBLE);
     }
 
 

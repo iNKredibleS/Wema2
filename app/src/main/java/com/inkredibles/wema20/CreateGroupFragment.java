@@ -76,22 +76,11 @@ public class CreateGroupFragment extends Fragment {
         loadUsers();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            addedUsers = bundle.getParcelableArrayList("added_users");
-        }
-    }
 
 
     @OnTextChanged(value = R.id.etSearch, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void textChanged(Editable editable) {
         String userQuery = editable.toString();
-        adapter.clear();
-        allUsers.clear();
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereContains("username", userQuery);
@@ -99,8 +88,11 @@ public class CreateGroupFragment extends Fragment {
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
+                    adapter.clear();
+                    allUsers.clear();
+                    adapter.notifyDataSetChanged();
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.i("add users fragmetn", "users =" + objects.get(i).getUsername());
+                        Log.i("add users text changed", "users =" + objects.get(i).getUsername());
                         allUsers.add(objects.get(i));
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
@@ -123,6 +115,7 @@ public class CreateGroupFragment extends Fragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
+                        Log.i("add users load", "users =" + objects.get(i).getUsername());
                         allUsers.add(objects.get(i));
                         adapter.notifyItemInserted(allUsers.size() - 1);
 
@@ -168,6 +161,7 @@ public class CreateGroupFragment extends Fragment {
                     }
                 });
     }
+
 
 
     @Override

@@ -196,6 +196,7 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     LatLng latLong = place.getLatLng(); //get a lat long
                     geoPoint = new ParseGeoPoint(latLong.latitude, latLong.longitude); //use a latlong to get a parsegeopoint
                     placeName = place.getName().toString();
+                    autocompleteFragment.setText("");
                 }
 
                 @Override
@@ -320,7 +321,6 @@ public class CreatePostFragment extends Fragment implements DialogueListener {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
-                            Log.d("CreatePostActivity", "create post success");
                             Toast.makeText(getActivity(), "Post Created", Toast.LENGTH_SHORT).show();
                             resetCreatePost();
                             if (isGroup) {

@@ -111,7 +111,7 @@ public class CreateRakFragment extends Fragment implements DateTimeListener {
         }
 
         return inSampleSize;
-    }
+    }  
 
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,

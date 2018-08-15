@@ -1,4 +1,4 @@
- *Wema*
+ # Wema
 
 **Wema** is a random act of kindness android app. It challenges a user everyday with a random act of kindess but also gives them
 the fexibility to create their own random acts of kindness. Users can also write a reflection after they do the random act of 

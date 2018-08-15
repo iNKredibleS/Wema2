@@ -13,13 +13,14 @@ Time spent: **4** weeks.
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://recordit.co/d14nDKfxUz' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/iNKredibleS/Wema2/blob/master/app/src/main/res/drawable/gif_walkthrough.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+GIF created with [Recordit](http://recordit.co/).
 
 ## Notes
 
 Describe any challenges encountered while building the app.
+We had issues with the Parse Server. In the course of testing we uploaded many images until our database got filled.This wasn't imeadiately clear since we only got an error that "Could not store file".However, we figured this later and emptied our database.
 
 ## Open-source libraries used
 

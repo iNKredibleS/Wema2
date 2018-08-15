@@ -11,7 +11,7 @@ Time spent: **4** weeks.
 
 ## Video Walkthrough
 
- # Here's a walkthrough of implemented user stories:
+ ### Here's a walkthrough of Wema:
 
 <img src='https://github.com/iNKredibleS/Wema2/blob/master/app/src/main/res/drawable/gif_walkthrough.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 

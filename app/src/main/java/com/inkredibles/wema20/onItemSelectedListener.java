@@ -40,17 +40,11 @@ public interface onItemSelectedListener {
 
     void toCurrentGroup(ParseRole currentRole);
 
-  //  void fromGroupAdaptertoCurrentGroup(ParseRole currentRole);
 
     void fromGroupstoCreateGroup();
 
 
 
-//    void setIsGroup (Boolean bool);
-//
-//    void setIsReflection (Boolean bool);
-//
-//    void setIsRak(Boolean bool);
 
 
 

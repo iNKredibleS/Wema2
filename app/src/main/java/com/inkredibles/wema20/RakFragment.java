@@ -1,17 +1,11 @@
 package com.inkredibles.wema20;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,12 +25,9 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.io.File;
@@ -300,86 +291,12 @@ public class RakFragment extends Fragment {
     @OnClick(R.id.feedBtn)
     protected void goToFeed() {
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
-        Intent ii = new Intent(getActivity(), MainActivity.class);
-        ii.putExtra("groupFragment", ROLE_IDENTIFIER);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(ii);
-
-
-        //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("Click here to see the new Rak");
-        bigText.setBigContentTitle("A new Rak has been added to Power Rangers group");
-        bigText.setSummaryText("RAK");
-
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Reminder to complete Rak of the Day");
-        mBuilder.setContentText("Swipe here to complete your Rak and write your reflection! ");
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setAutoCancel(false);
-        mBuilder.setOngoing(true);
-        mBuilder.setStyle(bigText);
-
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("notify_001",
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            mNotificationManager.createNotificationChannel(channel);
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
-
         listener.toFeed();
     }
 
     //on click handler for the later button
     @OnClick(R.id.doLaterBtn)
     protected void goToFeedDoLater() {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
-        Intent ii = new Intent(getActivity(), MainActivity.class);
-        ii.putExtra("rakFragment", "rakFragment");
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(ii);
-
-
-        //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_IMMUTABLE);
-
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Reminder to complete Rak of the day");
-        mBuilder.setContentText("Click here to complete your Rak and write your reflection!");
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setAutoCancel(false);
-        mBuilder.setOngoing(true);
-//        mBuilder.setStyle(bigText);
-        mBuilder.setTicker("Reminder to complete Rak of the day");
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("notify_001",
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            mNotificationManager.createNotificationChannel(channel);
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
 
         listener.toFeed();
     }
@@ -388,43 +305,6 @@ public class RakFragment extends Fragment {
     @OnClick(R.id.doneBtn)
     protected void goToPost() {
         User user = (User) ParseUser.getCurrentUser();
-
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
-        Intent ii = new Intent(getActivity(), MainActivity.class);
-        ii.putExtra("groupFragment", ROLE_IDENTIFIER);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(ii);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("Click here to see their current Raks and posts");
-        bigText.setBigContentTitle("You've been added to the Power Rangers group");
-        bigText.setSummaryText("RAK");
-
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Reminder to complete Rak of the Day");
-        mBuilder.setContentText("Swipe here to complete your Rak and write your reflection! ");
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setStyle(bigText);
-        mBuilder.setAutoCancel(false);
-        mBuilder.setOngoing(true);
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("notify_001",
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            mNotificationManager.createNotificationChannel(channel);
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
 
         listener.fromRAKtoCreatePost(user.getRak());
 

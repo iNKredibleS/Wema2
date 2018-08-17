@@ -8,10 +8,8 @@ import com.inkredibles.wema20.models.Post;
 import com.inkredibles.wema20.models.Rak;
 import com.parse.ParseImageView;
 import com.parse.ParseRole;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface onItemSelectedListener {
 
@@ -25,12 +23,11 @@ public interface onItemSelectedListener {
 
     void toCreateRak();
 
-    void toAddUsers();
 
 
     void addRakToServer(String s, String stringDate);
 
-    void fromAddUserstoCreateGroup (List<ParseUser> addedUsers);
+
 
     void fromCreateGrouptoCurrentGroup (ParseRole currentRole);
 

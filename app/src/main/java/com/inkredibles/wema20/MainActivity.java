@@ -12,9 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,7 +37,6 @@ import com.parse.ParseRole;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*The mainactivity handles navigation between fragments. It also here that the navigation drawer is instantiated and its options set.*/
 public class MainActivity extends AppCompatActivity implements onItemSelectedListener {
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
     final Fragment createRakFragment = new CreateRakFragment();
     final Fragment createGroupFragment = new CreateGroupFragment();
     final Fragment placesFragment = new PlacesFragment();
-    final Fragment addUsersFragment = new AddUsersFragment();
     final Fragment currentGroupFragment = new CurrentGroupFragment();
     final Fragment groupsFragment = new GroupsFragment();
     private Drawer result;
@@ -270,10 +268,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         isRak = false;
     }
 
-    @Override
-    public void toAddUsers() {
-        nextFragment(addUsersFragment);
-    }
 
     @Override
     public void toCreateRak() {
@@ -290,13 +284,6 @@ public class MainActivity extends AppCompatActivity implements onItemSelectedLis
         nextFragment(rakFragment);
     }
 
-    @Override
-    public void fromAddUserstoCreateGroup(List<ParseUser> addedUsers) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("added_users", new ArrayList<ParseUser>(addedUsers));
-        createGroupFragment.setArguments(bundle);
-        nextFragment(createGroupFragment);
-    }
 
 
     @Override

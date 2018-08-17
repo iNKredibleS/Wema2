@@ -1,6 +1,5 @@
 package com.inkredibles.wema20;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +19,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.inkredibles.wema20.models.Rak;
 import com.inkredibles.wema20.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -77,12 +73,7 @@ public class RakFragment extends Fragment {
     private Bundle bundle;
     private ParseQuery<Rak> query;
     private onItemSelectedListener listener;
-    private Bitmap myBitmap;
-    private ParseFile rakFile;
-    private User user;
-    private int completed;
-    private PlaceAutocompleteFragment autocompleteFragment;
-    private NotificationCompat.Builder notification;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,24 +93,15 @@ public class RakFragment extends Fragment {
     }
 
 
-    private void createNotification(int nId, int iconRes, String title, String body) {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                getContext()).setSmallIcon(iconRes)
-                .setContentTitle(title)
-                .setContentText(body);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(nId, mBuilder.build());
-    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         query = ParseQuery.getQuery(Rak.class);
-        rakList = new ArrayList();
-        userList = new ArrayList();
+        rakList = new ArrayList<Rak>();
+        userList = new ArrayList<User>();
         rand = new Random();
 
         //if you create a new RAK with the create button
